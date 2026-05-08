@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>WARSAW FC Matchday</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --panel:#0f0f10;
+      --panel2:#151518;
+      --line:#26262b;
+      --text:#f4f4f5;
+      --muted:#8b8b93;
+      --accent:#ffffff;
+      --yellow:#f7db36;
+      --blue:#1fb8ff;
+      --green:#67d46b;
+      --red:#ff453a;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at top,#101014 0%,#050505 55%);color:var(--text);font-family:Inter,Arial,sans-serif;letter-spacing:.02em}
+    .app{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
+    aside{background:rgba(15,15,16,.96);backdrop-filter:blur(12px);border-right:1px solid var(--line);padding:22px;overflow:auto}
+    main{padding:28px;display:flex;flex-direction:column;gap:20px}
+    h1,h2,h3{margin:0;text-transform:uppercase}
+    h1{font-size:32px;letter-spacing:.12em}
+    h2{font-size:18px;margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
+    label{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;margin:14px 0 6px}
+    input,textarea,select,button{width:100%;background:#0b0b0d;color:var(--text);border:1px solid var(--line);padding:12px;border-radius:14px;font-size:14px;transition:.2s ease}
+    textarea{height:128px;resize:vertical}
+    button{cursor:pointer;text-transform:uppercase;font-weight:700;letter-spacing:.08em;box-shadow:var(--shadow)}
+    button.primary{background:linear-gradient(135deg,#fff,#d8d8d8);color:#000;border-color:#fff}
+    button.danger{border-color:#652020;color:#ff9b9b}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .player-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:260px;overflow:auto}
+    .player-item{display:grid;grid-template-columns:28px 1fr 72px;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px;background:#070707}
+    .player-item input[type="checkbox"]{width:auto}
+    .player-item input,.player-item select{padding:7px;font-size:12px}
+    .rosters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:14px}
+    .roster-card{border:1px solid var(--line);border-radius:8px;padding:12px;background:#080808}
+    .roster-card h4{margin:0 0 8px;text-transform:uppercase}
+    .roster-card.full{border-color:#2d5f2f}
+    .roster-card.over{border-color:#7a2b2b}
+    .roster-count{color:var(--muted);font-size:12px;margin-bottom:8px;text-transform:uppercase}
+    .roster-card div{color:var(--muted);font-size:13px;line-height:1.5}
+    @media(max-width:900px){.rosters{grid-template-columns:1fr}}
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+    .stat-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#090909}
+    .goal-row{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:8px}
+    .topscorer{font-size:18px;font-weight:700;margin-top:8px}
+    .history-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+    .history-list{max-height:360px;overflow:auto;margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#070708}
+    .history-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px;border-bottom:1px solid var(--line);align-items:center}
+    .history-item:last-child{border-bottom:0}
+    .history-title{font-weight:900;letter-spacing:.08em}
+    .history-meta{color:var(--muted);font-size:12px;text-transform:uppercase;margin-top:4px}
+    .ranking-wrap{max-height:420px;overflow:auto;margin-top:12px}
+    .small-btn{width:auto;padding:8px 10px;font-size:11px;border-radius:999px;box-shadow:none}
+    .leaderboard-row{display:grid;grid-template-columns:42px 1fr 70px 70px 70px 70px;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0;font-size:13px}
+    .season-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+    .season-card{background:#09090b;border:1px solid var(--line);border-radius:16px;padding:16px}
+    .season-card .label{color:var(--muted);font-size:11px;text-transform:uppercase}
+    .season-card .value{font-size:30px;font-weight:950;margin-top:6px}
+    .event-browser{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end;margin-top:14px}
+    .event-detail{margin-top:14px;border:1px solid var(--line);border-radius:16px;padding:16px;background:#080809}
+    .event-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
+    .mini-table{width:100%;font-size:12px;margin-top:10px}
+    .mini-table td,.mini-table th{padding:6px;border-bottom:1px solid #222}
+    .leaderboard-row.header{color:var(--muted);text-transform:uppercase;font-size:11px}
+    @media(max-width:900px){.leaderboard-row{grid-template-columns:32px 1fr 52px 52px 52px 52px;font-size:12px}}
+    .event-code{font-size:24px;font-weight:950;letter-spacing:.14em;color:#fff;text-shadow:0 0 24px rgba(255,255,255,.12)}
+    .schedule-list{max-height:420px;overflow:auto;margin-top:14px;border:1px solid var(--line);border-radius:10px}
+    .schedule-round{border-bottom:1px solid var(--line);padding:12px;background:#080808}
+    .schedule-round:last-child{border-bottom:0}
+    .schedule-title{font-weight:900;text-transform:uppercase;margin-bottom:8px}
+    .schedule-matches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .schedule-match{border-left:1px solid var(--line);padding-left:10px;color:var(--muted);font-size:13px;text-transform:uppercase}
+    @media(max-width:900px){.schedule-matches{grid-template-columns:1fr}}
+    @media(max-width:900px){.stats-grid{grid-template-columns:1fr}}
+    .brandbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px}
+    .brand{display:flex;align-items:center;gap:18px}
+    .logo{width:54px;height:54px;border:2px solid var(--text);border-radius:50%;display:grid;place-items:center;font-weight:900}
+    .partner{font-size:14px;color:var(--muted)}
+    .clock{font-size:92px;text-align:center;font-weight:900;letter-spacing:.08em;text-shadow:0 0 40px rgba(255,255,255,.08)}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:20px;text-transform:uppercase}
+    .pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .pitch{min-height:280px;background:linear-gradient(180deg,#17171a,#0b0b0d);padding:26px;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+    .pitch:last-child{border-right:0}
+    .pitch .stripe{width:80%;height:4px;margin-bottom:30px;background:var(--accent)}
+    .pitch.left .stripe{background:var(--yellow)}
+    .pitch.mid .stripe{background:var(--text)}
+    .pitch.right .stripe{background:var(--blue)}
+    .pitch-title{font-size:17px;color:var(--muted);text-transform:uppercase;margin-bottom:22px}
+    .teams{font-size:38px;font-weight:900;line-height:1.15;text-transform:uppercase}
+    .vs{font-size:20px;color:var(--muted);margin:6px 0}
+    .score{display:flex;gap:8px;margin-top:18px}
+    .score input{width:62px;text-align:center;font-size:24px;font-weight:900}
+    .lower{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+    .panel{background:linear-gradient(180deg,var(--panel2),#0b0b0c);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+    .next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+    .next-card{border-left:1px solid var(--line);padding-left:16px;text-transform:uppercase}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{border-bottom:1px solid #2b2b2b;padding:8px;text-align:left}
+    th{color:var(--muted);text-transform:uppercase}
+    .ticker{border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;color:var(--muted);text-transform:uppercase}
+    .tv-back-btn{
+      display:none;
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:9999;
+      width:auto;
+      padding:12px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      color:#000;
+      border:0;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      font-size:12px;
+    }
+    .screen-mode .tv-back-btn{display:block}
+    .phone-preview aside{display:none}
+    .phone-preview main{padding-top:12px}
+    .screen-mode aside{display:none}
+    .screen-mode .app{grid-template-columns:1fr}
+    .screen-mode main{padding:34px 44px}
+    .screen-mode .score{display:none}
+    .screen-mode .clock{font-size:104px}
+    .screen-mode .pitch{min-height:320px}
+    .screen-mode .teams{font-size:44px}
+    @media(max-width:900px){.app{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}.pitches,.lower,.next-grid{grid-template-columns:1fr}.pitch{border-right:0;border-bottom:1px solid var(--line)}}
+  
+    /* MOBILE VIEW / PUBLIC PHONE PREVIEW */
+    .mobile-nav{
+      display:none;
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(5,5,6,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+      padding:10px;
+      gap:8px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .mobile-nav button{
+      width:auto;
+      min-width:max-content;
+      padding:10px 12px;
+      box-shadow:none;
+      border-radius:999px;
+      font-size:11px;
+      background:#111116;
+    }
+    .mobile-card-title{
+      display:none;
+      color:var(--muted);
+      text-transform:uppercase;
+      font-size:11px;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    @media(max-width:720px){
+      body{background:#050505}
+      .app{display:block;min-height:auto}
+      aside{
+        padding:14px;
+        border-right:0;
+        border-bottom:1px solid var(--line);
+      }
+      main{
+        padding:12px;
+        gap:12px;
+      }
+      .mobile-nav{display:flex}
+      .brandbar{
+        display:block;
+        padding-bottom:14px;
+      }
+      .brand{
+        gap:12px;
+        align-items:flex-start;
+      }
+      .logo{
+        width:44px;
+        height:44px;
+        font-size:13px;
+        flex:0 0 auto;
+      }
+      h1{font-size:22px;line-height:1.05}
+      h2{font-size:15px;margin-top:18px}
+      h3{font-size:14px}
+      .partner{font-size:11px;line-height:1.4}
+      .event-code{
+        font-size:18px;
+        text-align:left;
+        margin-top:12px;
+      }
+      .clock{
+        font-size:58px;
+        line-height:1;
+        margin-top:10px;
+      }
+      .meta{
+        font-size:13px;
+        gap:8px;
+        flex-direction:column;
+      }
+      .panel{
+        padding:14px;
+        border-radius:16px;
+      }
+      .pitches{
+        display:flex;
+        overflow-x:auto;
+        scroll-snap-type:x mandatory;
+        border-radius:16px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .pitch{
+        min-width:86vw;
+        min-height:230px;
+        scroll-snap-align:start;
+        border-right:1px solid var(--line);
+      }
+      .pitch-title{font-size:13px}
+      .teams{font-size:30px}
+      .vs{font-size:14px}
+      .lower,.stats-grid{
+        display:block;
+      }
+      .lower > .panel,.stats-grid > .stat-card{
+        margin-bottom:12px;
+      }
+      .next-grid{
+        display:flex;
+        overflow-x:auto;
+        gap:10px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .next-card{
+        min-width:180px;
+        border:1px solid var(--line);
+        border-radius:14px;
+        padding:12px;
+        background:#09090b;
+      }
+      .rosters{
+        display:flex;
+        overflow-x:auto;
+        gap:10px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .roster-card{
+        min-width:190px;
+      }
+      .season-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+      }
+      .season-card{
+        padding:12px;
+        border-radius:14px;
+      }
+      .season-card .value{
+        font-size:24px;
+      }
+      .event-browser{
+        grid-template-columns:1fr;
+      }
+      .event-detail-grid{
+        grid-template-columns:1fr;
+      }
+      .schedule-list{
+        max-height:none;
+      }
+      .schedule-matches{
+        grid-template-columns:1fr;
+      }
+      .schedule-match{
+        border-left:0;
+        border-top:1px solid var(--line);
+        padding:10px 0 0;
+      }
+      .leaderboard-row{
+        grid-template-columns:30px 1fr 48px 48px;
+      }
+      .leaderboard-row div:nth-child(5),
+      .leaderboard-row div:nth-child(6){
+        display:none;
+      }
+      table{
+        font-size:12px;
+      }
+      th,td{
+        padding:7px 5px;
+      }
+      input,textarea,select,button{
+        font-size:16px;
+        padding:12px;
+      }
+      .row,.row3{
+        grid-template-columns:1fr;
+      }
+      .player-item{
+        grid-template-columns:28px 1fr 70px;
+      }
+      .screen-mode main{
+        padding:10px;
+      }
+      .screen-mode .clock{
+        font-size:64px;
+      }
+      .screen-mode .pitch{
+        min-width:88vw;
+        min-height:250px;
+      }
+      .screen-mode .teams{
+        font-size:32px;
+      }
+      .screen-mode .tv-back-btn{
+        top:auto;
+        bottom:16px;
+        right:16px;
+      }
+      .ticker{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:6px;
+        font-size:11px;
+      }
+      .mobile-card-title{display:block}
+    }
+
+    @media(max-width:420px){
+      .season-grid{grid-template-columns:1fr 1fr}
+      .clock{font-size:48px}
+      .teams{font-size:26px}
+      h1{font-size:20px}
+      .pitch{min-width:90vw}
+    }
+
+  </style>
+</head>
+<body>
+<button class="tv-back-btn" onclick="toggleScreen()">WRÓĆ DO EDYCJI</button>
+<nav class="mobile-nav">
+  <button onclick="document.getElementById('liveSection').scrollIntoView({behavior:'smooth'})">Live</button>
+  <button onclick="document.getElementById('teamsSection').scrollIntoView({behavior:'smooth'})">Składy</button>
+  <button onclick="document.getElementById('seasonSection').scrollIntoView({behavior:'smooth'})">Sezon</button>
+  <button onclick="document.getElementById('rankingSection').scrollIntoView({behavior:'smooth'})">Ranking</button>
+  <button onclick="document.getElementById('scheduleSection').scrollIntoView({behavior:'smooth'})">Terminarz</button>
+  <button onclick="toggleScreen()">TV</button>
+</nav>
+<div class="app">
+  <aside>
+    <h1>WFC Admin</h1>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0">
+<button class="primary" onclick="toggleScreen()">TRYB TV</button>
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})">LIVE</button>
+<button onclick="togglePhonePreview()" style="grid-column:1 / -1">PODGLĄD TELEFON</button>
+</div>
+    <label>Nazwa eventu</label>
+    <input id="eventName" value="WARSAW FC MATCHDAY" />
+    <label>Numer ustawki / event ID, np. [ S03E13 ]</label>
+    <input id="eventNumber" value="[ S03E13 ]" oninput="saveAndRender()" />
+    <label>Partner / sponsor</label>
+    <input id="partnerName" value="adidas" />
+    <div class="row">
+      <div><label>Czas meczu</label><input id="matchMin" type="number" value="5" min="1" /></div>
+      <div>
+        <label>Liczba boisk</label>
+        <select id="pitchCount" onchange="generate()">
+          <option value="1">1 boisko</option>
+          <option value="2">2 boiska</option>
+          <option value="3" selected>3 boiska</option>
+        </select>
+      </div>
+    </div>
+    <label>Liczba drużyn WFC</label>
+    <select id="teamCount" onchange="setWfcTeams()">
+      <option value="6">6 drużyn</option>
+      <option value="7">7 drużyn</option>
+      <option value="8">8 drużyn</option>
+      <option value="9" selected>9 drużyn</option>
+      <option value="10">10 drużyn</option>
+      <option value="11">11 drużyn</option>
+      <option value="12">12 drużyn</option>
+      <option value="13">13 drużyn</option>
+      <option value="14">14 drużyn</option>
+      <option value="15">15 drużyn</option>
+      <option value="16">16 drużyn</option>
+      <option value="17">17 drużyn</option>
+      <option value="18">18 drużyn</option>
+      <option value="19">19 drużyn</option>
+      <option value="20">20 drużyn</option>
+    </select>
+
+    <label>Tryb</label>
+    <select id="modeType" onchange="generate()">
+      <option value="single">Każdy z każdym</option>
+      <option value="double" selected>Każdy z każdym + rewanże</option>
+    </select>
+
+    <h2>Lista osób / check-in</h2>
+    <label>Dodaj osobę ręcznie</label>
+    <div class="row3">
+      <input id="newPlayerName" placeholder="Nick / imię" />
+      <select id="newPlayerLevel">
+        <option value="3">pro</option>
+        <option value="2" selected>medium</option>
+        <option value="1">beginner</option>
+      </select>
+      <button onclick="addPlayer()">Dodaj</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button onclick="markAllPlayers(true)">Wszyscy obecni</button>
+      <button onclick="markAllPlayers(false)">Odznacz</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="primary" onclick="generateBalancedTeams()">Losuj / balansuj 3–4</button>
+      <button onclick="clearPlayers()">Wyczyść listę</button>
+    </div>
+    <div class="player-list" id="playerList"></div>
+
+    <label>Zespoły — zawsze WFC 1, WFC 2 itd.</label>
+    <textarea id="teamsInput" readonly>WFC 1
+WFC 2
+WFC 3
+WFC 4
+WFC 5
+WFC 6
+WFC 7
+WFC 8
+WFC 9</textarea>
+    <button class="primary" onclick="generate()">Generuj terminarz</button>
+
+    <h2>Historia i sezon</h2>
+    <div class="history-actions">
+      <button class="primary" onclick="saveCurrentEvent()">Zapisz ustawkę</button>
+      <button onclick="exportBase()">Eksport bazy</button>
+      <button onclick="document.getElementById('importFile').click()">Import bazy</button>
+      <button class="danger" onclick="resetSeasonBase()">Reset sezonu</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importBaseFile(event)" />
+
+    <h2>Sterowanie</h2>
+    <div class="row">
+      <button onclick="prevRound()">← Poprzednia</button>
+      <button onclick="nextRound()">Następna →</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="primary" onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pauza</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button onclick="resetTimer()">Reset czasu</button>
+      <button onclick="toggleScreen()">Tryb TV</button>
+    </div>
+    <button class="danger" style="margin-top:10px" onclick="clearData()">Wyczyść wyniki</button>
+
+    <h2>Komunikat</h2>
+    <input id="message" value="ZAWSZE TU. ZAWSZE RAZEM. / WE ARE WARSAW FC" oninput="saveAndRender()" />
+
+    <h2>Instrukcja</h2>
+    <p style="color:#aaa;line-height:1.45">Wpisz zespoły, kliknij generuj, odpal tryb TV i wyświetl stronę na telewizorze/projektorze. Każda kolejka to jeden wspólny start na 3 boiskach. Aplikacja nigdy nie pokazuje wolnego boiska. Jeśli matematycznie brakuje meczu, dokładany jest BONUS / REWANŻ, który nie liczy się do tabeli. Wyniki wpisujesz w panelu admina.</p>
+  </aside>
+
+  <main>
+    <section class="brandbar">
+      <div class="brand">
+        <div class="logo">WFC</div>
+        <div>
+          <h1 id="title">WARSAW FC MATCHDAY</h1>
+          <div class="partner">ZAWSZE TU. ZAWSZE RAZEM. · WE ARE WARSAW FC · POWERED BY <span id="partner">adidas</span></div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="partner">MECZE PO <span id="minutesLabel">5</span> MINUT</div>
+        <div class="event-code" id="eventCode">[ S03E13 ]</div>
+      </div>
+    </section>
+
+    
+<section class="panel" style="padding:14px 18px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px">
+    <div style="background:#0a0a0c;border:1px solid var(--line);padding:14px;border-radius:16px">
+      <div style="color:var(--muted);font-size:11px;text-transform:uppercase">Zespoły</div>
+      <div id="kpiTeams" style="font-size:28px;font-weight:900">9</div>
+    </div>
+    <div style="background:#0a0a0c;border:1px solid var(--line);padding:14px;border-radius:16px">
+      <div style="color:var(--muted);font-size:11px;text-transform:uppercase">Zawodnicy</div>
+      <div id="kpiPlayers" style="font-size:28px;font-weight:900">30</div>
+    </div>
+    <div style="background:#0a0a0c;border:1px solid var(--line);padding:14px;border-radius:16px">
+      <div style="color:var(--muted);font-size:11px;text-transform:uppercase">Boiska</div>
+      <div id="kpiPitches" style="font-size:28px;font-weight:900">3</div>
+    </div>
+    <div style="background:#0a0a0c;border:1px solid var(--line);padding:14px;border-radius:16px">
+      <div style="color:var(--muted);font-size:11px;text-transform:uppercase">Mecze</div>
+      <div id="kpiMatches" style="font-size:28px;font-weight:900">0</div>
+    </div>
+  </div>
+</section>
+
+<section id="liveSection">
+      <div class="meta">
+        <div>KOLEJKA <span id="roundNow">1</span> / <span id="roundTotal">1</span></div>
+        <div id="status">GRA</div>
+      </div>
+      <div class="clock" id="timer">05:00</div>
+    </section>
+
+    <section class="pitches" id="pitches"></section>
+
+    <section class="lower" id="teamsSection">
+      <div class="panel">
+        <h3>NASTĘPNA KOLEJKA</h3>
+        <div class="next-grid" id="nextRound"></div>
+        <h3 style="margin-top:18px">SKŁADY</h3>
+        <div class="rosters" id="rosters"></div>
+      </div>
+      <div class="panel">
+        <h3>TABELA</h3>
+        <table>
+          <thead><tr><th>#</th><th>Zespół</th><th>M</th><th>PKT</th><th>BR</th></tr></thead>
+          <tbody id="standings"></tbody>
+        </table>
+      </div>
+    
+    <section class="panel" id="seasonSection">
+      <h3>PRZEGLĄD SEZONU</h3>
+      <div class="season-grid" id="seasonOverview"></div>
+      <div class="event-browser">
+        <div>
+          <label>Wybierz ustawkę z historii</label>
+          <select id="eventBrowserSelect" onchange="previewHistoryEvent(this.value)"></select>
+        </div>
+        <button onclick="browsePrevEvent()">← Poprzednia</button>
+        <button onclick="browseNextEvent()">Następna →</button>
+      </div>
+      <div class="event-detail" id="eventPreview"></div>
+    </section>
+
+    <section class="panel">
+      <h3>BAZA SEZONU / HISTORIA USTAWEK</h3>
+      <div class="history-actions">
+        <button class="primary" onclick="saveCurrentEvent()">Zapisz obecną ustawkę</button>
+        <button onclick="renderHistoryAndRankings()">Odśwież ranking</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </section>
+
+    <section class="panel" id="rankingSection">
+      <h3>RANKING SEZONU</h3>
+      <div class="ranking-wrap" id="seasonRanking"></div>
+    </section>
+
+    <section class="panel" id="scheduleSection">
+      <h3>KALENDARZ WSZYSTKICH SPOTKAŃ</h3>
+      <div class="schedule-list" id="fullSchedule"></div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h3>GOLE ZAWODNIKÓW</h3>
+        <div id="playerGoalsEditor"></div>
+      </div>
+      <div class="stat-card">
+        <h3>TOP SCORER</h3>
+        <div id="topScorers"></div>
+      </div>
+    </section>
+
+    <section class="ticker">
+      <span id="msg">ZAWSZE TU. ZAWSZE RAZEM.</span>
+      <span>WE ARE WARSAW FC</span>
+      <span id="tickerEvent">[ S03E13 ]</span>
+    </section>
+  </main>
+</div>
+
+<script>
+let state = {
+  eventNumber: "[ S03E13 ]",
+  base: { events: [], players: {}, selectedEventId: "" },
+  teams: ["WFC 1","WFC 2","WFC 3","WFC 4","WFC 5","WFC 6","WFC 7","WFC 8","WFC 9"],
+  players: [
+    {name:"Zawodnik 1", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 2", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 3", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 4", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 5", level:3, present:true, team:"", goals:0},
+    {name:"Zawodnik 6", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 7", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 8", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 9", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 10", level:3, present:true, team:"", goals:0},
+    {name:"Zawodnik 11", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 12", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 13", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 14", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 15", level:3, present:true, team:"", goals:0},
+    {name:"Zawodnik 16", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 17", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 18", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 19", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 20", level:3, present:true, team:"", goals:0},
+    {name:"Zawodnik 21", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 22", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 23", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 24", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 25", level:3, present:true, team:"", goals:0},
+    {name:"Zawodnik 26", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 27", level:1, present:true, team:"", goals:0},
+    {name:"Zawodnik 28", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 29", level:2, present:true, team:"", goals:0},
+    {name:"Zawodnik 30", level:3, present:true, team:"", goals:0}
+  ],
+  rounds: [], currentRound: 0, duration: 300, remaining: 300, timerId: null, scores: {}
+};
+
+
+function addPlayer(){
+  const name = document.getElementById("newPlayerName").value.trim();
+  const level = Number(document.getElementById("newPlayerLevel").value || 2);
+  if(!name) return;
+  state.players.push({name, level, present:true, team:"", goals:0});
+  document.getElementById("newPlayerName").value = "";
+  saveAndRender();
+}
+function clearPlayers(){
+  if(confirm("Wyczyścić listę osób?")){
+    state.players = [];
+    saveAndRender();
+  }
+}
+function markAllPlayers(value){
+  state.players.forEach(p => p.present = value);
+  saveAndRender();
+}
+function teamSize(team, excludeIdx=null){
+  return state.players.filter((p,i)=>p.present && p.team===team && i!==excludeIdx).length;
+}
+function updatePlayer(idx, field, value){
+  if(!state.players[idx]) return;
+  if(field==="present") state.players[idx].present = value;
+  if(field==="level") state.players[idx].level = Number(value);
+  if(field==="team"){
+    if(value && teamSize(value, idx) >= 4){
+      alert("Ten zespół ma już 4 zawodników. Maksymalnie 4 osoby w teamie.");
+      render();
+      return;
+    }
+    state.players[idx].team = value;
+  }
+  if(field==="name") state.players[idx].name = value;
+  saveAndRender();
+}
+function removePlayer(idx){
+  state.players.splice(idx,1);
+  saveAndRender();
+}
+function generateBalancedTeams(){
+  const teams = getWfcTeams();
+  const present = state.players.filter(p => p.present);
+  const maxCapacity = teams.length * 4;
+
+  if(present.length > maxCapacity){
+    alert(`Za dużo obecnych osób. Przy ${teams.length} zespołach maksymalnie można przypisać ${maxCapacity} zawodników.`);
+    return;
+  }
+
+  // Reset przypisań.
+  state.players.forEach(p => p.team = "");
+
+  // Mieszamy, ale utrzymujemy balans poziomów.
+  const shuffled = present
+    .map(p => ({p, r: Math.random()}))
+    .sort((a,b)=>b.p.level-a.p.level || a.r-b.r)
+    .map(x=>x.p);
+
+  const buckets = teams.map(t => ({team:t, players:[], power:0}));
+
+  shuffled.forEach(p=>{
+    // Najpierw preferujemy zespoły poniżej 3 osób, potem poniżej 4.
+    let candidates = buckets.filter(b => b.players.length < 3);
+    if(!candidates.length) candidates = buckets.filter(b => b.players.length < 4);
+
+    candidates.sort((a,b)=>a.power-b.power || a.players.length-b.players.length || Math.random()-0.5);
+    const chosen = candidates[0];
+    chosen.players.push(p);
+    chosen.power += p.level;
+    p.team = chosen.team;
+  });
+
+  generate();
+}
+
+function updateGoals(idx, value){
+  if(!state.players[idx]) return;
+  state.players[idx].goals = Number(value || 0);
+  saveAndRender();
+}
+
+function getBase(){
+  if(!state.base) state.base = {events:[], players:{}};
+  if(!state.base.events) state.base.events = [];
+  if(!state.base.players) state.base.players = {};
+  return state.base;
+}
+function eventSummary(){
+  const present = state.players.filter(p=>p.present);
+  const totalGoals = present.reduce((a,p)=>a + Number(p.goals||0),0);
+  const top = present.slice().sort((a,b)=>(b.goals||0)-(a.goals||0))[0];
+  const requiredMatches = state.rounds.reduce((acc,s)=>acc+(s.matches||[]).filter(m=>!m[2]).length,0);
+  const savedStandings = calculateStandings();
+  return {
+    id: state.eventNumber || "[ S03E13 ]",
+    name: document.getElementById("eventName")?.value || "WARSAW FC MATCHDAY",
+    date: new Date().toISOString(),
+    dateLabel: new Date().toLocaleString("pl-PL"),
+    teams: state.teams.slice(),
+    pitchCount: Number(document.getElementById("pitchCount")?.value || 3),
+    players: present.map(p=>({name:p.name, level:p.level, team:p.team, goals:Number(p.goals||0)})),
+    totalPlayers: present.length,
+    totalGoals,
+    topScorer: top ? {name:top.name, goals:Number(top.goals||0)} : null,
+    matchesCount: requiredMatches,
+    schedule: state.rounds,
+    scores: state.scores,
+    standings: savedStandings
+  };
+}
+function calculateStandings(){
+  const table={}; state.teams.forEach(t=>table[t]={team:t,m:0,p:0,gf:0,ga:0,gd:0});
+  state.rounds.forEach((slot,ri)=>(slot.matches||[]).forEach((m,pi)=>{
+    if(m[2]) return;
+    const s=state.scores[matchId(ri,pi)];
+    if(!s || s[0]==="" || s[1]==="") return;
+    const a=Number(s[0]), b=Number(s[1]), A=table[m[0]], B=table[m[1]];
+    if(!A || !B) return;
+    A.m++; B.m++; A.gf+=a; A.ga+=b; B.gf+=b; B.ga+=a;
+    if(a>b){A.p+=3}else if(b>a){B.p+=3}else{A.p++;B.p++}
+  }));
+  return Object.values(table).map(x=>({...x, gd:x.gf-x.ga})).sort((a,b)=>b.p-a.p || b.gd-a.gd || b.gf-a.gf);
+}
+function saveCurrentEvent(){
+  const base = getBase();
+  const summary = eventSummary();
+  const existingIdx = base.events.findIndex(e=>e.id===summary.id);
+  if(existingIdx >= 0){
+    if(!confirm(`Ustawka ${summary.id} już istnieje. Nadpisać?`)) return;
+    base.events[existingIdx] = summary;
+  } else {
+    base.events.push(summary);
+  }
+  rebuildPlayerBase();
+  localStorage.setItem("wfc_state", JSON.stringify({...state,timerId:null}));
+  renderHistoryAndRankings();
+  alert(`Zapisano ustawkę ${summary.id}`);
+}
+function rebuildPlayerBase(){
+  const base = getBase();
+  base.players = {};
+  base.events.forEach(ev=>{
+    (ev.players||[]).forEach(p=>{
+      if(!base.players[p.name]){
+        base.players[p.name] = {name:p.name, events:0, goals:0, mvp:0, teams:{}, lastEvent:""};
+      }
+      const rec = base.players[p.name];
+      rec.events += 1;
+      rec.goals += Number(p.goals || 0);
+      rec.lastEvent = ev.id;
+      if(p.team) rec.teams[p.team] = (rec.teams[p.team] || 0) + 1;
+    });
+  });
+}
+
+function seasonTotals(){
+  const base = getBase();
+  const events = base.events || [];
+  const uniquePlayers = new Set();
+  let totalGoals = 0;
+  let totalPlayersAppearances = 0;
+  let totalMatches = 0;
+
+  events.forEach(ev=>{
+    totalGoals += Number(ev.totalGoals || 0);
+    totalPlayersAppearances += Number(ev.totalPlayers || 0);
+    totalMatches += Number(ev.matchesCount || 0);
+    (ev.players || []).forEach(p=>uniquePlayers.add(p.name));
+  });
+
+  const topEvent = events.slice().sort((a,b)=>(b.totalGoals||0)-(a.totalGoals||0))[0];
+  return {events, uniquePlayers, totalGoals, totalPlayersAppearances, totalMatches, topEvent};
+}
+function renderSeasonOverview(){
+  const box = document.getElementById("seasonOverview");
+  if(!box) return;
+  const t = seasonTotals();
+  const avgPlayers = t.events.length ? (t.totalPlayersAppearances / t.events.length).toFixed(1) : "0.0";
+  const avgGoals = t.events.length ? (t.totalGoals / t.events.length).toFixed(1) : "0.0";
+
+  box.innerHTML = `
+    <div class="season-card"><div class="label">Ustawki</div><div class="value">${t.events.length}</div></div>
+    <div class="season-card"><div class="label">Unikalni gracze</div><div class="value">${t.uniquePlayers.size}</div></div>
+    <div class="season-card"><div class="label">Suma goli</div><div class="value">${t.totalGoals}</div></div>
+    <div class="season-card"><div class="label">Mecze</div><div class="value">${t.totalMatches}</div></div>
+    <div class="season-card"><div class="label">Śr. graczy / ustawka</div><div class="value">${avgPlayers}</div></div>
+    <div class="season-card"><div class="label">Śr. goli / ustawka</div><div class="value">${avgGoals}</div></div>
+  `;
+}
+function renderEventBrowser(){
+  const base = getBase();
+  const select = document.getElementById("eventBrowserSelect");
+  if(!select) return;
+
+  const events = (base.events || []).slice();
+  if(!events.length){
+    select.innerHTML = `<option value="">Brak zapisanych ustawek</option>`;
+    document.getElementById("eventPreview").innerHTML = `<div class="history-meta">Zapisz pierwszą ustawkę, żeby zobaczyć przegląd sezonu.</div>`;
+    return;
+  }
+
+  if(!base.selectedEventId || !events.some(e=>e.id===base.selectedEventId)){
+    base.selectedEventId = events[events.length-1].id;
+  }
+
+  select.innerHTML = events.map(ev=>`<option value="${ev.id}" ${ev.id===base.selectedEventId?"selected":""}>${ev.id} · ${ev.dateLabel || ""}</option>`).join("");
+  previewHistoryEvent(base.selectedEventId, false);
+}
+function previewHistoryEvent(id, save=true){
+  const base = getBase();
+  const ev = (base.events || []).find(e=>e.id===id);
+  if(!ev) return;
+  base.selectedEventId = id;
+  const box = document.getElementById("eventPreview");
+  if(!box) return;
+
+  const topPlayers = (ev.players || []).slice().sort((a,b)=>(b.goals||0)-(a.goals||0)).slice(0,5);
+  const standings = (ev.standings || []).slice(0,5);
+  const teamsCount = (ev.teams || []).length;
+
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <div class="history-title">${ev.id} · ${ev.name || "WARSAW FC MATCHDAY"}</div>
+        <div class="history-meta">${ev.dateLabel || ""} · ${ev.totalPlayers || 0} graczy · ${teamsCount} teamów · ${ev.pitchCount || 3} boiska</div>
+      </div>
+      <button class="small-btn primary" onclick="loadEventFromHistory('${ev.id}')">Wróć do tej ustawki</button>
+    </div>
+
+    <div class="event-detail-grid">
+      <div class="season-card"><div class="label">Gole</div><div class="value">${ev.totalGoals || 0}</div></div>
+      <div class="season-card"><div class="label">Mecze</div><div class="value">${ev.matchesCount || 0}</div></div>
+      <div class="season-card"><div class="label">Top scorer</div><div class="value" style="font-size:20px">${ev.topScorer ? ev.topScorer.name + " · " + ev.topScorer.goals : "—"}</div></div>
+    </div>
+
+    <div class="event-detail-grid">
+      <div>
+        <h3 style="margin-top:16px">Top gole</h3>
+        <table class="mini-table">
+          <thead><tr><th>Gracz</th><th>Team</th><th>Gole</th></tr></thead>
+          <tbody>${topPlayers.map(p=>`<tr><td>${p.name}</td><td>${p.team || "—"}</td><td>${p.goals || 0}</td></tr>`).join("")}</tbody>
+        </table>
+      </div>
+      <div>
+        <h3 style="margin-top:16px">Tabela</h3>
+        <table class="mini-table">
+          <thead><tr><th>#</th><th>Team</th><th>PKT</th><th>BR</th></tr></thead>
+          <tbody>${standings.map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.p}</td><td>${r.gd>=0?"+":""}${r.gd}</td></tr>`).join("")}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const select = document.getElementById("eventBrowserSelect");
+  if(select) select.value = id;
+  if(save) localStorage.setItem("wfc_state", JSON.stringify({...state,timerId:null}));
+}
+function browsePrevEvent(){
+  const base = getBase();
+  const events = base.events || [];
+  if(!events.length) return;
+  const idx = Math.max(0, events.findIndex(e=>e.id===base.selectedEventId));
+  const nextIdx = idx <= 0 ? events.length-1 : idx-1;
+  previewHistoryEvent(events[nextIdx].id);
+}
+function browseNextEvent(){
+  const base = getBase();
+  const events = base.events || [];
+  if(!events.length) return;
+  const idx = Math.max(0, events.findIndex(e=>e.id===base.selectedEventId));
+  const nextIdx = idx >= events.length-1 ? 0 : idx+1;
+  previewHistoryEvent(events[nextIdx].id);
+}
+function renderHistoryAndRankings(){
+  const base = getBase();
+  rebuildPlayerBase();
+  renderSeasonOverview();
+  renderEventBrowser();
+
+  const historyBox = document.getElementById("historyList");
+  if(historyBox){
+    historyBox.innerHTML = base.events.slice().reverse().map(ev=>`
+      <div class="history-item">
+        <div>
+          <div class="history-title">${ev.id} · ${ev.name}</div>
+          <div class="history-meta">${ev.dateLabel || ""} · ${ev.totalPlayers || 0} graczy · ${ev.totalGoals || 0} goli · ${ev.matchesCount || 0} meczów · top: ${ev.topScorer ? ev.topScorer.name + " (" + ev.topScorer.goals + ")" : "—"}</div>
+        </div>
+        <div>
+          <button class="small-btn" onclick="loadEventFromHistory('${ev.id}')">Wczytaj</button>
+          <button class="small-btn danger" onclick="deleteEventFromHistory('${ev.id}')">Usuń</button>
+        </div>
+      </div>
+    `).join("") || `<div class="history-item"><div class="history-meta">Brak zapisanych ustawek. Po wydarzeniu kliknij „Zapisz ustawkę”.</div></div>`;
+  }
+
+  const rankingBox = document.getElementById("seasonRanking");
+  if(rankingBox){
+    const rows = Object.values(base.players).sort((a,b)=>b.goals-a.goals || b.events-a.events || a.name.localeCompare(b.name));
+    rankingBox.innerHTML = `
+      <div class="leaderboard-row header"><div>#</div><div>Gracz</div><div>Ustawki</div><div>Gole</div><div>Śr.</div><div>Ostatnio</div></div>
+      ${rows.map((p,i)=>`
+        <div class="leaderboard-row">
+          <div>${i+1}</div>
+          <div><strong>${p.name}</strong></div>
+          <div>${p.events}</div>
+          <div>${p.goals}</div>
+          <div>${p.events ? (p.goals/p.events).toFixed(1) : "0.0"}</div>
+          <div>${p.lastEvent || "—"}</div>
+        </div>
+      `).join("")}
+    `;
+  }
+}
+function loadEventFromHistory(id){
+  const ev = getBase().events.find(e=>e.id===id);
+  if(!ev) return;
+  document.getElementById("eventNumber").value = ev.id;
+  state.eventNumber = ev.id;
+  state.teams = ev.teams || state.teams;
+  state.rounds = ev.schedule || [];
+  state.scores = ev.scores || {};
+  state.players = (ev.players || []).map(p=>({name:p.name, level:p.level || 2, present:true, team:p.team || "", goals:p.goals || 0}));
+  document.getElementById("teamCount").value = String(Math.min(20, Math.max(6, state.teams.length || 9)));
+  if(document.getElementById("pitchCount")) document.getElementById("pitchCount").value = String(ev.pitchCount || 3);
+  state.currentRound = 0;
+  state.remaining = state.duration;
+  saveAndRender();
+}
+function deleteEventFromHistory(id){
+  if(!confirm(`Usunąć ustawkę ${id} z historii?`)) return;
+  const base = getBase();
+  base.events = base.events.filter(e=>e.id!==id);
+  rebuildPlayerBase();
+  if(state.base.events.length) state.base.selectedEventId = state.base.events[state.base.events.length-1].id;
+  saveAndRender();
+}
+function exportBase(){
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    app: "WARSAW FC Matchday Base",
+    base: getBase()
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `warsaw-fc-base-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+function importBaseFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      state.base = data.base || data;
+      rebuildPlayerBase();
+      saveAndRender();
+      alert("Zaimportowano bazę sezonu.");
+    }catch(err){
+      alert("Nie udało się zaimportować pliku JSON.");
+    }
+  };
+  reader.readAsText(file);
+}
+function resetSeasonBase(){
+  if(!confirm("Usunąć całą historię ustawek i ranking sezonu?")) return;
+  state.base = {events:[], players:{}};
+  saveAndRender();
+}
+function renderFullSchedule(){
+  const pitchCount = Number(document.getElementById("pitchCount")?.value || 3);
+  const labels = Array.from({length:pitchCount}, (_,i)=>`BOISKO NR ${i+1}`);
+  const box = document.getElementById("fullSchedule");
+  if(!box) return;
+  box.innerHTML = (state.rounds || []).map((slot, idx)=>{
+    const pitchCount = Number(document.getElementById("pitchCount")?.value || 3);
+    const labels = Array.from({length:pitchCount}, (_,i)=>`BOISKO NR ${i+1}`);
+    const matches = labels.map((_,i)=>{
+      const m = (slot.matches || [])[i];
+      if(!m) return `<div class="schedule-match">${labels[i]}<br><strong>—</strong></div>`;
+      const tag = m[2] ? "BONUS" : (m[3] || "MECZ");
+      return `<div class="schedule-match">${labels[i]}<br><strong>${m[0]} vs ${m[1]}</strong><br>${tag}</div>`;
+    }).join("");
+    return `<div class="schedule-round">
+      <div class="schedule-title">Start / kolejka ${idx+1}</div>
+      <div class="schedule-matches">${matches}</div>
+    </div>`;
+  }).join("");
+}
+function renderGoalStats(){
+  const active = state.players.filter(p=>p.present);
+
+  document.getElementById("playerGoalsEditor").innerHTML = active.map((p,i)=>{
+    const realIndex = state.players.indexOf(p);
+    return `
+      <div class="goal-row">
+        <div>${p.name} <span style="color:#888">(${p.team || "bez teamu"})</span></div>
+        <input type="number" min="0" value="${p.goals || 0}" onchange="updateGoals(${realIndex}, this.value)">
+      </div>
+    `;
+  }).join("");
+
+  const sorted = active.slice().sort((a,b)=>(b.goals||0)-(a.goals||0));
+  document.getElementById("topScorers").innerHTML = sorted.map((p,i)=>`
+    <div class="topscorer">
+      #${i+1} ${p.name} — ${p.goals || 0} GOLI
+    </div>
+  `).join("");
+}
+
+function renderPlayers(){
+  const teams = getWfcTeams();
+  const opts = (selected) => ['<option value="">—</option>'].concat(
+    teams.map(t=>`<option value="${t}" ${selected===t?"selected":""}>${t}</option>`)
+  ).join("");
+  document.getElementById("playerList").innerHTML = state.players.map((p,i)=>`
+    <div class="player-item">
+      <input type="checkbox" ${p.present?"checked":""} onchange="updatePlayer(${i},'present',this.checked)">
+      <input value="${p.name}" onchange="updatePlayer(${i},'name',this.value)">
+      <select onchange="updatePlayer(${i},'level',this.value)">
+        <option value="3" ${p.level==3?"selected":""}>pro</option>
+        <option value="2" ${p.level==2?"selected":""}>mid</option>
+        <option value="1" ${p.level==1?"selected":""}>beg</option>
+      </select>
+      <span></span>
+      <select onchange="updatePlayer(${i},'team',this.value)">${opts(p.team)}</select>
+      <button onclick="removePlayer(${i})">x</button>
+    </div>
+  `).join("");
+}
+function renderRosters(){
+  const teams = getWfcTeams();
+  document.getElementById("rosters").innerHTML = teams.map(t=>{
+    const players = state.players.filter(p=>p.present && p.team===t);
+    const names = players.map(p=>`${p.name} <span style="color:#777">(${p.goals || 0}g)</span>`);
+    const cls = players.length > 4 ? "over" : players.length >= 3 ? "full" : "";
+    const note = players.length < 3 ? "dobierz do min. 3" : players.length > 4 ? "za dużo" : "OK";
+    return `<div class="roster-card ${cls}"><h4>${t}</h4><div class="roster-count">${players.length}/4 — ${note}</div><div>${names.length ? names.join("<br>") : "BRAK"}</div></div>`;
+  }).join("");
+}
+function getWfcTeams(){
+  const count = Number(document.getElementById("teamCount")?.value || 9);
+  return Array.from({length: count}, (_, i) => `WFC ${i+1}`);
+}
+function setWfcTeams(){
+  const teams = getWfcTeams();
+  document.getElementById("teamsInput").value = teams.join("\n");
+  generate();
+}
+function buildPackedSchedule(teams){
+  const mode = document.getElementById("modeType")?.value || "double";
+  const pitchCount = Number(document.getElementById("pitchCount")?.value || 3);
+
+  const required = [];
+
+  // Pierwsza runda.
+  for(let i=0;i<teams.length;i++){
+    for(let j=i+1;j<teams.length;j++){
+      required.push([teams[i], teams[j], false, "MECZ"]);
+    }
+  }
+
+  // Rewanże.
+  if(mode === "double"){
+    for(let i=0;i<teams.length;i++){
+      for(let j=i+1;j<teams.length;j++){
+        required.push([teams[j], teams[i], false, "REWANŻ"]);
+      }
+    }
+  }
+
+  const slots = [];
+  let remaining = required.slice();
+  let bonusCursor = 0;
+
+  function pairKey(a,b){ return [a,b].sort().join("::"); }
+
+  function makeBonusMatch(used, history){
+    const options = [];
+    for(let i=0;i<teams.length;i++){
+      for(let j=i+1;j<teams.length;j++){
+        const a=teams[i], b=teams[j];
+        if(used.has(a) || used.has(b)) continue;
+        const key = pairKey(a,b);
+        options.push({match:[a,b,true,"BONUS"], count:history[key] || 0});
+      }
+    }
+    options.sort((x,y)=>x.count-y.count);
+    if(!options.length) return null;
+    const chosen = options[bonusCursor % options.length].match;
+    bonusCursor++;
+    return chosen;
+  }
+
+  const history = {};
+  required.forEach(m => history[pairKey(m[0],m[1])] = 1);
+
+  while(remaining.length){
+    let slot = [];
+    let used = new Set();
+
+    for(let pass=0; pass<8 && slot.length<pitchCount; pass++){
+      for(let i=0; i<remaining.length && slot.length<pitchCount; i++){
+        const [a,b] = remaining[i];
+        if(!used.has(a) && !used.has(b)){
+          slot.push(remaining[i]);
+          used.add(a); used.add(b);
+          remaining.splice(i,1);
+          i--;
+        }
+      }
+    }
+
+    while(slot.length < pitchCount){
+      const bonus = makeBonusMatch(used, history);
+      if(!bonus) break;
+      slot.push(bonus);
+      used.add(bonus[0]); used.add(bonus[1]);
+      history[pairKey(bonus[0],bonus[1])] = (history[pairKey(bonus[0],bonus[1])] || 0) + 1;
+    }
+
+    slots.push({
+      matches: slot,
+      roundNumber: slots.length + 1,
+      part: 1,
+      partsTotal: 1
+    });
+  }
+
+  return slots;
+}
+function generate(){
+  const teams = getWfcTeams();
+  document.getElementById("teamsInput").value = teams.join("\n");
+  if(teams.length < 2){ alert("Dodaj minimum 2 zespoły"); return; }
+  state.teams=teams;
+  state.rounds=buildPackedSchedule(teams);
+  state.currentRound=0;
+  state.duration=Number(document.getElementById("matchMin").value||5)*60;
+  state.remaining=state.duration;
+  state.scores={};
+  saveAndRender();
+}
+function matchId(roundIdx, pitchIdx){ return `${roundIdx}-${pitchIdx}`; }
+
+function renderKPIs(){
+  const matches = state.rounds.reduce((acc,s)=>acc + ((s.matches||[]).filter(m=>!m[2]).length),0);
+  document.getElementById("kpiTeams").textContent = state.teams.length;
+  document.getElementById("kpiPlayers").textContent = state.players.filter(p=>p.present).length;
+  document.getElementById("kpiPitches").textContent = document.getElementById("pitchCount")?.value || 3;
+  document.getElementById("kpiMatches").textContent = matches;
+}
+function render(){
+  document.getElementById("title").textContent=document.getElementById("eventName").value;
+  state.eventNumber = document.getElementById("eventNumber") ? document.getElementById("eventNumber").value : state.eventNumber;
+  document.getElementById("eventCode").textContent = state.eventNumber || "[ S03E13 ]";
+  document.getElementById("partner").textContent=document.getElementById("partnerName").value;
+  document.getElementById("minutesLabel").textContent=document.getElementById("matchMin").value;
+  const msgInput = document.getElementById("message");
+  if(msgInput && (msgInput.value === "Sercem Warszawy" || msgInput.value === "WE ARE WARSAW FC" || !msgInput.value.trim())) msgInput.value = "ZAWSZE TU. ZAWSZE RAZEM. / WE ARE WARSAW FC";
+  document.getElementById("msg").textContent=msgInput.value;
+  if(document.getElementById("tickerEvent")) document.getElementById("tickerEvent").textContent = state.eventNumber || "[ S03E13 ]";
+  document.getElementById("roundNow").textContent=state.currentRound+1;
+  document.getElementById("roundTotal").textContent=Math.max(state.rounds.length,1);
+  document.getElementById("timer").textContent=formatTime(state.remaining);
+
+  const pitchCount = Number(document.getElementById("pitchCount")?.value || 3);
+  const labels = Array.from({length:pitchCount}, (_,i)=>`BOISKO NR ${i+1}`);
+  const cls=["left","mid","right"];
+  const slot=state.rounds[state.currentRound]||{matches:[]};
+  const round=slot.matches||[];
+  const extraInfo = `START ${slot.roundNumber || 1}`;
+  document.getElementById("status").textContent = extraInfo;
+  document.getElementById("pitches").innerHTML = labels.map((_,i)=>{
+    const m=round[i]; const id=matchId(state.currentRound,i); const s=state.scores[id]||["",""];
+    if(!m) return `<div class="pitch ${cls[i]}"><div class="stripe"></div><div style="position:absolute;inset:auto -30% -60% -30%;height:160px;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.05"></div><div class="pitch-title">${labels[i]}</div><div class="teams">KONIEC<br><span class="vs">BRAK MECZU</span></div></div>`;
+    return `<div class="pitch ${cls[i]}"><div class="stripe"></div><div style="position:absolute;inset:auto -30% -60% -30%;height:160px;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.05"></div><div class="pitch-title">${labels[i]}</div>
+      <div class="teams">${m[0]}<div class="vs">${m[2] ? "BONUS" : (m[3] || "VS")}</div>${m[1]}</div>
+      <div class="score"><input type="number" value="${s[0]}" onchange="setScore('${id}',0,this.value)"><input type="number" value="${s[1]}" onchange="setScore('${id}',1,this.value)"></div>
+    </div>`;
+  }).join("");
+
+  const nextSlot=state.rounds[state.currentRound+1]||{matches:[]};
+  const next=nextSlot.matches||[];
+  document.getElementById("nextRound").innerHTML=labels.map((_,i)=>{
+    const m=next[i]; return `<div class="next-card">${labels[i]}<br><strong>${m?m[0]:"-"} ${m?(m[2]?"bonus":"vs"):""} ${m?m[1]:""}</strong></div>`
+  }).join("");
+  renderTable();
+  renderPlayers();
+  renderRosters();
+  renderGoalStats();
+  renderFullSchedule();
+  renderKPIs();
+  renderHistoryAndRankings();
+}
+function setScore(id,idx,val){ state.scores[id]=state.scores[id]||["",""]; state.scores[id][idx]=val; saveAndRender(); }
+function renderTable(){
+  const table={}; state.teams.forEach(t=>table[t]={team:t,m:0,p:0,gf:0,ga:0,gd:0});
+  state.rounds.forEach((slot,ri)=>(slot.matches||[]).forEach((m,pi)=>{
+    if(m[2]) return; // bonus/rewanż nie liczy się do tabeli każdy z każdym
+    const s=state.scores[matchId(ri,pi)];
+    if(!s || s[0]==="" || s[1]==="") return;
+    const a=Number(s[0]), b=Number(s[1]), A=table[m[0]], B=table[m[1]];
+    A.m++; B.m++; A.gf+=a; A.ga+=b; B.gf+=b; B.ga+=a;
+    if(a>b){A.p+=3}else if(b>a){B.p+=3}else{A.p++;B.p++}
+  }));
+  const rows=Object.values(table).map(x=>({...x, gd:x.gf-x.ga})).sort((a,b)=>b.p-a.p || b.gd-a.gd || b.gf-a.gf);
+  document.getElementById("standings").innerHTML=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.m}</td><td>${r.p}</td><td>${r.gd>=0?"+":""}${r.gd}</td></tr>`).join("");
+}
+function formatTime(sec){ const m=Math.floor(sec/60), s=sec%60; return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`; }
+function tick(){ if(state.remaining>0){state.remaining--; render(); localStorage.setItem("wfc_state",JSON.stringify(state));} else pauseTimer(); }
+function startTimer(){ pauseTimer(); state.timerId=setInterval(tick,1000); render(); }
+function pauseTimer(){ if(state.timerId) clearInterval(state.timerId); state.timerId=null; render(); }
+function resetTimer(){ state.remaining=state.duration; saveAndRender(); }
+function nextRound(){ if(state.currentRound < state.rounds.length-1){state.currentRound++; state.remaining=state.duration; saveAndRender();} }
+function prevRound(){ if(state.currentRound > 0){state.currentRound--; state.remaining=state.duration; saveAndRender();} }
+function toggleScreen(){
+  document.body.classList.toggle("screen-mode");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function togglePhonePreview(){
+  document.body.classList.toggle("phone-preview");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function saveAndRender(){ localStorage.setItem("wfc_state",JSON.stringify({...state,timerId:null})); render(); }
+function clearData(){ if(confirm("Wyczyścić wyniki?")){state.scores={}; saveAndRender();} }
+window.onload=()=>{
+  const saved=localStorage.getItem("wfc_state");
+  if(saved){try{state={...state,...JSON.parse(saved),timerId:null}}catch(e){}}
+
+  // Uzupełnij statystyki i listę do 30 osób, jeśli otwierasz starą wersję.
+  if(!state.base) state.base = {events:[], players:{}};
+  if(!state.base.events) state.base.events = [];
+  if(!state.base.players) state.base.players = {};
+  state.players = (state.players || []).map(p => ({goals:0, team:"", level:2, present:true, ...p}));
+  for(let i=state.players.length+1; i<=30; i++){
+    state.players.push({name:`Zawodnik ${i}`, level:(i%5===0?3:(i%3!==0?2:1)), present:true, team:"", goals:0});
+  }
+
+  if(document.getElementById("eventNumber")) document.getElementById("eventNumber").value = state.eventNumber || "[ S03E13 ]";
+  const count = Math.min(20, Math.max(6, state.teams?.length || 9));
+  document.getElementById("teamCount").value = String(count);
+  setWfcTeams();
+}
+</script>
+</body>
+</html>
