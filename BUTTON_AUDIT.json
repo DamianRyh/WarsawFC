@@ -1,0 +1,14 @@
+{
+  "button_count": 75,
+  "has_home": true,
+  "has_back": true,
+  "has_views": {
+    "live": true,
+    "admin": true,
+    "season": true,
+    "ranking": true,
+    "profiles": true,
+    "schedule": true
+  },
+  "has_exit_tv": true
+}
