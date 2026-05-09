@@ -183,8 +183,8 @@ body{padding-bottom:82px}
         <div id="loginForm">
           <label>Email / nick</label>
           <input id="loginEmail" placeholder="np. damian@warsawfc.pl albo Ryhu">
-          <label>Hasło / kod dostępu</label>
-          <input id="loginPassword" type="password" placeholder="WFC-ADMIN / WFC-PLAYER">
+          <label>Hasło konta</label>
+          <input id="loginPassword" type="password" placeholder="hasło Supabase">
           <label>Rola</label>
           <select id="authLoginRole">
             <option value="guest">Guest</option>
@@ -201,6 +201,8 @@ body{padding-bottom:82px}
           <input id="regName" placeholder="np. Ryhu">
           <label>Email</label>
           <input id="regEmail" placeholder="email">
+          <label>Hasło</label>
+          <input id="regPassword" type="password" placeholder="minimum 6 znaków">
           <label>Pozycja</label>
           <input id="regPosition" placeholder="np. attacker / defender / freestyle">
           <label>Instagram</label>
@@ -235,6 +237,10 @@ body{padding-bottom:82px}
   <div class="grid2" style="margin-top:10px">
     <button onclick="openAuth()">Logowanie</button>
     <button onclick="authLogout()">Wyloguj</button>
+  </div>
+  <div class="grid2" style="margin-top:10px">
+    <button onclick="supabasePullProfilesIntoApp()">Pobierz profile online</button>
+    <button onclick="supabasePushCurrentEvent()">Zapisz event online</button>
   </div>
 </div>
 <div class="role-box">
@@ -332,6 +338,281 @@ body{padding-bottom:82px}
 </section>
 <section class="bottom"><span>ZAWSZE TU. ZAWSZE RAZEM.</span><span>WE ARE WARSAW FC</span><span id="bottomEvent">[ S03E12 ]</span></section>
 </main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* --- WFC SUPABASE INTEGRATION v1 --- */
+const WFC_SUPABASE_URL = "https://kpbzjfanleyaiwhzvsor.supabase.co";
+const WFC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YsLanoIurd3BXKkT4zRN5w_wYoS4H4l";
+let wfcSupabase = null;
+
+function initSupabaseClient(){
+  if(!window.supabase){
+    console.warn("Supabase SDK not loaded. App will use local fallback.");
+    return null;
+  }
+  if(!wfcSupabase){
+    wfcSupabase = window.supabase.createClient(WFC_SUPABASE_URL, WFC_SUPABASE_PUBLISHABLE_KEY);
+  }
+  return wfcSupabase;
+}
+
+async function supabaseUpsertProfile(user, extra={}){
+  const sb = initSupabaseClient();
+  if(!sb || !user) return null;
+
+  const profile = {
+    id: user.id,
+    nickname: extra.nickname || user.user_metadata?.nickname || user.email?.split("@")[0] || "player",
+    full_name: extra.full_name || extra.nickname || user.user_metadata?.nickname || "",
+    instagram: extra.instagram || "",
+    position: extra.position || "",
+    avatar_url: extra.avatar_url || "",
+    role: extra.role || "player",
+    bio: extra.bio || ""
+  };
+
+  const { data, error } = await sb.from("profiles").upsert(profile).select().single();
+  if(error){
+    console.warn("Profile upsert error:", error.message);
+    return profile;
+  }
+  return data;
+}
+
+async function supabaseLoadProfile(user){
+  const sb = initSupabaseClient();
+  if(!sb || !user) return null;
+  const { data, error } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if(error){
+    console.warn("Profile load error:", error.message);
+    return null;
+  }
+  return data;
+}
+
+function profileToSession(profile, user){
+  return {
+    id: user?.id || profile?.id || "",
+    name: profile?.nickname || profile?.full_name || user?.email || "Player",
+    email: user?.email || "",
+    role: profile?.role || "player",
+    position: profile?.position || "",
+    instagram: profile?.instagram || "",
+    photo: profile?.avatar_url || ""
+  };
+}
+
+async function authLogin(){
+  const roleChoice = document.getElementById("authLoginRole")?.value || "guest";
+  const email = document.getElementById("loginEmail")?.value.trim();
+  const password = document.getElementById("loginPassword")?.value.trim();
+
+  if(roleChoice === "guest"){
+    setSession({name:"Guest", email:"", role:"guest"});
+    showView("live");
+    return;
+  }
+
+  if(!email || !password){
+    alert("Wpisz email/nick i hasło.");
+    return;
+  }
+
+  const sb = initSupabaseClient();
+  if(!sb){
+    alert("Supabase SDK nie jest dostępny. Sprawdź internet lub konfigurację.");
+    return;
+  }
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error){
+    alert("Nie udało się zalogować: " + error.message);
+    return;
+  }
+
+  let profile = await supabaseLoadProfile(data.user);
+  if(!profile){
+    profile = await supabaseUpsertProfile(data.user, { role:"player" });
+  }
+
+  setSession(profileToSession(profile, data.user));
+  await supabasePullProfilesIntoApp();
+  showView((profile?.role || "player") === "admin" ? "live" : "profiles");
+}
+
+async function authRegister(){
+  const name = document.getElementById("regName")?.value.trim();
+  const email = document.getElementById("regEmail")?.value.trim();
+  const password = document.getElementById("regPassword")?.value.trim();
+  const position = document.getElementById("regPosition")?.value.trim();
+  const instagram = document.getElementById("regInstagram")?.value.trim();
+  const level = Number(document.getElementById("regLevel")?.value || 2);
+
+  if(!name || !email || !password){
+    alert("Wpisz nick, email i hasło.");
+    return;
+  }
+
+  const sb = initSupabaseClient();
+  if(!sb){
+    alert("Supabase SDK nie jest dostępny.");
+    return;
+  }
+
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { nickname:name, position, instagram }
+    }
+  });
+
+  if(error){
+    alert("Nie udało się zarejestrować: " + error.message);
+    return;
+  }
+
+  if(!data.user){
+    alert("Sprawdź email i potwierdź konto, jeśli Supabase tego wymaga.");
+    return;
+  }
+
+  const profile = await supabaseUpsertProfile(data.user, {
+    nickname:name,
+    full_name:name,
+    position,
+    instagram,
+    role:"player"
+  });
+
+  const existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
+  if(existing){
+    existing.position = position;
+    existing.instagram = instagram;
+    existing.level = level;
+    existing.present = true;
+  } else {
+    state.players.push({
+      name,
+      level,
+      present:true,
+      team:"",
+      goals:0,
+      position,
+      instagram,
+      notes:"",
+      photo:""
+    });
+  }
+
+  save();
+  setSession(profileToSession(profile, data.user));
+  await supabasePullProfilesIntoApp();
+  showView("profiles");
+  render();
+}
+
+async function authLogout(){
+  const sb = initSupabaseClient();
+  if(sb) await sb.auth.signOut();
+  currentUser = null;
+  localStorage.removeItem("wfc_current_user_v12_seeded");
+  localStorage.removeItem("wfc_current_user");
+  currentRole = "guest";
+  localStorage.setItem("wfc_role_v12_seeded", currentRole);
+  try{ applyRole(); }catch(e){}
+  try{ updateSessionUI(); }catch(e){}
+  showView("live");
+}
+
+async function supabasePullProfilesIntoApp(){
+  const sb = initSupabaseClient();
+  if(!sb) return;
+
+  const { data, error } = await sb
+    .from("profiles")
+    .select("id,nickname,full_name,instagram,position,avatar_url,role,goals,appearances,bio")
+    .order("created_at", { ascending:true });
+
+  if(error){
+    console.warn("Profiles pull error:", error.message);
+    return;
+  }
+
+  (data || []).forEach(row => {
+    const name = row.nickname || row.full_name || "Player";
+    const existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
+    const payload = {
+      name,
+      level:2,
+      present:false,
+      team:"",
+      goals:Number(row.goals || 0),
+      position:row.position || "",
+      instagram:row.instagram || "",
+      notes:row.bio || "",
+      photo:row.avatar_url || ""
+    };
+    if(existing){
+      existing.position = payload.position;
+      existing.instagram = payload.instagram;
+      existing.notes = payload.notes;
+      existing.photo = payload.photo;
+    } else {
+      state.players.push(payload);
+    }
+  });
+
+  save();
+  render();
+}
+
+async function supabasePushCurrentEvent(){
+  const sb = initSupabaseClient();
+  if(!sb) return alert("Brak Supabase.");
+
+  const ev = eventSummary();
+  const { data, error } = await sb.from("events").upsert({
+    code: ev.id,
+    title: ev.name,
+    event_date: ev.date ? ev.date.slice(0,10) : new Date().toISOString().slice(0,10),
+    season: "S03",
+    status: "completed"
+  }, { onConflict:"code" }).select().single();
+
+  if(error){
+    alert("Nie udało się zapisać ustawki online: " + error.message);
+    return;
+  }
+
+  alert("Zapisano ustawkę online: " + ev.id);
+}
+
+async function initSupabaseSession(){
+  const sb = initSupabaseClient();
+  if(!sb) return;
+
+  const { data } = await sb.auth.getSession();
+  const session = data?.session;
+
+  if(session?.user){
+    let profile = await supabaseLoadProfile(session.user);
+    if(!profile) profile = await supabaseUpsertProfile(session.user, { role:"player" });
+    setSession(profileToSession(profile, session.user));
+    await supabasePullProfilesIntoApp();
+  }
+
+  sb.auth.onAuthStateChange(async (_event, session) => {
+    if(session?.user){
+      let profile = await supabaseLoadProfile(session.user);
+      if(!profile) profile = await supabaseUpsertProfile(session.user, { role:"player" });
+      setSession(profileToSession(profile, session.user));
+    }
+  });
+}
+
+window.addEventListener("load", initSupabaseSession);
+
+</script>
 <script>
 
 window.viewHistory=['live'];
@@ -734,8 +1015,8 @@ function renderSeason(){const b=base();rebuildBase();const totalGoals=b.events.r
 function renderRanking(){const rows=Object.values(base().players).sort((a,b)=>b.goals-a.goals||b.events-a.events);ranking.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Gracz</th><th>Ustawki</th><th>Gole</th><th>Śr.</th><th>Ostatnio</th></tr></thead><tbody>${rows.map((p,i)=>`<tr><td>${i+1}</td><td><span class="player-link" data-player="${p.name}">${p.name}</span></td><td>${p.events}</td><td>${p.goals}</td><td>${p.events?(p.goals/p.events).toFixed(1):"0.0"}</td><td>${p.lastEvent}</td></tr>`).join("")}</tbody></table></div>`}
 
 // SUPABASE READY — następny krok:
-// const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
-// const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+// const SUPABASE_URL = "https://kpbzjfanleyaiwhzvsor.supabase.co";
+// const SUPABASE_ANON_KEY = "sb_publishable_YsLanoIurd3BXKkT4zRN5w_wYoS4H4l";
 // const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 //
 // Plan tabel:
