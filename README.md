@@ -1,26 +1,37 @@
-# WARSAW FC Matchday Base — Supabase Ready v1
+# WARSAW FC Base 1.0 Clean
 
-Podłączono Supabase:
+Stabilna, uporządkowana wersja aplikacji.
 
-- Project URL: `https://kpbzjfanleyaiwhzvsor.supabase.co`
-- Publishable key: dodany w `index.html`
-- Supabase Auth: rejestracja i logowanie email/hasło
-- Profile zapisują się w tabeli `profiles`
-- Możliwość pobrania profili online do aplikacji
-- Możliwość zapisania aktualnej ustawki online do tabeli `events`
+## Struktura
 
-## Ważne
+```txt
+index.html
+styles.css
+config.js
+supabaseClient.js
+app.js
+TEST_CHECKLIST.md
+SUPABASE_NOTES.md
+```
 
-Nie wrzucaj secret key/service role do frontendu.
+## Funkcje w tej wersji
 
-## Po deployu
+- logowanie/rejestracja przez Supabase,
+- Guest/Public,
+- Admin/Public/TV,
+- terminarz 1–3 boiska,
+- 6–20 zespołów,
+- strzelcy w meczu,
+- tabela live,
+- lista strzelców,
+- profile graczy,
+- historia ustawek,
+- ranking sezonu,
+- eksport/import local JSON,
+- seed ustawek S03E03–S03E12.
 
-1. Wejdź w aplikację.
-2. Zarejestruj konto.
-3. W Supabase SQL Editor uruchom `supabase_admin_role.sql`, podstawiając swój email.
-4. Zaloguj się ponownie — będziesz adminem.
+## Deploy
 
-## Pliki SQL
+Wrzuć rozpakowane pliki do repo GitHub i deployuj na Vercel.
 
-- `supabase_seed_events.sql` — wgrywa ustawki S03E03-S03E12 do bazy.
-- `supabase_admin_role.sql` — ustawia admina.
+Nie wrzucaj ZIP-a jako pliku do repo — wrzuć rozpakowane pliki.

@@ -1,1152 +1,278 @@
 <!doctype html>
 <html lang="pl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>WARSAW FC Matchday Optimized</title>
-<style>
-:root{--bg:#050506;--panel:#111116;--panel2:#17171d;--line:#2b2b33;--text:#f7f7f8;--muted:#8d8d98;--good:#66d46f;--bad:#ff5c5c;--r:18px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#14141a,#050506 55%);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:1px solid var(--line);background:#101015;color:var(--text);border-radius:14px;padding:12px 14px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-button.primary{background:#fff;color:#000;border-color:#fff}button.danger{color:#ffb8b8;border-color:#5a2b2b}
-input,select,textarea{width:100%;background:#08080b;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px}label{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;margin:14px 0 6px}
-h1,h2,h3{margin:0;text-transform:uppercase}h1{font-size:28px;letter-spacing:.08em}h2{font-size:16px;margin:22px 0 12px}h3{font-size:14px;letter-spacing:.06em}
-.app{min-height:100vh;display:grid;grid-template-columns:360px 1fr}aside{background:rgba(13,13,16,.96);border-right:1px solid var(--line);padding:18px;overflow:auto}main{padding:22px;display:flex;flex-direction:column;gap:14px}
-.top{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:16px}.brand{display:flex;gap:14px;align-items:center}.logo{width:52px;height:52px;border:2px solid var(--text);border-radius:50%;display:grid;place-items:center;font-weight:950}.muted{color:var(--muted)}.event-code{font-size:22px;font-weight:950;letter-spacing:.12em;text-align:right}
-.panel{background:linear-gradient(180deg,var(--panel2),#09090c);border:1px solid var(--line);border-radius:var(--r);padding:18px}.slogan{font-size:24px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
-.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;position:sticky;top:0;z-index:5;background:rgba(5,5,6,.9);backdrop-filter:blur(14px);padding:8px;border:1px solid var(--line);border-radius:18px}.tabs button{box-shadow:none;padding:10px;font-size:12px}.tabs button.active{background:#fff;color:#000}.view{display:none}.view.active{display:flex;flex-direction:column;gap:14px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.kpi,.card{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px}.kpi .label{color:var(--muted);font-size:11px;text-transform:uppercase}.kpi .value{font-size:28px;font-weight:950;margin-top:4px}
-.clock{font-size:88px;font-weight:950;text-align:center;letter-spacing:.08em;line-height:1}.meta{display:flex;justify-content:space-between;color:var(--muted);text-transform:uppercase;font-size:14px;gap:12px}
-.pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));border:1px solid var(--line);border-radius:18px;overflow:hidden}.pitch{min-height:260px;padding:22px;border-right:1px solid var(--line);background:linear-gradient(180deg,#18181e,#09090c);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}.pitch:last-child{border-right:0}.stripe{position:absolute;top:0;left:12%;right:12%;height:4px;background:#fff}.pitch-title{color:var(--muted);font-size:13px;text-transform:uppercase;margin-bottom:18px}.teams{font-size:34px;font-weight:950;text-transform:uppercase;line-height:1.14}.vs{font-size:14px;color:var(--muted);margin:8px 0}.score{display:flex;gap:8px;margin-top:18px}.score input{width:64px;text-align:center;font-size:22px;font-weight:950}.scorer-btn{margin-top:12px;width:auto;padding:9px 12px;font-size:12px}.scorer-panel{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#08080b;text-align:left;max-height:260px;overflow:auto}.scorer-team{margin-bottom:12px}.scorer-row{display:grid;grid-template-columns:1fr auto 30px auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #202027}.goal-count{font-weight:950;text-align:center}
-.next-grid,.rosters,.season-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.card.ok{border-color:#2e6b38}.card.bad{border-color:#6b2e2e}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #24242a;text-align:left}th{color:var(--muted);text-transform:uppercase;font-size:11px}
-.player{display:grid;grid-template-columns:28px 1fr 74px;gap:8px;align-items:center;border:1px solid var(--line);background:#08080b;border-radius:14px;padding:8px;margin-bottom:8px}.player input[type=checkbox]{width:auto}.list{max-height:360px;overflow:auto}.schedule-round,.history-item{border-bottom:1px solid var(--line);padding:12px}.schedule-round.active{background:#15151b;border-left:4px solid #fff}.round-nav{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:14px}.round-pills{display:flex;gap:8px;overflow:auto;padding:4px}.round-pill{min-width:44px;padding:9px 11px;border-radius:999px;box-shadow:none}.round-pill.active{background:#fff;color:#000}.profiles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.profile-card{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px}.avatar{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:950;background:#16161d}.profile-head{display:flex;gap:12px;align-items:center;margin-bottom:12px}.profile-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted);font-size:12px}.profile-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.schedule-matches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}.bottom{display:flex;justify-content:space-between;gap:12px;color:var(--muted);text-transform:uppercase;border-top:1px solid var(--line);padding-top:14px;font-size:12px}
-.tv-back{display:none;position:fixed;right:18px;top:18px;z-index:50;width:auto;background:#fff;color:#000;border:0;border-radius:999px}.tv-mode aside,.phone-mode aside{display:none}.tv-mode .app,.phone-mode .app{display:block}.tv-mode main{padding:28px}.tv-mode .tabs{display:none}.tv-mode .score{display:none}.tv-mode .tv-back{display:block}.tv-mode .view{display:none}.tv-mode #liveView{display:flex}
-.tv-compact aside{display:none}.tv-compact .app{display:block}.tv-compact main{padding:28px}.tv-compact .tabs,.tv-compact .score,.tv-compact #adminView,.tv-compact #seasonView,.tv-compact #rankingView,.tv-compact #profilesView,.tv-compact #scheduleView{display:none!important}.tv-compact .tv-back{display:block}
-.tv-compact .view{display:none}.tv-compact #tvCompactView{display:flex!important}
-.tv-compact-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}.tv-compact-bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px}.tv-compact table{font-size:18px}.tv-compact th,.tv-compact td{padding:12px 10px}.tv-scorer{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:13px 0;font-size:20px}.tv-scorer strong{font-size:24px}
-.tv-current{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.tv-match-card{background:linear-gradient(180deg,#18181f,#08080b);border:1px solid var(--line);border-radius:20px;padding:24px;text-align:center;min-height:230px;display:flex;flex-direction:column;justify-content:center}
-.tv-match-card .teams{font-size:38px}.tv-next-card{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
-.tv-compact .clock{font-size:118px}
-@media(max-width:760px){.tv-compact-grid,.tv-compact-bottom{grid-template-columns:1fr}.tv-compact .clock{font-size:64px}.tv-compact table{font-size:14px}.tv-scorer{font-size:15px}.tv-scorer strong{font-size:18px}}
-.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
-.public-mode aside{display:none}
-.public-mode .app{display:block}
-.public-mode main{padding:22px}
-.public-mode #adminView,.public-mode #seasonView .history-item button,.public-mode #scheduleView button,.public-mode .score,.public-mode .scorer-btn,.public-mode .scorer-panel,.public-mode .floating-nav{display:none!important}.guest-mode .score,.guest-mode .scorer-btn,.guest-mode .scorer-panel,.guest-mode #adminView,.guest-mode #profilesView{display:none!important}.player-mode .score,.player-mode .scorer-btn,.player-mode .scorer-panel,.player-mode #adminView{display:none!important}
-.public-mode .tabs{grid-template-columns:repeat(4,1fr)}.public-mode .admin-mobile-link{display:none!important}
-.public-mode #tab-admin,.public-mode #tab-profiles{display:none}
-.admin-badge,.public-badge{display:inline-block;padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:12px;text-transform:uppercase;color:var(--muted)}
-.public-badge{color:#fff;border-color:#fff}
-.role-box{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-.auth-screen{display:none;position:fixed;inset:0;z-index:999;background:radial-gradient(circle at top,#17171f,#050506 55%);padding:24px;overflow:auto}
-.auth-screen.active{display:grid;place-items:center}
-.auth-card{width:min(920px,100%);background:linear-gradient(180deg,#15151b,#09090c);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 25px 80px rgba(0,0,0,.55)}
-.auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.auth-hero{border:1px solid var(--line);border-radius:22px;padding:22px;background:#08080b;display:flex;flex-direction:column;justify-content:space-between;min-height:420px}
-.auth-form{border:1px solid var(--line);border-radius:22px;padding:22px;background:#101016}
-.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.auth-tabs button.active{background:#fff;color:#000}
-.auth-mini{font-size:12px;color:var(--muted);line-height:1.5}
-.supabase-note{border:1px dashed #3d3d48;border-radius:16px;padding:12px;color:var(--muted);font-size:12px;margin-top:14px}
-.profile-chip{display:flex;align-items:center;gap:10px;background:#09090c;border:1px solid var(--line);border-radius:16px;padding:10px;margin-top:10px}
-.profile-chip .avatar{width:42px;height:42px}
-.player-link{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.player-link:hover{opacity:.8}
-.player-modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);padding:20px;overflow:auto}
-.player-modal.active{display:grid;place-items:center}
-.player-modal-card{width:min(760px,100%);background:linear-gradient(180deg,#17171f,#08080b);border:1px solid var(--line);border-radius:28px;padding:24px}
-.player-modal-grid{display:grid;grid-template-columns:180px 1fr;gap:20px}
-.player-big-avatar{width:180px;height:180px;border-radius:28px;border:1px solid var(--line);display:grid;place-items:center;font-size:54px;font-weight:950;background:#111}
-.player-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
-.player-stat{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px}
-.player-history-item{border-bottom:1px solid #202027;padding:10px 0}
-.player-close{margin-top:20px}
-@media(max-width:760px){.player-modal-card{padding:16px;border-radius:20px}.player-modal-grid{grid-template-columns:1fr}.player-big-avatar{width:120px;height:120px;font-size:38px;margin:0 auto}}
-
-.session-card{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-@media(max-width:760px){.auth-grid{grid-template-columns:1fr}.auth-card{padding:14px;border-radius:20px}.auth-hero{min-height:auto}.auth-screen{padding:12px}}
-.role-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.role-pill{display:inline-block;padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:12px;text-transform:uppercase;color:var(--muted);margin-top:8px}
-.role-admin{color:#fff;border-color:#fff}.role-player{color:#66d46f;border-color:#2e6b38}.role-guest{color:#8d8d98}
-.guest-mode .admin-only,.player-mode .admin-only{display:none!important}
-.guest-mode .player-only{display:none!important}
-.player-mode .admin-write-only{display:none!important}
-
-.phone-nav{display:none}
-@media(max-width:760px){.tabs{grid-template-columns:repeat(6,minmax(90px,1fr))}.round-nav{grid-template-columns:1fr}.profiles-grid{grid-template-columns:1fr}.profile-form{grid-template-columns:1fr}.app{display:block}.phone-nav{display:flex;position:sticky;top:0;z-index:20;gap:8px;overflow:auto;background:rgba(5,5,6,.92);backdrop-filter:blur(14px);padding:8px;border-bottom:1px solid var(--line)}.phone-nav button{min-width:max-content;font-size:11px;padding:10px}aside{border-right:0;border-bottom:1px solid var(--line);padding:14px}main{padding:12px}.top{display:block}.brand{align-items:flex-start}.event-code{text-align:left;margin-top:10px}.slogan{font-size:18px}.clock{font-size:52px}.tabs{grid-template-columns:repeat(5,minmax(90px,1fr));overflow:auto}.pitches{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.pitch{min-width:88vw;scroll-snap-align:start}.grid2,.grid3{grid-template-columns:1fr}.bottom{display:grid}.teams{font-size:28px}}
-
-.floating-nav{position:fixed;left:16px;bottom:16px;z-index:100;display:flex;gap:10px;flex-wrap:wrap}
-.float-btn{background:#fff;color:#000;border:none;border-radius:999px;padding:12px 16px;font-weight:900}
-.mobile-backbar{display:none}
-@media(max-width:760px){
-.mobile-backbar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;background:#0b0b10;border-top:1px solid #23232b;padding:10px;justify-content:space-around}
-.mobile-backbar button{font-size:11px;padding:10px 12px}
-body{padding-bottom:82px}
-.floating-nav{bottom:82px}
-}
-
-.app-nav-safe button{touch-action:manipulation}
-.floating-nav{position:fixed;left:16px;bottom:16px;z-index:100;display:flex;gap:10px;flex-wrap:wrap}
-.float-btn{background:#fff;color:#000;border:none;border-radius:999px;padding:12px 16px;font-weight:900}
-.mobile-backbar{display:none}
-@media(max-width:760px){
-.mobile-backbar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;background:#0b0b10;border-top:1px solid #23232b;padding:10px;justify-content:space-around}
-.mobile-backbar button{font-size:11px;padding:10px 12px}
-body{padding-bottom:82px}
-.floating-nav{bottom:82px}
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>WARSAW FC Base 1.0</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<div class="floating-nav app-nav-safe">
-  <button type="button" class="float-btn" data-action="home">HOME</button>
-  <button type="button" class="float-btn" data-action="back">POWRÓT</button>
-</div>
-
-<div class="mobile-backbar app-nav-safe">
-  <button type="button" data-view="live">LIVE</button>
-  <button type="button" data-view="admin">ADMIN</button>
-  <button type="button" data-view="season">SEZON</button>
-  <button type="button" data-view="ranking">RANKING</button>
-  <button type="button" data-view="profiles">PROFILE</button>
-</div>
-
-
-<div id="playerModal" class="player-modal">
-  <div class="player-modal-card">
-    <div class="player-modal-grid">
-      <div id="playerModalAvatar" class="player-big-avatar">WFC</div>
-      <div>
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-          <div>
-            <h1 id="playerModalName">Player</h1>
-            <p class="muted" id="playerModalRole">WFC</p>
-          </div>
-          <button onclick="closePlayerProfile()">✕</button>
-        </div>
-
-        <div class="player-stats">
-          <div class="player-stat">
-            <div class="muted">Gole</div>
-            <div style="font-size:32px;font-weight:950" id="playerModalGoals">0</div>
-          </div>
-          <div class="player-stat">
-            <div class="muted">Ustawki</div>
-            <div style="font-size:32px;font-weight:950" id="playerModalEvents">0</div>
-          </div>
-          <div class="player-stat">
-            <div class="muted">Pozycja</div>
-            <div style="font-size:20px;font-weight:800" id="playerModalPosition">—</div>
-          </div>
-          <div class="player-stat">
-            <div class="muted">Instagram</div>
-            <div style="font-size:18px;font-weight:700" id="playerModalInstagram">—</div>
-          </div>
-        </div>
-
-        <div class="panel" style="margin-top:18px">
-          <h3>Historia zawodnika</h3>
-          <div id="playerModalHistory"></div>
-        </div>
-
-        <button class="primary player-close" onclick="closePlayerProfile()">Powrót</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="authScreen" class="auth-screen">
-  <div class="auth-card">
-    <div class="auth-grid">
-      <div class="auth-hero">
+  <div id="authModal" class="modal active">
+    <div class="modal-card">
+      <div class="brand-row">
+        <div class="logo">WFC</div>
         <div>
-          <div class="logo" style="margin-bottom:18px">WFC</div>
           <h1>WARSAW FC BASE</h1>
-          <p class="muted">ZAWSZE TU. ZAWSZE RAZEM. · WE ARE WARSAW FC</p>
+          <p>ZAWSZE TU. ZAWSZE RAZEM. / WE ARE WARSAW FC</p>
         </div>
+      </div>
+
+      <div class="tabs mini">
+        <button data-auth-tab="login" class="active">Logowanie</button>
+        <button data-auth-tab="register">Rejestracja</button>
+        <button data-auth-tab="guest">Guest</button>
+      </div>
+
+      <section id="loginTab" class="auth-tab active">
+        <label>Email</label>
+        <input id="loginEmail" placeholder="email" />
+        <label>Hasło</label>
+        <input id="loginPassword" type="password" placeholder="hasło" />
+        <button id="loginBtn" class="primary">Zaloguj</button>
+        <p class="muted">Po Supabase: logowanie email/hasło. Lokalnie: użyj Guest albo kodów MVP.</p>
+      </section>
+
+      <section id="registerTab" class="auth-tab">
+        <label>Nick / imię</label>
+        <input id="registerName" placeholder="np. Ryhu" />
+        <label>Email</label>
+        <input id="registerEmail" placeholder="email" />
+        <label>Hasło</label>
+        <input id="registerPassword" type="password" placeholder="min. 6 znaków" />
+        <label>Pozycja</label>
+        <input id="registerPosition" placeholder="np. attacker / defender" />
+        <label>Instagram</label>
+        <input id="registerInstagram" placeholder="@username" />
+        <button id="registerBtn" class="primary">Stwórz profil</button>
+      </section>
+
+      <section id="guestTab" class="auth-tab">
+        <p class="muted">Guest widzi publiczny podgląd wydarzenia bez edycji.</p>
+        <button id="guestBtn" class="primary">Kontynuuj jako Guest</button>
+      </section>
+    </div>
+  </div>
+
+  <div id="playerModal" class="modal">
+    <div class="modal-card wide">
+      <button id="closePlayerModal" class="close">×</button>
+      <div id="playerProfile"></div>
+    </div>
+  </div>
+
+  <div class="app">
+    <aside id="adminPanel">
+      <div class="brand-row">
+        <div class="logo">WFC</div>
         <div>
-          <h2>System kont</h2>
-          <p class="auth-mini">MVP działa lokalnie w przeglądarce. Ten ekran jest przygotowany pod Supabase Auth: email, magic link, Google i role w bazie.</p>
-          <div class="supabase-note">
-            Supabase-ready: później pola z tego formularza podłączymy do tabel <strong>profiles</strong>, <strong>roles</strong>, <strong>events</strong>, <strong>stats</strong>.
+          <h2>Admin Panel</h2>
+          <p id="sessionText">Guest</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="openAuthBtn">Logowanie</button>
+        <button id="switchAccountBtn">Zmień konto</button>
+        <button id="logoutBtn" class="danger">Wyloguj</button>
+      </div>
+
+      <div class="mode-box">
+        <button id="modeAdminBtn">ADMIN</button>
+        <button id="modePublicBtn">PUBLIC</button>
+        <button id="tvBtn">TV</button>
+        <button id="tvSimpleBtn">TV kolejka</button>
+      </div>
+
+      <h3>Ustawka</h3>
+      <label>Numer ustawki</label>
+      <input id="eventCode" value="[ S03E12 ]" />
+      <label>Nazwa</label>
+      <input id="eventTitle" value="WARSAW FC MATCHDAY" />
+      <label>Czas meczu</label>
+      <input id="matchMinutes" type="number" value="5" min="1" />
+      <label>Liczba boisk</label>
+      <select id="pitchCount">
+        <option value="1">1 boisko</option>
+        <option value="2">2 boiska</option>
+        <option value="3" selected>3 boiska</option>
+      </select>
+      <label>Liczba zespołów</label>
+      <select id="teamCount"></select>
+      <label>Tryb</label>
+      <select id="scheduleMode">
+        <option value="single">Każdy z każdym</option>
+        <option value="double" selected>Każdy z każdym + rewanże</option>
+      </select>
+      <button id="generateBtn" class="primary">Generuj terminarz</button>
+
+      <h3>Zawodnicy</h3>
+      <div class="row">
+        <input id="newPlayerName" placeholder="Nick" />
+        <button id="addPlayerBtn">Dodaj</button>
+      </div>
+      <div class="actions">
+        <button id="balanceTeamsBtn">Losuj teamy 3–4</button>
+        <button id="markAllBtn">Wszyscy obecni</button>
+        <button id="clearPlayersBtn" class="danger">Wyczyść</button>
+      </div>
+      <div id="playersAdminList" class="list"></div>
+
+      <h3>Baza</h3>
+      <div class="actions">
+        <button id="saveEventBtn" class="primary">Zapisz ustawkę</button>
+        <button id="exportBtn">Eksport</button>
+        <button id="importBtn">Import</button>
+        <button id="resetLocalBtn" class="danger">Reset local</button>
+      </div>
+      <input id="importFile" type="file" accept="application/json" hidden />
+    </aside>
+
+    <main>
+      <header>
+        <div>
+          <h1 id="screenTitle">WARSAW FC MATCHDAY</h1>
+          <p>ZAWSZE TU. ZAWSZE RAZEM. / WE ARE WARSAW FC</p>
+        </div>
+        <div class="event-pill" id="screenEventCode">[ S03E12 ]</div>
+      </header>
+
+      <nav class="tabs">
+        <button data-view="live" class="active">Live</button>
+        <button data-view="season">Sezon</button>
+        <button data-view="ranking">Ranking</button>
+        <button data-view="profiles">Profile</button>
+        <button data-view="schedule">Terminarz</button>
+      </nav>
+
+      <section id="liveView" class="view active">
+        <div class="kpis" id="kpis"></div>
+
+        <section class="panel">
+          <div class="round-meta">
+            <span>Kolejka <b id="currentRoundLabel">1</b> / <b id="roundTotalLabel">1</b></span>
+            <span id="modeLabel">PUBLIC</span>
+          </div>
+          <div id="timer" class="timer">05:00</div>
+          <div class="actions center admin-only">
+            <button id="startTimerBtn" class="primary">Start</button>
+            <button id="pauseTimerBtn">Pauza</button>
+            <button id="resetTimerBtn">Reset</button>
+          </div>
+          <div class="round-nav">
+            <button id="prevRoundBtn">←</button>
+            <div id="roundPills"></div>
+            <button id="nextRoundBtn">→</button>
+          </div>
+        </section>
+
+        <section id="pitches" class="pitches"></section>
+
+        <section class="grid two">
+          <div class="panel">
+            <h3>Następna kolejka</h3>
+            <div id="nextRound"></div>
+            <h3>Składy</h3>
+            <div id="rosters" class="cards"></div>
+          </div>
+          <div class="panel">
+            <h3>Tabela</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>#</th><th>Team</th><th>M</th><th>PKT</th><th>BR</th></tr></thead>
+                <tbody id="standings"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid two">
+          <div class="panel">
+            <h3>Top scorer</h3>
+            <div id="topScorers"></div>
+          </div>
+          <div class="panel">
+            <h3>Ostatnie gole</h3>
+            <div id="lastGoals"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="seasonView" class="view">
+        <button class="back-btn" data-view="live">← Live</button>
+        <div class="panel">
+          <h3>Przegląd sezonu</h3>
+          <div id="seasonOverview" class="kpis"></div>
+        </div>
+        <div class="panel">
+          <h3>Historia ustawek</h3>
+          <div id="historyList"></div>
+        </div>
+      </section>
+
+      <section id="rankingView" class="view">
+        <button class="back-btn" data-view="live">← Live</button>
+        <div class="panel">
+          <h3>Ranking sezonu</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Gracz</th><th>Ustawki</th><th>Gole</th><th>Śr.</th></tr></thead>
+              <tbody id="rankingTable"></tbody>
+            </table>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="auth-form">
-        <div class="auth-tabs">
-          <button id="loginTab" class="active" onclick="switchAuthTab('login')">Logowanie</button>
-          <button id="registerTab" onclick="switchAuthTab('register')">Rejestracja</button>
+      <section id="profilesView" class="view">
+        <button class="back-btn" data-view="live">← Live</button>
+        <div class="panel">
+          <h3>Profile graczy</h3>
+          <div id="profilesGrid" class="profiles-grid"></div>
         </div>
+      </section>
 
-        <div id="loginForm">
-          <label>Email / nick</label>
-          <input id="loginEmail" placeholder="np. damian@warsawfc.pl albo Ryhu">
-          <label>Hasło konta</label>
-          <input id="loginPassword" type="password" placeholder="hasło Supabase">
-          <label>Rola</label>
-          <select id="authLoginRole">
-            <option value="guest">Guest</option>
-            <option value="player">Player</option>
-            <option value="admin">Admin</option>
-          </select>
-          <button class="primary" style="margin-top:14px" onclick="authLogin()">Zaloguj</button>
-          <button style="margin-top:10px" onclick="continueAsGuest()">Kontynuuj jako Guest</button>
-          <p class="auth-mini">Kody MVP: Admin = WFC-ADMIN, Player = WFC-PLAYER. W produkcji zastąpi to Supabase Auth.</p>
+      <section id="scheduleView" class="view">
+        <button class="back-btn" data-view="live">← Live</button>
+        <div class="panel">
+          <h3>Terminarz</h3>
+          <div id="fullSchedule"></div>
         </div>
+      </section>
 
-        <div id="registerForm" style="display:none">
-          <label>Nick / imię</label>
-          <input id="regName" placeholder="np. Ryhu">
-          <label>Email</label>
-          <input id="regEmail" placeholder="email">
-          <label>Hasło</label>
-          <input id="regPassword" type="password" placeholder="minimum 6 znaków">
-          <label>Pozycja</label>
-          <input id="regPosition" placeholder="np. attacker / defender / freestyle">
-          <label>Instagram</label>
-          <input id="regInstagram" placeholder="@username">
-          <label>Poziom</label>
-          <select id="regLevel">
-            <option value="1">beginner</option>
-            <option value="2" selected>medium</option>
-            <option value="3">pro</option>
-          </select>
-          <button class="primary" style="margin-top:14px" onclick="authRegister()">Stwórz profil</button>
-          <p class="auth-mini">Po rejestracji profil pojawi się w widoku Profile i będzie gotowy do przypisania do teamu.</p>
+      <section id="tvSimpleView" class="view">
+        <button id="exitTvBtn" class="back-btn">← Wyjdź z TV</button>
+        <div class="panel tv-hero">
+          <div>Kolejka <b id="tvRound">1</b> / <b id="tvTotal">1</b></div>
+          <div id="tvTimer" class="timer">05:00</div>
         </div>
-      </div>
-    </div>
+        <div class="grid two">
+          <div class="panel">
+            <h3>Teraz grają</h3>
+            <div id="tvCurrent"></div>
+          </div>
+          <div class="panel">
+            <h3>Następna kolejka</h3>
+            <div id="tvNext"></div>
+          </div>
+        </div>
+        <div class="grid two">
+          <div class="panel"><h3>Tabela</h3><div id="tvStandings"></div></div>
+          <div class="panel"><h3>Strzelcy</h3><div id="tvScorers"></div></div>
+        </div>
+      </section>
+    </main>
   </div>
-</div>
 
-
-
-<button class="tv-back" onclick="exitTVModes()">WRÓĆ DO EDYCJI</button>
-<nav class="phone-nav"><button data-view="live" onclick="showView('live')">Live</button><button data-view="admin" onclick="showView('admin')">Admin</button><button data-view="season" onclick="showView('season')">Sezon</button><button data-view="ranking" onclick="showView('ranking')">Ranking</button><button data-view="profiles" onclick="showView('profiles')">Profile</button><button data-view="schedule" onclick="showView('schedule')">Terminarz</button></nav>
-<div class="app">
-<aside>
-<h1>WFC Base</h1>
-<div class="session-card">
-  <h3>Sesja</h3>
-  <div id="sessionInfo" class="profile-chip">
-    <div class="avatar">?</div>
-    <div><strong>Guest</strong><div class="muted">niezalogowany</div></div>
-  </div>
-  <div class="grid2" style="margin-top:10px">
-    <button onclick="openAuth()">Logowanie</button>
-    <button onclick="authLogout()">Wyloguj</button>
-  </div>
-  <div class="grid2" style="margin-top:10px">
-    <button onclick="supabasePullProfilesIntoApp()">Pobierz profile online</button>
-    <button onclick="supabasePushCurrentEvent()">Zapisz event online</button>
-  </div>
-</div>
-<div class="role-box">
-  <h3>Logowanie / role</h3>
-  <label>Rola</label>
-  <select id="loginRole">
-    <option value="guest">Guest / public</option>
-    <option value="player">Player</option>
-    <option value="admin">Admin</option>
-  </select>
-  <label>Kod dostępu</label>
-  <input id="loginCode" type="password" placeholder="Kod roli">
-  <div class="role-row" style="margin-top:10px">
-    <button class="primary" onclick="loginRoleUser()">Zaloguj</button>
-    <button onclick="logoutRoleUser()">Wyloguj</button>
-  </div>
-  <div id="currentRoleLabel" class="role-pill role-guest">GUEST</div>
-  <p class="muted" style="font-size:12px;margin-bottom:0">MVP lokalne: admin = pełna edycja, player = profil, guest = podgląd.</p>
-</div>
-<div class="mode-switch">
-<button class="primary" onclick="setAppMode('admin')">ADMIN</button>
-<button onclick="setAppMode('public')">PUBLIC</button>
-</div>
-<div class="grid2" style="margin:14px 0"><button class="primary" onclick="toggleTV()">Tryb TV</button><button onclick="toggleTVCompact()">TV kolejka</button></div>
-<div class="grid2" style="margin-top:10px"><button onclick="togglePhoneMode()">Telefon</button><button data-view="live" onclick="showView('live')">Live</button></div>
-<label>Nazwa eventu</label><input id="eventName" value="WARSAW FC MATCHDAY" oninput="syncSettings()">
-<label>Numer ustawki</label><input id="eventNumber" value="[ S03E12 ]" oninput="syncSettings()">
-<label>Partner</label><input id="partnerName" value="WARSAW FC" oninput="syncSettings()">
-<div class="grid2"><div><label>Czas meczu</label><input id="matchMin" type="number" value="5" min="1" onchange="generateSchedule()"></div><div><label>Boiska</label><select id="pitchCount" onchange="generateSchedule()"><option>1</option><option>2</option><option selected>3</option></select></div></div>
-<div class="grid2"><div><label>Zespoły</label><select id="teamCount" onchange="setTeams()"></select></div><div><label>Tryb</label><select id="modeType" onchange="generateSchedule()"><option value="single">bez rewanżów</option><option value="double" selected>rewanże</option></select></div></div>
-<h2>Zawodnicy</h2>
-<div class="grid3"><input id="newPlayerName" placeholder="Nick"><select id="newPlayerLevel"><option value="3">pro</option><option value="2" selected>medium</option><option value="1">beginner</option></select><button onclick="addPlayer()">Dodaj</button></div>
-<div class="grid2" style="margin-top:10px"><button class="primary" onclick="balanceTeams()">Losuj 3–4</button><button onclick="markAll(true)">Wszyscy obecni</button></div>
-<div class="grid2" style="margin-top:10px"><button onclick="markAll(false)">Odznacz</button><button class="danger" onclick="clearPlayers()">Wyczyść</button></div>
-<div id="playersList" class="list" style="margin-top:12px"></div>
-<h2>Linki widoków</h2>
-<div class="grid2">
-<button onclick="openAdminLink()">Kopiuj admin</button>
-<button onclick="openPublicLink()">Kopiuj publiczny</button>
-</div>
-<h2>Historia</h2>
-<div class="grid2"><button class="primary" onclick="saveEvent()">Zapisz ustawkę</button><button onclick="exportBase()">Eksport</button></div>
-<div class="grid2" style="margin-top:10px"><button onclick="document.getElementById('importFile').click()">Import</button><button class="danger" onclick="resetBase()">Reset bazy</button><button onclick="resetToPastEventsSeed()" style="grid-column:1 / -1">Wczytaj S03E03–S03E12</button></div>
-<input id="importFile" type="file" accept="application/json" style="display:none" onchange="importBase(event)">
-</aside>
-<main>
-<section class="top"><div class="brand"><div class="logo">WFC</div><div><h1 id="title">WARSAW FC MATCHDAY</h1><div class="muted">ZAWSZE TU. ZAWSZE RAZEM. · WE ARE WARSAW FC</div></div></div><div><div class="event-code" id="eventCode">[ S03E12 ]</div><div class="muted" style="text-align:right" id="partner">WARSAW FC</div><div style="text-align:right;margin-top:8px"><span id="modeBadge" class="admin-badge">ADMIN MODE</span></div></div></section>
-<section class="panel"><div class="slogan">ZAWSZE TU. ZAWSZE RAZEM.</div><div class="muted">WE ARE WARSAW FC · under the bridge · street football community</div></section>
-<nav class="tabs"><button id="tab-live" class="active" data-view="live" onclick="showView('live')">Live</button><button id="tab-admin" data-view="admin" data-view="admin" onclick="showView('admin')">Admin</button><button id="tab-season" data-view="season" data-view="season" onclick="showView('season')">Sezon</button><button id="tab-ranking" data-view="ranking" data-view="ranking" onclick="showView('ranking')">Ranking</button><button id="tab-profiles" data-view="profiles" data-view="profiles" onclick="showView('profiles')">Profile</button><button id="tab-schedule" data-view="schedule" data-view="schedule" onclick="showView('schedule')">Terminarz</button></nav>
-<section id="liveView" class="view active">
-<div class="panel" id="publicIntro" style="display:none">
-  <h3>Publiczny podgląd wydarzenia</h3>
-  <p class="muted">Ten widok jest tylko do oglądania: aktualna kolejka, tabela, strzelcy, historia i ranking sezonu. Role: Guest = podgląd, Player = profil, Admin = pełna edycja.</p>
-</div>
-<div class="panel kpis" id="kpis"></div>
-<section class="panel"><div class="meta"><div>Kolejka <span id="roundNow">1</span> / <span id="roundTotal">1</span></div><div id="roundStatus">START 1</div></div><div class="clock" id="timer">05:00</div><div class="grid3" style="max-width:620px;margin:0 auto"><button class="primary" onclick="startTimer()">Start</button><button onclick="pauseTimer()">Pauza</button><button onclick="resetTimer()">Reset</button></div><div class="round-nav"><button onclick="prevRound()">← Poprzednia</button><div class="round-pills" id="roundPills"></div><button onclick="nextRound()">Następna →</button></div></section>
-<section class="pitches" id="pitches"></section>
-<section class="grid2"><div class="panel"><h3>Następna kolejka</h3><div class="next-grid" id="nextRound"></div><h3 style="margin-top:18px">Składy</h3><div class="rosters" id="rosters"></div></div><div class="panel"><h3>Tabela</h3><div class="table-wrap"><table><thead><tr><th>#</th><th>Team</th><th>M</th><th>PKT</th><th>BR</th></tr></thead><tbody id="standings"></tbody></table></div></div></section>
-<section class="grid2"><div class="panel"><h3>Gole graczy</h3><p class="muted">Dodawaj gole przez przycisk „Strzelcy” przy meczu — wynik i statystyki liczą się automatycznie.</p><div id="goalsEditor"></div></div><div class="panel"><h3>Top scorer</h3><div id="topScorers"></div></div></section>
-</section>
-<section id="adminView" class="view"><button class="secondary" style="width:max-content" onclick="goHome()">← Wróć do LIVE</button><section class="panel"><h3>Szybka konfiguracja</h3><p class="muted">Panel po lewej zarządza eventem, graczami, składami i historią.</p><div class="grid3"><button class="primary" onclick="generateSchedule()">Generuj terminarz</button><button onclick="prevRound()">← Poprzednia</button><button onclick="nextRound()">Następna →</button></div></section><section class="panel"><h3>Zespoły</h3><textarea id="teamsPreview" readonly style="height:180px"></textarea></section></section>
-<section id="seasonView" class="view"><button class="secondary" style="width:max-content" onclick="goBackView()">← Powrót</button><section class="panel"><h3>Przegląd sezonu</h3><div class="season-grid" id="seasonOverview"></div></section><section class="panel"><h3>Poprzednie ustawki</h3><div class="grid3"><select id="eventSelect" onchange="previewEvent(this.value)"></select><button onclick="browseEvent(-1)">← Poprzednia</button><button onclick="browseEvent(1)">Następna →</button></div><div id="eventPreview" style="margin-top:14px"></div></section><section class="panel"><h3>Historia</h3><div id="historyList" class="table-wrap"></div></section></section>
-<section id="rankingView" class="view"><button class="secondary" style="width:max-content" onclick="goBackView()">← Powrót</button><section class="panel"><h3>Ranking sezonu</h3><div id="ranking"></div></section></section>
-<section id="profilesView" class="view"><button class="secondary" style="width:max-content" onclick="goBackView()">← Powrót</button><section class="panel"><h3>Profile graczy</h3><p class="muted">Twórz profile graczy, dopisuj pozycję, Instagram, notatki i śledź statystyki sezonowe.</p><div class="profiles-grid" id="profilesGrid"></div></section></section><section id="scheduleView" class="view"><button class="secondary" style="width:max-content" onclick="goBackView()">← Powrót</button><section class="panel"><h3>Kalendarz wszystkich spotkań</h3><div id="fullSchedule" class="table-wrap"></div></section></section>
-<section id="tvCompactView" class="view">
-  <section class="panel">
-    <div class="meta"><div>AKTUALNA KOLEJKA <span id="tvRoundNow">1</span> / <span id="tvRoundTotal">1</span></div><div id="tvEventCode">[ S03E12 ]</div></div>
-    <div class="clock" id="tvTimer">05:00</div><div style="display:flex;gap:10px;justify-content:center;margin-top:14px"><button onclick="prevRound()">←</button><button onclick="nextRound()">→</button></div>
-  </section>
-  <section class="tv-compact-grid">
-    <div class="panel">
-      <h3>TERAZ GRAJĄ</h3>
-      <div class="tv-current" id="tvCurrentMatches"></div>
-    </div>
-    <div class="panel">
-      <h3>NASTĘPNA KOLEJKA</h3>
-      <div id="tvNextMatches"></div>
-    </div>
-  </section>
-  <section class="tv-compact-bottom">
-    <div class="panel">
-      <h3>TABELA LIVE</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>#</th><th>Team</th><th>PKT</th><th>BR</th></tr></thead>
-          <tbody id="tvStandings"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="panel">
-      <h3>LISTA STRZELCÓW</h3>
-      <div id="tvScorers"></div>
-    </div>
-  </section>
-</section>
-<section class="bottom"><span>ZAWSZE TU. ZAWSZE RAZEM.</span><span>WE ARE WARSAW FC</span><span id="bottomEvent">[ S03E12 ]</span></section>
-</main></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-/* --- WFC SUPABASE INTEGRATION v1 --- */
-const WFC_SUPABASE_URL = "https://kpbzjfanleyaiwhzvsor.supabase.co";
-const WFC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YsLanoIurd3BXKkT4zRN5w_wYoS4H4l";
-let wfcSupabase = null;
-
-function initSupabaseClient(){
-  if(!window.supabase){
-    console.warn("Supabase SDK not loaded. App will use local fallback.");
-    return null;
-  }
-  if(!wfcSupabase){
-    wfcSupabase = window.supabase.createClient(WFC_SUPABASE_URL, WFC_SUPABASE_PUBLISHABLE_KEY);
-  }
-  return wfcSupabase;
-}
-
-async function supabaseUpsertProfile(user, extra={}){
-  const sb = initSupabaseClient();
-  if(!sb || !user) return null;
-
-  const profile = {
-    id: user.id,
-    nickname: extra.nickname || user.user_metadata?.nickname || user.email?.split("@")[0] || "player",
-    full_name: extra.full_name || extra.nickname || user.user_metadata?.nickname || "",
-    instagram: extra.instagram || "",
-    position: extra.position || "",
-    avatar_url: extra.avatar_url || "",
-    role: extra.role || "player",
-    bio: extra.bio || ""
-  };
-
-  const { data, error } = await sb.from("profiles").upsert(profile).select().single();
-  if(error){
-    console.warn("Profile upsert error:", error.message);
-    return profile;
-  }
-  return data;
-}
-
-async function supabaseLoadProfile(user){
-  const sb = initSupabaseClient();
-  if(!sb || !user) return null;
-  const { data, error } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
-  if(error){
-    console.warn("Profile load error:", error.message);
-    return null;
-  }
-  return data;
-}
-
-function profileToSession(profile, user){
-  return {
-    id: user?.id || profile?.id || "",
-    name: profile?.nickname || profile?.full_name || user?.email || "Player",
-    email: user?.email || "",
-    role: profile?.role || "player",
-    position: profile?.position || "",
-    instagram: profile?.instagram || "",
-    photo: profile?.avatar_url || ""
-  };
-}
-
-async function authLogin(){
-  const roleChoice = document.getElementById("authLoginRole")?.value || "guest";
-  const email = document.getElementById("loginEmail")?.value.trim();
-  const password = document.getElementById("loginPassword")?.value.trim();
-
-  if(roleChoice === "guest"){
-    setSession({name:"Guest", email:"", role:"guest"});
-    showView("live");
-    return;
-  }
-
-  if(!email || !password){
-    alert("Wpisz email/nick i hasło.");
-    return;
-  }
-
-  const sb = initSupabaseClient();
-  if(!sb){
-    alert("Supabase SDK nie jest dostępny. Sprawdź internet lub konfigurację.");
-    return;
-  }
-
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  if(error){
-    alert("Nie udało się zalogować: " + error.message);
-    return;
-  }
-
-  let profile = await supabaseLoadProfile(data.user);
-  if(!profile){
-    profile = await supabaseUpsertProfile(data.user, { role:"player" });
-  }
-
-  setSession(profileToSession(profile, data.user));
-  await supabasePullProfilesIntoApp();
-  showView((profile?.role || "player") === "admin" ? "live" : "profiles");
-}
-
-async function authRegister(){
-  const name = document.getElementById("regName")?.value.trim();
-  const email = document.getElementById("regEmail")?.value.trim();
-  const password = document.getElementById("regPassword")?.value.trim();
-  const position = document.getElementById("regPosition")?.value.trim();
-  const instagram = document.getElementById("regInstagram")?.value.trim();
-  const level = Number(document.getElementById("regLevel")?.value || 2);
-
-  if(!name || !email || !password){
-    alert("Wpisz nick, email i hasło.");
-    return;
-  }
-
-  const sb = initSupabaseClient();
-  if(!sb){
-    alert("Supabase SDK nie jest dostępny.");
-    return;
-  }
-
-  const { data, error } = await sb.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { nickname:name, position, instagram }
-    }
-  });
-
-  if(error){
-    alert("Nie udało się zarejestrować: " + error.message);
-    return;
-  }
-
-  if(!data.user){
-    alert("Sprawdź email i potwierdź konto, jeśli Supabase tego wymaga.");
-    return;
-  }
-
-  const profile = await supabaseUpsertProfile(data.user, {
-    nickname:name,
-    full_name:name,
-    position,
-    instagram,
-    role:"player"
-  });
-
-  const existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
-  if(existing){
-    existing.position = position;
-    existing.instagram = instagram;
-    existing.level = level;
-    existing.present = true;
-  } else {
-    state.players.push({
-      name,
-      level,
-      present:true,
-      team:"",
-      goals:0,
-      position,
-      instagram,
-      notes:"",
-      photo:""
-    });
-  }
-
-  save();
-  setSession(profileToSession(profile, data.user));
-  await supabasePullProfilesIntoApp();
-  showView("profiles");
-  render();
-}
-
-async function authLogout(){
-  const sb = initSupabaseClient();
-  if(sb) await sb.auth.signOut();
-  currentUser = null;
-  localStorage.removeItem("wfc_current_user_v12_seeded");
-  localStorage.removeItem("wfc_current_user");
-  currentRole = "guest";
-  localStorage.setItem("wfc_role_v12_seeded", currentRole);
-  try{ applyRole(); }catch(e){}
-  try{ updateSessionUI(); }catch(e){}
-  showView("live");
-}
-
-async function supabasePullProfilesIntoApp(){
-  const sb = initSupabaseClient();
-  if(!sb) return;
-
-  const { data, error } = await sb
-    .from("profiles")
-    .select("id,nickname,full_name,instagram,position,avatar_url,role,goals,appearances,bio")
-    .order("created_at", { ascending:true });
-
-  if(error){
-    console.warn("Profiles pull error:", error.message);
-    return;
-  }
-
-  (data || []).forEach(row => {
-    const name = row.nickname || row.full_name || "Player";
-    const existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
-    const payload = {
-      name,
-      level:2,
-      present:false,
-      team:"",
-      goals:Number(row.goals || 0),
-      position:row.position || "",
-      instagram:row.instagram || "",
-      notes:row.bio || "",
-      photo:row.avatar_url || ""
-    };
-    if(existing){
-      existing.position = payload.position;
-      existing.instagram = payload.instagram;
-      existing.notes = payload.notes;
-      existing.photo = payload.photo;
-    } else {
-      state.players.push(payload);
-    }
-  });
-
-  save();
-  render();
-}
-
-async function supabasePushCurrentEvent(){
-  const sb = initSupabaseClient();
-  if(!sb) return alert("Brak Supabase.");
-
-  const ev = eventSummary();
-  const { data, error } = await sb.from("events").upsert({
-    code: ev.id,
-    title: ev.name,
-    event_date: ev.date ? ev.date.slice(0,10) : new Date().toISOString().slice(0,10),
-    season: "S03",
-    status: "completed"
-  }, { onConflict:"code" }).select().single();
-
-  if(error){
-    alert("Nie udało się zapisać ustawki online: " + error.message);
-    return;
-  }
-
-  alert("Zapisano ustawkę online: " + ev.id);
-}
-
-async function initSupabaseSession(){
-  const sb = initSupabaseClient();
-  if(!sb) return;
-
-  const { data } = await sb.auth.getSession();
-  const session = data?.session;
-
-  if(session?.user){
-    let profile = await supabaseLoadProfile(session.user);
-    if(!profile) profile = await supabaseUpsertProfile(session.user, { role:"player" });
-    setSession(profileToSession(profile, session.user));
-    await supabasePullProfilesIntoApp();
-  }
-
-  sb.auth.onAuthStateChange(async (_event, session) => {
-    if(session?.user){
-      let profile = await supabaseLoadProfile(session.user);
-      if(!profile) profile = await supabaseUpsertProfile(session.user, { role:"player" });
-      setSession(profileToSession(profile, session.user));
-    }
-  });
-}
-
-window.addEventListener("load", initSupabaseSession);
-
-</script>
-<script>
-
-window.viewHistory=['live'];
-
-let appMode = localStorage.getItem("wfc_app_mode_v12_seeded") || "admin";
-
-let currentRole = localStorage.getItem("wfc_role_v12_seeded") || "guest";
-
-// MVP access codes. In wersji online zastąpimy to Supabase Auth.
-// Możesz zmienić kody tutaj:
-const ROLE_CODES = {
-  admin: "WFC-ADMIN",
-  player: "WFC-PLAYER",
-  guest: ""
-};
-
-let currentUser = JSON.parse(localStorage.getItem("wfc_current_user_v12_seeded") || "null");
-let registeredUsers = JSON.parse(localStorage.getItem("wfc_registered_users_v12_seeded") || "[]");
-
-function openAuth(){ document.getElementById("authScreen").classList.add("active"); }
-function closeAuth(){ document.getElementById("authScreen").classList.remove("active"); }
-
-function switchAuthTab(tab){
-  loginForm.style.display = tab==="login" ? "block" : "none";
-  registerForm.style.display = tab==="register" ? "block" : "none";
-  loginTab.classList.toggle("active", tab==="login");
-  registerTab.classList.toggle("active", tab==="register");
-}
-
-
-function playerInitials(name){
-  return (name||"WFC").split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
-}
-
-function openPlayerProfile(name){
-  const player = state.players.find(p=>p.name===name) || registeredUsers.find(u=>u.name===name);
-  if(!player) return;
-
-  const stats = profileStats(name);
-
-  playerModalName.textContent = player.name || "Player";
-  playerModalRole.textContent = `${player.team || "bez teamu"} · ${player.level==3?"pro":player.level==2?"medium":"beginner"}`;
-  playerModalGoals.textContent = stats.goals || 0;
-  playerModalEvents.textContent = stats.events || 0;
-  playerModalPosition.textContent = player.position || "—";
-  playerModalInstagram.textContent = player.instagram || "—";
-
-  if(player.photo){
-    playerModalAvatar.innerHTML = `<img src="${player.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:28px">`;
-  } else {
-    playerModalAvatar.innerHTML = playerInitials(player.name);
-  }
-
-  const history = (base().events || []).filter(ev =>
-    (ev.players || []).some(p => p.name === name)
-  ).slice().reverse();
-
-  playerModalHistory.innerHTML = history.length
-    ? history.map(ev => `
-      <div class="player-history-item">
-        <strong>${ev.id}</strong>
-        <div class="muted">${ev.dateLabel}</div>
-      </div>
-    `).join("")
-    : `<div class="muted">Brak historii.</div>`;
-
-  playerModal.classList.add("active");
-  location.hash = "#player=" + encodeURIComponent(name);
-}
-
-function closePlayerProfile(){
-  playerModal.classList.remove("active");
-  if(location.hash.startsWith("#player=")){
-    history.replaceState("", document.title, window.location.pathname + window.location.search);
-  }
-}
-
-function initPlayerProfileFromHash(){
-  if(location.hash.startsWith("#player=")){
-    const name = decodeURIComponent(location.hash.replace("#player=",""));
-    setTimeout(()=>openPlayerProfile(name),300);
-  }
-}
-
-function initials(name){
-  return (name||"WFC").split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
-}
-
-function updateSessionUI(){
-  const box = document.getElementById("sessionInfo");
-  if(!box) return;
-  const u = currentUser || {name:"Guest", role:"guest", email:"niezalogowany"};
-  box.innerHTML = `<div class="avatar">${initials(u.name)}</div><div><strong>${u.name}</strong><div class="muted">${u.role} · ${u.email || ""}</div></div>`;
-}
-
-function setSession(user){
-  currentUser = user;
-  localStorage.setItem("wfc_current_user_v12_seeded", JSON.stringify(currentUser));
-  currentRole = user.role || "guest";
-  localStorage.setItem("wfc_role_v12_seeded", currentRole);
-  applyRole();
-  updateSessionUI();
-  closeAuth();
-}
-
-function authLogin(){
-  const role = authLoginRole.value;
-  const email = loginEmail.value.trim() || "Guest";
-  const pass = loginPassword.value.trim();
-
-  if(role === "guest"){
-    setSession({name:"Guest", email:"", role:"guest"});
-    showView("live");
-    return;
-  }
-
-  if(pass !== ROLE_CODES[role]){
-    alert("Nieprawidłowy kod dostępu.");
-    return;
-  }
-
-  const saved = registeredUsers.find(u => u.email===email || u.name.toLowerCase()===email.toLowerCase());
-  setSession(saved ? {...saved, role} : {name:email, email, role});
-  showView(role==="player" ? "profiles" : "live");
-}
-
-function authRegister(){
-  const name = regName.value.trim();
-  if(!name){ alert("Wpisz nick / imię."); return; }
-
-  const user = {
-    id: "user_" + Date.now(),
-    name,
-    email: regEmail.value.trim(),
-    role: "player",
-    position: regPosition.value.trim(),
-    instagram: regInstagram.value.trim(),
-    level: Number(regLevel.value || 2),
-    photo:"",
-    notes:"",
-    createdAt:new Date().toISOString()
-  };
-
-  registeredUsers = registeredUsers.filter(u => u.name.toLowerCase() !== name.toLowerCase());
-  registeredUsers.push(user);
-  localStorage.setItem("wfc_registered_users_v12_seeded", JSON.stringify(registeredUsers));
-
-  const existing = state.players.find(p=>p.name.toLowerCase()===name.toLowerCase());
-  if(existing){
-    existing.position=user.position; existing.instagram=user.instagram; existing.level=user.level; existing.present=true;
-  }else{
-    state.players.push({name:user.name,level:user.level,present:true,team:"",goals:0,position:user.position,instagram:user.instagram,notes:"",photo:""});
-  }
-
-  save();
-  setSession(user);
-  showView("profiles");
-  render();
-}
-
-function continueAsGuest(){
-  setSession({name:"Guest", email:"", role:"guest"});
-  showView("live");
-}
-
-function authLogout(){
-  currentUser = null;
-  localStorage.removeItem("wfc_current_user_v12_seeded");
-  currentRole = "guest";
-  localStorage.setItem("wfc_role_v12_seeded", currentRole);
-  applyRole();
-  updateSessionUI();
-  showView("live");
-}
-
-
-function applyRole(){
-  document.body.classList.remove("guest-mode","player-mode","admin-mode");
-  document.body.classList.add(currentRole + "-mode");
-
-  const label = document.getElementById("currentRoleLabel");
-  if(label){
-    label.textContent = currentRole.toUpperCase();
-    label.className = "role-pill " + (currentRole==="admin" ? "role-admin" : currentRole==="player" ? "role-player" : "role-guest");
-  }
-
-  // Guest i player domyślnie widzą publiczny podgląd.
-  if(currentRole !== "admin"){
-    setAppMode("public");
-  } else {
-    setAppMode("admin");
-  }
-  updateSessionUI();
-}
-
-function loginRoleUser(){
-  const role = document.getElementById("loginRole").value;
-  const code = document.getElementById("loginCode").value.trim();
-
-  if(role === "guest"){
-    currentRole = "guest";
-  } else if(code === ROLE_CODES[role]){
-    currentRole = role;
-  } else {
-    alert("Nieprawidłowy kod dostępu dla tej roli.");
-    return;
-  }
-
-  localStorage.setItem("wfc_role_v12_seeded", currentRole);
-  document.getElementById("loginCode").value = "";
-  applyRole();
-
-  if(currentRole === "player") showView("profiles");
-  else showView("live");
-}
-
-function logoutRoleUser(){
-  currentRole = "guest";
-  localStorage.setItem("wfc_role_v12_seeded", currentRole);
-  applyRole();
-  showView("live");
-}
-
-function requireAdmin(){
-  if(currentRole !== "admin"){
-    alert("Ta akcja jest dostępna tylko dla admina.");
-    return false;
-  }
-  return true;
-}
-
-function setAppMode(mode){
-  appMode = mode;
-  localStorage.setItem("wfc_app_mode_v12_seeded", mode);
-  document.body.classList.toggle("public-mode", mode==="public");
-  const badge=document.getElementById("modeBadge");
-  if(badge){
-    badge.textContent = mode==="public" ? "PUBLIC VIEW" : "ADMIN MODE";
-    badge.className = mode==="public" ? "public-badge" : "admin-badge";
-  }
-  const intro=document.getElementById("publicIntro");
-  if(intro) intro.style.display = mode==="public" ? "block" : "none";
-  if(mode==="public" && document.getElementById("adminView")?.classList.contains("active")) showView("live", false);
-}
-function openPublicLink(){
-  const url = location.origin + location.pathname + "#public";
-  navigator.clipboard?.writeText(url);
-  alert("Skopiowano link publiczny: " + url);
-}
-function openAdminLink(){
-  const url = location.origin + location.pathname + "#admin";
-  navigator.clipboard?.writeText(url);
-  alert("Skopiowano link admina: " + url);
-}
-function initModeFromHash(){
-  if(location.hash==="#public") appMode="public";
-  if(location.hash==="#admin") appMode="admin";
-  setAppMode(appMode);
-}
-
-function goHome(){exitTVModes();showView('live');}
-function goBackView(){
- exitTVModes();
- if(window.viewHistory.length>1){
-   window.viewHistory.pop();
-   const prev=window.viewHistory[window.viewHistory.length-1];
-   showView(prev,false);
- } else {showView('live',false);}
-}
-
-const DEFAULT_PLAYERS=[{name:'Bartosz Piwiński',level:2,present:true,team:'WFC 1',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Bartek Nowak',level:2,present:true,team:'WFC 1',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Mateusz Żywulski',level:2,present:true,team:'WFC 1',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Karol Machulski',level:2,present:true,team:'WFC 2',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Marcel Michalczyk',level:2,present:true,team:'WFC 2',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Kamil Junior',level:2,present:true,team:'WFC 2',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Michał Rycaj',level:2,present:true,team:'WFC 3',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Weronika Samulska',level:2,present:true,team:'WFC 3',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Bartek Barzał',level:2,present:true,team:'WFC 3',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Damian Gawrych',level:2,present:true,team:'WFC 4',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Daniel Kleber',level:2,present:true,team:'WFC 4',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Patryk Junior',level:2,present:true,team:'WFC 4',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Kamil Machulski',level:2,present:true,team:'WFC 5',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Hubert Majewski',level:2,present:true,team:'WFC 5',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Szymon Kwiatkowski',level:2,present:true,team:'WFC 5',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Fernando Morales',level:2,present:true,team:'WFC 6',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Marcin Szejba',level:2,present:true,team:'WFC 6',goals:0,position:'',instagram:'',notes:'',photo:''},{name:'Bartosz Jabłoński',level:2,present:true,team:'WFC 6',goals:0,position:'',instagram:'',notes:'',photo:''}];
-const PAST_EVENTS_SEED = [{"id": "[ S03E03 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-03-04T00:00:00", "dateLabel": "04.03.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E04 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-03-11T00:00:00", "dateLabel": "11.03.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E05 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-03-18T00:00:00", "dateLabel": "18.03.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E06 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-03-25T00:00:00", "dateLabel": "25.03.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E07 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-04-01T00:00:00", "dateLabel": "01.04.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E08 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-04-08T00:00:00", "dateLabel": "08.04.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E09 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-04-15T00:00:00", "dateLabel": "15.04.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E10 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-04-22T00:00:00", "dateLabel": "22.04.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E11 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-04-29T00:00:00", "dateLabel": "29.04.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}, {"id": "[ S03E12 ]", "name": "WARSAW FC MATCHDAY", "date": "2026-05-06T00:00:00", "dateLabel": "06.05.2026", "teams": [], "pitchCount": 3, "players": [], "totalPlayers": 0, "totalGoals": 0, "topScorer": null, "matchesCount": 0, "schedule": [], "scores": {}, "goalEvents": {}, "standings": [], "status": "completed", "notes": "Ustawka do uzupełnienia obecności."}];
-let state={eventNumber:"[ S03E12 ]",teams:[],players:DEFAULT_PLAYERS,rounds:[],currentRound:0,duration:300,remaining:300,timer:null,scores:{},goalEvents:{},base:{events:PAST_EVENTS_SEED,players:{},selectedEventId:"[ S03E12 ]"}};
-function save(){localStorage.setItem("wfc_opt_v4",JSON.stringify({...state,timer:null}))}function load(){try{const s=JSON.parse(localStorage.getItem("wfc_opt_v4"));if(s)state={...state,...s,timer:null};state.goalEvents=state.goalEvents||{}}catch(e){}}
-function teamNames(){return Array.from({length:Number(teamCount.value||6)},(_,i)=>`WFC ${i+1}`)}function setTeams(){state.teams=teamNames();teamsPreview.value=state.teams.join("\n");generateSchedule()}
-function syncSettings(){state.eventNumber=eventNumber.value;title.textContent=eventName.value;eventCode.textContent=state.eventNumber;bottomEvent.textContent=state.eventNumber;partner.textContent=partnerName.value;save();render()}
-function showView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));document.getElementById(v+"View").classList.add("active");document.getElementById("tab-"+v)?.classList.add("active");scrollTo({top:0,behavior:"smooth"})}
-function toggleTV(){document.body.classList.remove("tv-compact");document.body.classList.toggle("tv-mode");showView("live")}
-function toggleTVCompact(){document.body.classList.remove("tv-mode");document.body.classList.toggle("tv-compact");showView("live")}
-function exitTVModes(){document.body.classList.remove("tv-mode");document.body.classList.remove("tv-compact");showView("live")}
-function fmt(s){return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}function labels(){return Array.from({length:Number(pitchCount.value||3)},(_,i)=>`BOISKO NR ${i+1}`)}
-function buildSchedule(){const teams=state.teams,mode=modeType.value,pc=Number(pitchCount.value||3),req=[];for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++)req.push([teams[i],teams[j],false,"MECZ"]);if(mode==="double")for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++)req.push([teams[j],teams[i],false,"REWANŻ"]);const hist={},key=(a,b)=>[a,b].sort().join("::");req.forEach(m=>hist[key(m[0],m[1])]=1);let remaining=req.slice(),slots=[],bonusCursor=0;function bonus(used){const opts=[];for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++){let a=teams[i],b=teams[j];if(!used.has(a)&&!used.has(b))opts.push({m:[a,b,true,"BONUS"],c:hist[key(a,b)]||0})}opts.sort((a,b)=>a.c-b.c);if(!opts.length)return null;return opts[(bonusCursor++)%opts.length].m}while(remaining.length){let slot=[],used=new Set();for(let pass=0;pass<8&&slot.length<pc;pass++)for(let i=0;i<remaining.length&&slot.length<pc;i++){let[a,b]=remaining[i];if(!used.has(a)&&!used.has(b)){slot.push(remaining[i]);used.add(a);used.add(b);remaining.splice(i,1);i--}}while(slot.length<pc){let b=bonus(used);if(!b)break;slot.push(b);used.add(b[0]);used.add(b[1]);hist[key(b[0],b[1])]++}slots.push({matches:slot,roundNumber:slots.length+1})}return slots}
-function generateSchedule(){if(!requireAdmin())return;state.duration=Number(matchMin.value||5)*60;state.remaining=state.duration;state.rounds=buildSchedule();state.currentRound=0;state.scores={};state.goalEvents={};save();render()}function matchId(r,p){return `${r}-${p}`}
-function syncScoreFromGoals(id){
-  const [r,p]=id.split("-").map(Number), m=state.rounds?.[r]?.matches?.[p];
-  if(!m) return;
-  const list=state.goalEvents?.[id]||[];
-  state.scores[id]=[
-    String(list.filter(g=>g.team===m[0]).length),
-    String(list.filter(g=>g.team===m[1]).length)
-  ];
-}
-function rebuildPlayerGoalsFromMatchEvents(){
-  state.players.forEach(p=>p.goals=0);
-  Object.values(state.goalEvents||{}).flat().forEach(g=>{
-    const p=state.players.find(x=>x.name===g.playerName);
-    if(p) p.goals=(Number(p.goals)||0)+1;
-  });
-}
-function addGoal(id, playerName, team){if(!requireAdmin())return;
-  state.goalEvents=state.goalEvents||{};
-  state.goalEvents[id]=state.goalEvents[id]||[];
-  state.goalEvents[id].push({playerName,team,at:new Date().toISOString()});
-  syncScoreFromGoals(id); rebuildPlayerGoalsFromMatchEvents(); save(); render();
-}
-function removeGoal(id, playerName, team){if(!requireAdmin())return;
-  const list=state.goalEvents?.[id]||[];
-  for(let i=list.length-1;i>=0;i--){
-    if(list[i].playerName===playerName && list[i].team===team){list.splice(i,1);break;}
-  }
-  state.goalEvents[id]=list; syncScoreFromGoals(id); rebuildPlayerGoalsFromMatchEvents(); save(); render();
-}
-function goalCountFor(id, playerName){
-  return (state.goalEvents?.[id]||[]).filter(g=>g.playerName===playerName).length;
-}
-function renderScorerPanel(id,m){
-  const esc=s=>String(s).replace(/'/g,"&#39;");
-  const block=(team)=>`<div class="scorer-team"><strong>${team}</strong>${
-    state.players.filter(p=>p.present&&p.team===team).map(p=>`
-      <div class="scorer-row">
-        <span class="player-link" data-player="${p.name}">${p.name}</span>
-        <button onclick="removeGoal('${id}','${esc(p.name)}','${team}')">−</button>
-        <span class="goal-count">${goalCountFor(id,p.name)}</span>
-        <button class="primary" onclick="addGoal('${id}','${esc(p.name)}','${team}')">+</button>
-      </div>`).join("") || `<div class="muted">Brak zawodników</div>`
-  }</div>`;
-  return `<div class="scorer-panel">${block(m[0])}${block(m[1])}</div>`;
-}
-function toggleScorers(id){
-  window.openScorerMatch = window.openScorerMatch===id ? "" : id;
-  render(false);
-}
-
-function setScore(id,i,val){if(!requireAdmin())return;state.scores[id]=state.scores[id]||["",""];state.scores[id][i]=val;save();render()}function nextRound(){if(!requireAdmin())return;if(state.currentRound<state.rounds.length-1){state.currentRound++;state.remaining=state.duration;save();render()}}function prevRound(){if(!requireAdmin())return;if(state.currentRound>0){state.currentRound--;state.remaining=state.duration;save();render()}}function jumpRound(i){if(i>=0&&i<state.rounds.length){state.currentRound=i;state.remaining=state.duration;save();render();showView("live")}}function startTimer(){pauseTimer();state.timer=setInterval(()=>{if(state.remaining>0){state.remaining--;render(false)}else pauseTimer()},1000)}function pauseTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}function resetTimer(){state.remaining=state.duration;save();render()}
-function addPlayer(){if(!requireAdmin())return;const name=newPlayerName.value.trim();if(!name)return;state.players.push({name,level:Number(newPlayerLevel.value),present:true,team:"",goals:0,position:"",instagram:"",notes:"",photo:""});newPlayerName.value="";save();render()}function markAll(v){if(!requireAdmin())return;state.players.forEach(p=>p.present=v);save();render()}function clearPlayers(){if(!requireAdmin())return;if(confirm("Wyczyścić listę graczy?")){state.players=[];save();render()}}function teamSize(t,idx=null){return state.players.filter((p,i)=>p.present&&p.team===t&&i!==idx).length}function updatePlayer(i,field,val){if(currentRole==='guest')return;if(currentRole==='player' && !['position','instagram','notes','photo'].includes(field)){alert('Gracz może edytować tylko swój profil.');return;}const p=state.players[i];if(!p)return;if(field==="present")p.present=val;if(field==="level")p.level=Number(val);if(field==="name")p.name=val;if(field==="position")p.position=val;if(field==="instagram")p.instagram=val;if(field==="notes")p.notes=val;if(field==="photo")p.photo=val;if(field==="goals")p.goals=Number(val||0);if(field==="team"){if(val&&teamSize(val,i)>=4){alert("Maksymalnie 4 zawodników w zespole");return}p.team=val}save();render()}function removePlayer(i){if(!requireAdmin())return;state.players.splice(i,1);save();render()}function balanceTeams(){if(!requireAdmin())return;const teams=state.teams,present=state.players.filter(p=>p.present);if(present.length>teams.length*4){alert(`Za dużo osób. Maks: ${teams.length*4}`);return}state.players.forEach(p=>p.team="");const buckets=teams.map(t=>({t,players:[],power:0}));present.sort((a,b)=>b.level-a.level||Math.random()-.5).forEach(p=>{let c=buckets.filter(b=>b.players.length<3);if(!c.length)c=buckets.filter(b=>b.players.length<4);c.sort((a,b)=>a.power-b.power||a.players.length-b.players.length);c[0].players.push(p);c[0].power+=p.level;p.team=c[0].t});save();render()}
-function standingsCalc(){const table={};state.teams.forEach(t=>table[t]={team:t,m:0,p:0,gf:0,ga:0,gd:0});state.rounds.forEach((slot,r)=>(slot.matches||[]).forEach((m,p)=>{if(m[2])return;const s=state.scores[matchId(r,p)];if(!s||s[0]===""||s[1]==="")return;const a=Number(s[0]),b=Number(s[1]),A=table[m[0]],B=table[m[1]];if(!A||!B)return;A.m++;B.m++;A.gf+=a;A.ga+=b;B.gf+=b;B.ga+=a;if(a>b)A.p+=3;else if(b>a)B.p+=3;else{A.p++;B.p++}}));return Object.values(table).map(x=>({...x,gd:x.gf-x.ga})).sort((a,b)=>b.p-a.p||b.gd-a.gd||b.gf-a.gf)}
-function base(){state.base=state.base||{events:[],players:{},selectedEventId:""};return state.base}function rebuildBase(){const b=base();b.players={};b.events.forEach(ev=>(ev.players||[]).forEach(p=>{b.players[p.name]=b.players[p.name]||{name:p.name,events:0,goals:0,lastEvent:""};b.players[p.name].events++;b.players[p.name].goals+=Number(p.goals||0);b.players[p.name].lastEvent=ev.id}))}
-function eventSummary(){const present=state.players.filter(p=>p.present),totalGoals=present.reduce((a,p)=>a+Number(p.goals||0),0),top=present.slice().sort((a,b)=>(b.goals||0)-(a.goals||0))[0];return{id:state.eventNumber,name:eventName.value,date:new Date().toISOString(),dateLabel:new Date().toLocaleString("pl-PL"),teams:state.teams,pitchCount:Number(pitchCount.value),players:present.map(p=>({name:p.name,level:p.level,team:p.team,goals:p.goals,position:p.position||"",instagram:p.instagram||"",notes:p.notes||"",photo:p.photo||""})),totalPlayers:present.length,totalGoals,topScorer:top?{name:top.name,goals:top.goals}:null,matchesCount:state.rounds.reduce((a,s)=>a+s.matches.filter(m=>!m[2]).length,0),schedule:state.rounds,scores:state.scores,goalEvents:state.goalEvents||{},standings:standingsCalc()}}
-function saveEvent(){if(!requireAdmin())return;const b=base(),ev=eventSummary(),i=b.events.findIndex(x=>x.id===ev.id);if(i>=0&&!confirm("Nadpisać ustawkę?"))return;if(i>=0)b.events[i]=ev;else b.events.push(ev);b.selectedEventId=ev.id;rebuildBase();save();render();alert("Zapisano "+ev.id)}function loadEvent(id){const ev=base().events.find(e=>e.id===id);if(!ev)return;state.eventNumber=ev.id;eventNumber.value=ev.id;state.teams=ev.teams;teamCount.value=String(ev.teams.length);pitchCount.value=String(ev.pitchCount||3);state.rounds=ev.schedule;state.scores=ev.scores||{};state.goalEvents=ev.goalEvents||{};state.players=(ev.players||[]).map(p=>({...p,present:true}));state.currentRound=0;save();render();showView("live")}function deleteEvent(id){if(!requireAdmin())return;if(!confirm("Usunąć?"))return;const b=base();b.events=b.events.filter(e=>e.id!==id);rebuildBase();save();render()}function resetBase(){if(!requireAdmin())return;if(confirm("Usunąć całą bazę?")){state.base={events:[],players:{},selectedEventId:""};save();render()}}function exportBase(){const blob=new Blob([JSON.stringify({base:base(),exportedAt:new Date().toISOString()},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="warsaw-fc-base.json";a.click()}function importBase(e){if(!requireAdmin())return;const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state.base=JSON.parse(r.result).base||JSON.parse(r.result);rebuildBase();save();render()}catch{alert("Błędny plik")}};r.readAsText(f)}function previewEvent(id){const ev=base().events.find(e=>e.id===id);if(!ev)return;base().selectedEventId=id;eventPreview.innerHTML=`<div class="card"><h3>${ev.id}</h3><p class="muted">${ev.dateLabel} · ${ev.totalPlayers} graczy · ${ev.totalGoals} goli</p><button class="primary" onclick="loadEvent('${ev.id}')">Wróć do tej ustawki</button></div>`;save()}function browseEvent(step){const evs=base().events;if(!evs.length)return;let i=evs.findIndex(e=>e.id===base().selectedEventId);if(i<0)i=evs.length-1;i=(i+step+evs.length)%evs.length;previewEvent(evs[i].id)}
-
-function renderTVCompact(){
-  if(!document.getElementById("tvCompactView")) return;
-  const labs=labels();
-  const slot=state.rounds[state.currentRound]||{matches:[]};
-  const next=state.rounds[state.currentRound+1]||{matches:[]};
-  tvRoundNow.textContent=state.currentRound+1;
-  tvRoundTotal.textContent=Math.max(1,state.rounds.length);
-  tvEventCode.textContent=state.eventNumber;
-  tvTimer.textContent=fmt(state.remaining);
-  tvCurrentMatches.innerHTML=labs.map((lab,i)=>{
-    const m=slot.matches[i];
-    if(!m) return `<div class="tv-match-card"><div class="pitch-title">${lab}</div><div class="teams">BRAK</div></div>`;
-    return `<div class="tv-match-card"><div class="pitch-title">${lab}</div><div class="teams">${m[0]}<div class="vs">${m[2]?"BONUS":m[3]}</div>${m[1]}</div></div>`;
-  }).join("");
-  tvNextMatches.innerHTML=labs.map((lab,i)=>{
-    const m=next.matches[i];
-    return `<div class="tv-next-card"><div class="muted">${lab}</div><strong>${m?m[0]+" vs "+m[1]:"—"}</strong>${m?`<div class="muted">${m[2]?"BONUS":m[3]}</div>`:""}</div>`;
-  }).join("");
-
-  if(document.getElementById("tvStandings")){
-    tvStandings.innerHTML=standingsCalc().slice(0,8).map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.p}</td><td>${r.gd>=0?"+":""}${r.gd}</td></tr>`).join("");
-  }
-  if(document.getElementById("tvScorers")){
-    const scorers=state.players.filter(p=>p.present).slice().sort((a,b)=>(b.goals||0)-(a.goals||0)).slice(0,8);
-    tvScorers.innerHTML=scorers.map((p,i)=>`<div class="tv-scorer"><span>#${i+1} ${p.name}</span><strong>${p.goals||0}</strong></div>`).join("");
-  }
-}
-function render(saveNow=true){if(saveNow)save();eventCode.textContent=state.eventNumber;bottomEvent.textContent=state.eventNumber;timer.textContent=fmt(state.remaining);roundNow.textContent=state.currentRound+1;roundTotal.textContent=Math.max(1,state.rounds.length);roundStatus.textContent=`START ${state.currentRound+1}`; if(document.getElementById("roundPills")) roundPills.innerHTML=state.rounds.map((_,i)=>`<button class="round-pill ${i===state.currentRound?"active":""}" onclick="jumpRound(${i})">${i+1}</button>`).join("");const labs=labels(),slot=state.rounds[state.currentRound]||{matches:[]};kpis.innerHTML=[["Zespoły",state.teams.length],["Gracze",state.players.filter(p=>p.present).length],["Boiska",pitchCount.value],["Mecze",state.rounds.reduce((a,s)=>a+s.matches.filter(m=>!m[2]).length,0)]].map(x=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div></div>`).join("");pitches.innerHTML=labs.map((lab,i)=>{const m=slot.matches[i],id=matchId(state.currentRound,i),s=state.scores[id]||["",""];if(!m)return`<div class="pitch"><div class="stripe"></div><div class="pitch-title">${lab}</div><div class="teams">BRAK</div></div>`;return`<div class="pitch"><div class="stripe"></div><div class="pitch-title">${lab}</div><div class="teams">${m[0]}<div class="vs">${m[2]?"BONUS":m[3]}</div>${m[1]}</div><div class="score"><input type="number" value="${s[0]}" onchange="setScore('${id}',0,this.value)"><input type="number" value="${s[1]}" onchange="setScore('${id}',1,this.value)"></div><button class="scorer-btn" onclick="toggleScorers('${id}')">Strzelcy</button>${window.openScorerMatch==='${id}'?renderScorerPanel('${id}',m):""}</div>`}).join("");const next=state.rounds[state.currentRound+1]||{matches:[]};nextRound.innerHTML=labs.map((lab,i)=>{const m=next.matches[i];return`<div class="card"><div class="muted">${lab}</div><strong>${m?m[0]+" vs "+m[1]:"—"}</strong></div>`}).join("");standings.innerHTML=standingsCalc().map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.m}</td><td>${r.p}</td><td>${r.gd>=0?"+":""}${r.gd}</td></tr>`).join("");renderPlayers();renderRosters();renderGoals();renderProfiles();renderSchedule();renderSeason();renderRanking();renderTVCompact()}
-function renderPlayers(){const opts=['<option value="">—</option>'].concat(state.teams.map(t=>`<option>${t}</option>`)).join("");playersList.innerHTML=state.players.map((p,i)=>`<div class="player"><input type="checkbox" ${p.present?"checked":""} onchange="updatePlayer(${i},'present',this.checked)"><input value="${p.name}" onchange="updatePlayer(${i},'name',this.value)"><select onchange="updatePlayer(${i},'level',this.value)"><option value="3" ${p.level==3?"selected":""}>pro</option><option value="2" ${p.level==2?"selected":""}>mid</option><option value="1" ${p.level==1?"selected":""}>beg</option></select><span></span><select onchange="updatePlayer(${i},'team',this.value)">${opts.replace(`>${p.team}<`,` selected>${p.team}<`)}</select><button onclick="removePlayer(${i})">x</button></div>`).join("")}
-function renderRosters(){rosters.innerHTML=state.teams.map(t=>{const ps=state.players.filter(p=>p.present&&p.team===t);return`<div class="card ${ps.length>=3&&ps.length<=4?"ok":ps.length>4?"bad":""}"><h3>${t}</h3><div class="muted">${ps.length}/4</div>${ps.map(p=>`<div><span class="player-link" data-player="${p.name}">${p.name}</span> <span class="muted">(${p.goals||0}g)</span></div>`).join("")||"—"}</div>`}).join("");teamsPreview.value=state.teams.join("\n")}
-function renderGoals(){const present=state.players.filter(p=>p.present);goalsEditor.innerHTML=present.map(p=>{const i=state.players.indexOf(p);return`<div class="grid2" style="margin-bottom:8px"><div><span class="player-link" data-player="${p.name}">${p.name}</span> <span class="muted">${p.team||"—"}</span></div><input type="number" value="${p.goals||0}" min="0" onchange="updatePlayer(${i},'goals',this.value)"></div>`}).join("");topScorers.innerHTML=present.slice().sort((a,b)=>(b.goals||0)-(a.goals||0)).map((p,i)=>`<div class="card" style="margin-bottom:8px">#${i+1} <strong>${p.name}</strong> — ${p.goals||0} goli</div>`).join("")}
-
-function profileStats(name){
-  const b=base(); rebuildBase();
-  const saved=b.players[name]||{events:0,goals:0,lastEvent:"—"};
-  const current=state.players.find(p=>p.name===name)||{};
-  return {events:saved.events||0, goals:(saved.goals||0)+(current.goals||0), lastEvent:saved.lastEvent||"—"};
-}
-function renderProfiles(){
-  if(!document.getElementById("profilesGrid")) return;
-  const all=state.players.slice().sort((a,b)=>a.name.localeCompare(b.name));
-  profilesGrid.innerHTML=all.map((p,i)=>{
-    const idx=state.players.indexOf(p), st=profileStats(p.name);
-    const initials=(p.name||"WFC").split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
-    const avatar=p.photo?`<img src="${p.photo}" style="width:54px;height:54px;border-radius:50%;object-fit:cover">`:`${initials}`;
-    return `<div class="profile-card">
-      <div class="profile-head"><div class="avatar">${avatar}</div><div><h3><span class="player-link" data-player="${p.name}">${p.name}</span></h3><div class="muted">${p.team||"bez teamu"} · ${p.position||"pozycja —"}</div></div></div>
-      <div class="profile-meta"><div>Ustawki: <strong>${st.events}</strong></div><div>Gole: <strong>${st.goals}</strong></div><div>Poziom: <strong>${p.level==3?"pro":p.level==2?"medium":"beginner"}</strong></div><div>Ostatnio: <strong>${st.lastEvent}</strong></div></div>
-      <div class="profile-form">
-        <input placeholder="Pozycja" value="${p.position||""}" onchange="updatePlayer(${idx},'position',this.value)">
-        <input placeholder="Instagram" value="${p.instagram||""}" onchange="updatePlayer(${idx},'instagram',this.value)">
-        <input placeholder="URL zdjęcia" value="${p.photo||""}" onchange="updatePlayer(${idx},'photo',this.value)">
-        <input placeholder="Notatki" value="${p.notes||""}" onchange="updatePlayer(${idx},'notes',this.value)">
-      </div>
-    </div>`
-  }).join("");
-}
-function renderSchedule(){fullSchedule.innerHTML=state.rounds.map((s,i)=>`<div class="schedule-round ${i===state.currentRound?"active":""}"><strong>Start ${i+1}</strong> <button style="width:auto;padding:7px 10px;margin-left:8px" onclick="jumpRound(${i})">Pokaż</button><div class="schedule-matches">${labels().map((lab,j)=>{const m=s.matches[j];return`<div class="card"><div class="muted">${lab}</div>${m?`<strong>${m[0]} vs ${m[1]}</strong><br>${m[2]?"BONUS":m[3]}`:"—"}</div>`}).join("")}</div></div>`).join("")}
-function renderSeason(){const b=base();rebuildBase();const totalGoals=b.events.reduce((a,e)=>a+(e.totalGoals||0),0),players=new Set();b.events.forEach(e=>(e.players||[]).forEach(p=>players.add(p.name)));seasonOverview.innerHTML=[["Ustawki",b.events.length],["Unikalni gracze",players.size],["Suma goli",totalGoals],["Mecze",b.events.reduce((a,e)=>a+(e.matchesCount||0),0)]].map(x=>`<div class="card"><div class="muted">${x[0]}</div><div style="font-size:30px;font-weight:950">${x[1]}</div></div>`).join("");eventSelect.innerHTML=b.events.map(e=>`<option value="${e.id}">${e.id} · ${e.dateLabel}</option>`).join("")||'<option>Brak zapisów</option>';historyList.innerHTML=b.events.slice().reverse().map(e=>`<div class="history-item"><strong>${e.id}</strong><div class="muted">${e.totalPlayers} graczy · ${e.totalGoals} goli</div><button onclick="loadEvent('${e.id}')">Wczytaj</button><button class="danger" onclick="deleteEvent('${e.id}')">Usuń</button></div>`).join("")}
-function renderRanking(){const rows=Object.values(base().players).sort((a,b)=>b.goals-a.goals||b.events-a.events);ranking.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Gracz</th><th>Ustawki</th><th>Gole</th><th>Śr.</th><th>Ostatnio</th></tr></thead><tbody>${rows.map((p,i)=>`<tr><td>${i+1}</td><td><span class="player-link" data-player="${p.name}">${p.name}</span></td><td>${p.events}</td><td>${p.goals}</td><td>${p.events?(p.goals/p.events).toFixed(1):"0.0"}</td><td>${p.lastEvent}</td></tr>`).join("")}</tbody></table></div>`}
-
-// SUPABASE READY — następny krok:
-// const SUPABASE_URL = "https://kpbzjfanleyaiwhzvsor.supabase.co";
-// const SUPABASE_ANON_KEY = "sb_publishable_YsLanoIurd3BXKkT4zRN5w_wYoS4H4l";
-// const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-//
-// Plan tabel:
-// profiles: id, name, email, role, position, instagram, photo, created_at
-// events: id, season, code, date, status, created_by
-// event_players: event_id, player_id, team, present
-// matches: event_id, round, pitch, team_a, team_b, score_a, score_b
-// goals: match_id, player_id, team, minute
-// season_stats: player_id, season, appearances, goals, mvp, points
-
-function init(){for(let i=6;i<=20;i++)teamCount.innerHTML+=`<option value="${i}" ${i===6?"selected":""}>${i} zespołów</option>`;load();eventNumber.value=state.eventNumber||"[ S03E12 ]";if(!state.teams.length)state.teams=teamNames(); if(!localStorage.getItem("wfc_opt_v4")){teamCount.value="6"; state.teams=teamNames();}teamCount.value=String(state.teams.length||6);teamsPreview.value=state.teams.join("\n");state.players=(state.players||DEFAULT_PLAYERS).map(p=>({present:true,team:"",goals:0,level:2,position:"",instagram:"",notes:"",photo:"",...p}));if(!state.base || !state.base.events || !state.base.events.length){state.base={events:PAST_EVENTS_SEED,players:{},selectedEventId:'[ S03E12 ]'};} if(!state.rounds.length)generateSchedule();else render();initModeFromHash();if(currentUser){currentRole=currentUser.role||currentRole;}applyRole();updateSessionUI();if(!currentUser)openAuth();initPlayerProfileFromHash()}init();
-
-/* --- WFC NAVIGATION HOTFIX v13 --- */
-(function(){
-  window.WFC = window.WFC || {};
-  WFC.currentView = WFC.currentView || "live";
-  WFC.history = WFC.history || ["live"];
-
-  window.safeScrollTop = function(){
-    try { window.scrollTo({top:0, behavior:"smooth"}); } catch(e){ window.scrollTo(0,0); }
-  };
-
-  window.showView = function(view, track=true){
-    const allowed = ["live","admin","season","ranking","profiles","schedule"];
-    if(!allowed.includes(view)) view = "live";
-
-    // Role protection, but do not break navigation.
-    try {
-      if(typeof currentRole !== "undefined"){
-        if(currentRole !== "admin" && view === "admin") view = "live";
-        if(currentRole === "guest" && view === "profiles") view = "live";
-      }
-      if(typeof appMode !== "undefined" && appMode === "public"){
-        if(view === "admin") view = "live";
-        if(typeof currentRole !== "undefined" && currentRole === "guest" && view === "profiles") view = "live";
-      }
-    } catch(e){}
-
-    document.querySelectorAll(".view").forEach(el => el.classList.remove("active"));
-    document.querySelectorAll(".tabs button").forEach(el => el.classList.remove("active"));
-
-    const target = document.getElementById(view + "View");
-    if(target) target.classList.add("active");
-    const tab = document.getElementById("tab-" + view);
-    if(tab) tab.classList.add("active");
-
-    if(track && WFC.currentView !== view){
-      WFC.history.push(view);
-      if(WFC.history.length > 25) WFC.history.shift();
-    }
-    WFC.currentView = view;
-    safeScrollTop();
-  };
-
-  window.exitTVModes = function(){
-    document.body.classList.remove("tv-mode","tv-compact","phone-mode");
-  };
-
-  window.goHome = function(){
-    exitTVModes();
-    showView("live");
-  };
-
-  window.goBackView = function(){
-    exitTVModes();
-    if(WFC.history.length > 1){
-      WFC.history.pop();
-      const previous = WFC.history[WFC.history.length - 1] || "live";
-      showView(previous, false);
-    } else {
-      showView("live", false);
-    }
-  };
-
-  window.toggleTV = function(){
-    document.body.classList.remove("tv-compact","phone-mode");
-    document.body.classList.toggle("tv-mode");
-    showView("live");
-  };
-
-  window.toggleTVCompact = function(){
-    document.body.classList.remove("tv-mode","phone-mode");
-    document.body.classList.toggle("tv-compact");
-    showView("live");
-  };
-
-  window.togglePhoneMode = function(){
-    document.body.classList.remove("tv-mode","tv-compact");
-    document.body.classList.toggle("phone-mode");
-    showView("live");
-  };
-
-  document.addEventListener("click", function(e){
-    const btn = e.target.closest("[data-view],[data-action],[data-player]");
-    if(!btn) return;
-
-    if(btn.dataset.view){
-      e.preventDefault();
-      showView(btn.dataset.view);
-      return;
-    }
-    if(btn.dataset.action === "home"){
-      e.preventDefault();
-      goHome();
-      return;
-    }
-    if(btn.dataset.action === "back"){
-      e.preventDefault();
-      goBackView();
-      return;
-    }
-    if(btn.dataset.player){
-      e.preventDefault();
-      if(typeof openPlayerProfile === "function") openPlayerProfile(btn.dataset.player);
-      return;
-    }
-  });
-
-  // Make existing inline nav buttons safer as a fallback.
-  document.addEventListener("DOMContentLoaded", function(){
-    document.querySelectorAll(".phone-nav button,.mobile-backbar button").forEach(btn=>{
-      const text = (btn.textContent || "").trim().toLowerCase();
-      if(text === "live") btn.dataset.view = "live";
-      if(text === "admin") btn.dataset.view = "admin";
-      if(text === "sezon") btn.dataset.view = "season";
-      if(text === "ranking") btn.dataset.view = "ranking";
-      if(text === "profile") btn.dataset.view = "profiles";
-      if(text === "terminarz") btn.dataset.view = "schedule";
-    });
-  });
-})();
-
-</script></body></html>
+  <nav class="mobile-nav">
+    <button data-view="live">Live</button>
+    <button data-view="season">Sezon</button>
+    <button data-view="ranking">Ranking</button>
+    <button data-view="profiles">Profile</button>
+    <button data-view="schedule">Terminarz</button>
+  </nav>
+
+  <script src="./config.js"></script>
+  <script src="./supabaseClient.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
