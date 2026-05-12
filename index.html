@@ -1,0 +1,1595 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WARSAW FC Matchday — Final 1.3</title>
+<style>
+:root{--bg:#050506;--panel:#101015;--panel2:#17171d;--line:#2a2a33;--text:#f7f7f8;--muted:#9a9aa4;--danger:#ff6b6b;--good:#67d46b;--r:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#15151c,#050506 58%);color:var(--text);font-family:Inter,Arial,sans-serif;padding-bottom:74px}
+button,input,select,textarea{font:inherit}button{border:1px solid var(--line);background:#111116;color:var(--text);border-radius:14px;padding:11px 13px;font-weight:850;cursor:pointer;text-transform:uppercase;letter-spacing:.03em}button.primary{background:#fff;color:#000;border-color:#fff}button.danger{border-color:#5a2a2a;color:#ffd1d1}
+input,select,textarea{width:100%;background:#09090c;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px}label{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;margin:12px 0 5px}
+h1,h2,h3{margin:0 0 10px;text-transform:uppercase}p{margin-top:0}.muted{color:var(--muted)}.app{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);background:rgba(12,12,16,.97);padding:18px;overflow:auto}main{padding:22px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:52px;height:52px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-weight:950}.event-pill{border:1px solid var(--line);border-radius:999px;padding:12px 16px;font-weight:950;letter-spacing:.08em}
+.panel,.modal-card{background:linear-gradient(180deg,var(--panel2),#09090c);border:1px solid var(--line);border-radius:var(--r);padding:18px}.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;position:sticky;top:0;background:rgba(5,5,6,.88);backdrop-filter:blur(14px);z-index:10;border:1px solid var(--line);border-radius:18px;padding:8px}.tabs button.active{background:#fff;color:#000}
+.view{display:none;flex-direction:column;gap:14px}.view.active{display:flex}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.kpi,.card{background:#09090c;border:1px solid var(--line);border-radius:16px;padding:14px}.kpi .value{font-size:30px;font-weight:950}.timer{font-size:86px;font-weight:950;text-align:center;line-height:1}
+.round-meta{display:flex;justify-content:space-between;color:var(--muted);text-transform:uppercase}.round-nav{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}.round-pills{display:flex;gap:8px;overflow:auto}.round-pills button.active{background:#fff;color:#000}
+.pitches{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border:1px solid var(--line);border-radius:18px;overflow:hidden}.pitch{min-height:250px;border-right:1px solid var(--line);background:linear-gradient(180deg,#18181f,#09090c);padding:20px;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative}.pitch:last-child{border-right:0}.pitch:before{content:"";position:absolute;top:0;left:12%;right:12%;height:4px;background:#fff}.pitch-title{color:var(--muted);text-transform:uppercase;font-size:13px;margin-bottom:16px}.teams{font-size:32px;font-weight:950;text-transform:uppercase;line-height:1.15}.vs{font-size:13px;color:var(--muted);margin:8px 0}.score{display:flex;gap:8px;justify-content:center;margin-top:14px}.score input{width:64px;text-align:center;font-size:22px;font-weight:950}
+.scorer-panel{margin-top:12px;text-align:left;border:1px solid var(--line);border-radius:14px;padding:12px;background:#08080b;max-height:230px;overflow:auto}.scorer-row{display:grid;grid-template-columns:1fr auto 30px auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #222}.scorer-row button{padding:6px 10px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #24242a;text-align:left}th{color:var(--muted);text-transform:uppercase;font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.profiles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;align-items:start}.player-link{text-decoration:underline;text-underline-offset:3px;cursor:pointer}.player-row{display:grid;grid-template-columns:28px 1fr 76px;gap:8px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:8px;background:#08080b}.player-row input[type=checkbox]{width:auto}.list{max-height:340px;overflow:auto}.schedule-round{border-bottom:1px solid var(--line);padding:12px}.status-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:12px}.status-done{background:#111827;color:#fff}.status-planned{background:#DBEAFE;color:#1E40AF}.status-open{background:#FEF3C7;color:#92400E}.status-closed{background:#DCFCE7;color:#166534}.schedule-matches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}
+.modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.86);padding:18px;overflow:auto}.modal.active{display:grid;place-items:center}.modal-card{width:min(860px,100%);position:relative}.close{position:absolute;right:14px;top:14px}.lock-card{width:min(520px,100%)}.mobile-nav{display:none}
+.tv-mode aside,.tv-mode .tabs,.tv-mode .mobile-nav{display:none!important}.tv-mode .app{display:block}.tv-mode main{padding:26px}.tv-mode .view{display:none}.tv-mode #tvView{display:flex}.tv-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px}.tv-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px}.tv-mode .timer{font-size:112px}
+@media(max-width:760px){body{padding-bottom:74px}.app{display:block}aside{border-right:0;border-bottom:1px solid var(--line)}main{padding:12px}header{display:block}.tabs{grid-template-columns:repeat(6,minmax(92px,1fr));overflow:auto}.grid2,.grid3,.tv-grid,.tv-bottom{grid-template-columns:1fr}.pitches{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.pitch{min-width:88vw;scroll-snap-align:start}.timer{font-size:52px}.teams{font-size:26px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#0a0a0e;border-top:1px solid var(--line);gap:6px;padding:8px;overflow:auto}.mobile-nav button{min-width:max-content;font-size:11px}}
+
+/* --- WFC x ADIDAS FOOTBALL UI 1.3 --- */
+:root{
+  --bg:#030303;
+  --panel:#0b0b0b;
+  --panel2:#141414;
+  --line:#2f2f2f;
+  --text:#ffffff;
+  --muted:#b8b8b8;
+  --danger:#ff5c5c;
+  --good:#76ff82;
+  --accent:#ffffff;
+  --r:20px;
+}
+body{
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.055) 0 2px, transparent 2px 34px),
+    radial-gradient(circle at top left,#1c1c1c,#030303 55%);
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(120deg, transparent 0 62%, rgba(255,255,255,.045) 62% 64%, transparent 64% 100%),
+    linear-gradient(120deg, transparent 0 68%, rgba(255,255,255,.03) 68% 70%, transparent 70% 100%);
+  z-index:0;
+}
+.app, .modal, .mobile-nav{position:relative;z-index:1}
+.logo{
+  border-radius:6px;
+  border:2px solid #fff;
+  background:#fff;
+  color:#000;
+  letter-spacing:-.08em;
+}
+.logo:after{
+  content:"///";
+  font-size:12px;
+  margin-left:2px;
+}
+header{
+  border-bottom:1px solid rgba(255,255,255,.28);
+  background:linear-gradient(90deg,rgba(255,255,255,.08),transparent);
+  border-radius:0 0 22px 22px;
+  padding:18px;
+}
+header h1, aside h2, .tabs button, button, h3{
+  letter-spacing:.08em;
+}
+.event-pill{
+  background:#fff;
+  color:#000;
+  border-color:#fff;
+  box-shadow:0 10px 40px rgba(255,255,255,.08);
+}
+.panel,.modal-card,.card,.kpi{
+  border-color:rgba(255,255,255,.18);
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+  box-shadow:0 20px 60px rgba(0,0,0,.32);
+}
+.tabs{
+  border-color:rgba(255,255,255,.18);
+  background:rgba(0,0,0,.78);
+}
+.tabs button.active, button.primary{
+  background:#fff;
+  color:#000;
+  border-color:#fff;
+}
+button:hover{
+  transform:translateY(-1px);
+  transition:.15s ease;
+}
+.pitch{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),
+    radial-gradient(circle at center,rgba(255,255,255,.04),transparent 58%);
+}
+.pitch:before{
+  left:8%;
+  right:8%;
+  height:6px;
+  background:
+    linear-gradient(90deg,#fff 0 28%,transparent 28% 36%,#fff 36% 64%,transparent 64% 72%,#fff 72% 100%);
+}
+.pitch-title{
+  color:#fff;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:999px;
+  padding:7px 10px;
+  display:inline-block;
+  align-self:center;
+}
+.teams{
+  letter-spacing:.03em;
+}
+.timer{
+  text-shadow:0 0 28px rgba(255,255,255,.18);
+}
+.brand-lockup{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.brand-stripes{
+  display:inline-grid;
+  grid-template-columns:repeat(3,9px);
+  gap:4px;
+  height:26px;
+  align-items:end;
+}
+.brand-stripes span{
+  display:block;
+  width:9px;
+  background:#fff;
+}
+.brand-stripes span:nth-child(1){height:12px}
+.brand-stripes span:nth-child(2){height:19px}
+.brand-stripes span:nth-child(3){height:26px}
+.partner-ribbon{
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:18px;
+  padding:14px;
+  background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.partner-ribbon strong{
+  letter-spacing:.16em;
+}
+.tv-mode .partner-ribbon{
+  font-size:22px;
+}
+.status-pill{
+  border-color:rgba(255,255,255,.28);
+}
+.mobile-nav{
+  background:#000;
+  border-top-color:rgba(255,255,255,.24);
+}
+
+
+/* --- WFC x ADIDAS FINAL BRAND LIGHT 1.4 --- */
+.sponsor-strip{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:#fff;
+  color:#000;
+  border-radius:0 0 18px 18px;
+  padding:8px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  box-shadow:0 14px 40px rgba(0,0,0,.28);
+}
+.sponsor-strip .mini-stripes{
+  display:inline-flex;
+  gap:3px;
+  align-items:end;
+  height:18px;
+  margin-right:8px;
+}
+.sponsor-strip .mini-stripes i{
+  display:block;
+  width:6px;
+  background:#000;
+}
+.sponsor-strip .mini-stripes i:nth-child(1){height:8px}
+.sponsor-strip .mini-stripes i:nth-child(2){height:13px}
+.sponsor-strip .mini-stripes i:nth-child(3){height:18px}
+.sponsor-note{
+  font-size:10px;
+  opacity:.68;
+  letter-spacing:.08em;
+}
+.matchday-ad{
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:20px;
+  padding:16px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.02)),
+    linear-gradient(120deg,transparent 0 55%,rgba(255,255,255,.08) 55% 57%,transparent 57% 100%);
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+}
+.matchday-ad h3{
+  margin:0;
+  letter-spacing:.12em;
+}
+.matchday-ad p{
+  margin:4px 0 0;
+}
+.ad-badge{
+  background:#fff;
+  color:#000;
+  border-radius:999px;
+  padding:10px 14px;
+  font-weight:950;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.pitch .ad-mini{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  right:10px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;
+  padding:6px 8px;
+  font-size:10px;
+  color:#cfcfcf;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  background:rgba(0,0,0,.28);
+}
+.tv-mode .sponsor-strip{
+  font-size:20px;
+  padding:14px 22px;
+}
+.tv-mode .matchday-ad{
+  font-size:22px;
+}
+.tv-mode .pitch .ad-mini{
+  font-size:13px;
+}
+@media(max-width:760px){
+  .sponsor-strip{font-size:10px;letter-spacing:.08em;align-items:flex-start}
+  .sponsor-note{display:none}
+  .matchday-ad{grid-template-columns:1fr}
+  .ad-badge{width:max-content}
+}
+
+
+@font-face{font-family:"Aglet Mono";src:local("Aglet Mono"),local("AgletMono");font-display:swap;}
+:root{--wfc-font:"Aglet Mono","IBM Plex Mono","SFMono-Regular","Roboto Mono","Courier New",monospace;}
+*{font-family:var(--wfc-font)!important;}
+.generator-layout{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:18px;align-items:start}
+.generator-controls .grid2{margin-top:8px}
+.generator-meta{margin-top:14px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.02)}
+.generator-meta .meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.generator-meta .mini{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.generator-preview-panel .preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.player-card-preview-wrap{display:flex;justify-content:center;align-items:flex-start;padding:14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.08);border-radius:22px;overflow:auto}
+.player-card-preview{width:100%;display:flex;justify-content:center}
+.player-card-template{width:820px;max-width:100%;aspect-ratio:4/5;background:#0b0b0d;color:#fff;border:1px solid rgba(255,255,255,.08);overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.player-card-template,.player-card-template *{border-radius:0!important}
+.player-card-template .pc-shell{display:flex;flex-direction:column;height:100%}
+.player-card-template .pc-header{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.08);gap:18px}
+.player-card-template .pc-header-left{display:flex;align-items:center;gap:16px}.player-card-template .pc-header-no-logo{gap:0}
+.player-card-template .pc-crest{width:62px;height:62px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;font-size:30px;background:rgba(255,255,255,.04)}
+.player-card-template .pc-crest small{font-size:11px;letter-spacing:.22em;opacity:.6}
+.player-card-template .pc-title{font-size:18px;letter-spacing:.12em;text-transform:uppercase;opacity:.86}
+.player-card-template .pc-subtitle{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;margin-top:4px}
+.player-card-template .pc-motto{text-align:right;font-size:12px;line-height:1.6;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+.player-card-template .pc-content{display:grid;grid-template-columns:1.18fr .82fr;min-height:0;flex:1}
+.player-card-template .pc-left{padding:22px 22px 14px;background:#f1f1f1;color:#101113;display:flex;flex-direction:column;gap:14px}
+.player-card-template .pc-kicker{font-size:16px;letter-spacing:.15em;text-transform:uppercase;opacity:.7}
+.player-card-template .pc-name{font-size:54px;line-height:.94;letter-spacing:.03em;text-transform:uppercase;word-break:break-word}
+.player-card-template .pc-nick{display:flex;align-items:center;justify-content:space-between;background:#111;color:#fff;padding:16px 18px;font-size:28px;letter-spacing:.08em;text-transform:uppercase}
+.player-card-template .pc-detail-list{display:grid;gap:8px}
+.player-card-template .pc-detail{display:grid;grid-template-columns:1fr auto;gap:14px;padding:11px 14px;border:1px solid rgba(0,0,0,.10);font-size:15px;background:rgba(255,255,255,.55)}
+.player-card-template .pc-detail span:last-child{font-weight:700;text-align:right}
+.player-card-template .pc-right{position:relative;background:linear-gradient(180deg,#131417,#0a0b0d 62%,#111 100%);display:flex;flex-direction:column;justify-content:flex-end;min-height:0;overflow:hidden}
+.player-card-template .pc-code{position:absolute;top:18px;right:18px;padding:10px 14px;background:rgba(0,0,0,.46);border:1px solid rgba(255,255,255,.12);font-size:16px;letter-spacing:.15em;text-transform:uppercase;backdrop-filter:blur(8px)}
+.player-card-template .pc-image{position:absolute;inset:18px 18px 92px 18px;background-size:cover;background-position:center top;opacity:.88}
+.player-card-template .pc-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.28) 45%,rgba(8,8,10,.88) 100%)}
+.player-card-template .pc-placeholder{position:absolute;inset:18px 18px 92px 18px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(255,255,255,.10),transparent 34%),repeating-linear-gradient(120deg,rgba(255,255,255,.05) 0,rgba(255,255,255,.05) 8px,transparent 8px,transparent 24px),linear-gradient(160deg,#111,#0a0a0b)}
+.player-card-template .pc-placeholder div{text-align:center;padding:18px}.player-card-template .pc-placeholder b{font-size:84px;line-height:1}.player-card-template .pc-placeholder p{margin-top:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.72}
+.player-card-template .pc-right-bottom{position:relative;z-index:1;padding:14px 16px 16px;border-top:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,transparent,rgba(0,0,0,.65) 25%,rgba(0,0,0,.78) 100%)}
+.player-card-template .pc-right-bottom .pc-tagline{display:flex;justify-content:flex-start;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.84}
+.player-card-template .pc-right-bottom .pc-tagline b{font-size:12px;opacity:1;line-height:1.2;font-weight:600}
+.player-card-template .pc-stats,.player-card-template .pc-badges{display:grid;background:#09090a}
+.player-card-template .pc-stats{border-top:1px solid rgba(255,255,255,.08);grid-template-columns:repeat(4,minmax(0,1fr))}
+.player-card-template .pc-badges{border-top:1px solid rgba(255,255,255,.08);background:#111214;grid-template-columns:repeat(4,minmax(0,1fr))}
+.player-card-template .pc-stat,.player-card-template .pc-badge{padding:16px 12px 18px;border-right:1px dashed rgba(255,255,255,.12);border-bottom:1px dashed rgba(255,255,255,.08);text-align:center;min-height:112px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.player-card-template .pc-stat:last-child,.player-card-template .pc-badge:last-child{border-right:none}
+.player-card-template .pc-stat-label,.player-card-template .pc-badge-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.72;min-height:26px;display:flex;align-items:center;justify-content:center;line-height:1.2;padding:0 4px;word-break:break-word;text-wrap:balance}
+.player-card-template .pc-stat-value{margin-top:8px;font-size:34px;line-height:1;font-weight:700}
+.player-card-template .pc-badge-value{margin-top:10px;font-size:30px;font-weight:700;line-height:1}
+.player-card-template .pc-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 20px;background:#f1f1f1;color:#111;border-top:1px solid rgba(0,0,0,.08);font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.player-card-template .pc-footer .chip{padding:8px 12px;background:#111;color:#fff;font-size:12px;letter-spacing:.16em}
+.player-card-template.clean .pc-left{background:#ffffff}
+.player-card-template.clean .pc-header,.player-card-template.clean .pc-stats,.player-card-template.clean .pc-badges{background:#0d0d10}
+.player-card-template.adidas .pc-header{background:linear-gradient(90deg,#050505,#111 58%,#161616)}
+.player-card-template.adidas .pc-title::after{content:" × ADIDAS FOOTBALL";font-size:12px;letter-spacing:.18em;opacity:.72;display:block;margin-top:5px}
+.player-card-template.adidas .pc-right{background:linear-gradient(180deg,#101010,#050505 68%,#0b0b0b 100%)}
+.player-card-template.adidas .pc-nick,.player-card-template.adidas .pc-footer .chip{background:#fff;color:#111}
+.player-card-template.topscorer .pc-header{background:linear-gradient(90deg,#111,#15110a 46%,#111)}
+.player-card-template.topscorer .pc-left{background:linear-gradient(180deg,#f5f0dd,#ece2bf)}
+.player-card-template.topscorer .pc-nick{background:#111;color:#f5df8d}
+.player-card-template.topscorer .pc-footer .chip{background:#c7a543;color:#111}
+.player-card-template.topscorer .pc-title::after{content:" · TOP SCORER";font-size:12px;letter-spacing:.18em;opacity:.72}
+
+.player-card-template.minimal{width:820px;max-width:100%;aspect-ratio:4/5;position:relative;background:#050505;color:#fff;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.player-card-template.minimal .mp-bg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.14),rgba(0,0,0,.48));background-size:cover;background-position:center;filter:grayscale(1) contrast(1.05)}
+.player-card-template.minimal .mp-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.18) 38%,rgba(0,0,0,.46) 64%,rgba(0,0,0,.92) 100%)}
+.player-card-template.minimal .mp-placeholder{position:absolute;inset:0;background:radial-gradient(circle at 50% 28%,rgba(255,255,255,.07),transparent 18%),linear-gradient(180deg,#050505,#0b0b0d 55%,#080808);display:grid;place-items:center}
+.player-card-template.minimal .mp-placeholder span{font-size:140px;letter-spacing:.06em;opacity:.12;font-weight:700}
+.player-card-template.minimal .mp-layer{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:34px 34px 28px}
+.player-card-template.minimal .mp-top,.player-card-template.minimal .mp-meta,.player-card-template.minimal .mp-bottom-line{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.player-card-template.minimal .mp-top{font-size:18px;letter-spacing:.18em;text-transform:uppercase}
+.player-card-template.minimal .mp-top span:last-child{opacity:.82}
+.player-card-template.minimal .mp-meta{margin-top:10px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;opacity:.72}
+.player-card-template.minimal .mp-spacer{flex:1}
+.player-card-template.minimal .mp-core{display:flex;flex-direction:column;gap:14px;max-width:74%;margin-bottom:34px}
+.player-card-template.minimal .mp-kicker{font-size:14px;letter-spacing:.24em;text-transform:uppercase;opacity:.72}
+.player-card-template.minimal .mp-name{font-size:78px;line-height:.9;letter-spacing:.01em;text-transform:uppercase;word-break:break-word}
+.player-card-template.minimal .mp-tags{display:flex;flex-wrap:wrap;gap:10px;font-size:14px;letter-spacing:.18em;text-transform:uppercase;opacity:.9}
+.player-card-template.minimal .mp-tag{border:1px solid rgba(255,255,255,.18);padding:8px 12px;background:rgba(255,255,255,.04);backdrop-filter:blur(2px)}
+.player-card-template.minimal .mp-bottom{display:flex;flex-direction:column;gap:18px}
+.player-card-template.minimal .mp-bottom-line{font-size:15px;letter-spacing:.18em;text-transform:uppercase;opacity:.92}
+.player-card-template.minimal .mp-loc{max-width:72%;line-height:1.25}
+.player-card-template.minimal .mp-date{text-align:right}
+.player-card-template.minimal .mp-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.16);border-left:1px solid rgba(255,255,255,.12)}
+.player-card-template.minimal .mp-stat{min-height:102px;padding:16px 14px 14px;border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;justify-content:space-between;background:rgba(0,0,0,.42);backdrop-filter:blur(3px)}
+.player-card-template.minimal .mp-stat-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.72;line-height:1.25}
+.player-card-template.minimal .mp-stat-value{font-size:42px;line-height:1;font-weight:700;letter-spacing:.01em}
+.player-card-template.minimal .mp-footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;opacity:.84}
+.player-card-template.minimal .mp-footer strong{font-weight:600}
+.player-card-template.minimal .mp-mark{font-size:22px;letter-spacing:.24em}
+@media (max-width:1200px){.player-card-template.minimal .mp-core{max-width:100%}.player-card-template.minimal .mp-name{font-size:62px}}
+@media (max-width:720px){.player-card-template.minimal .mp-layer{padding:20px 18px 18px}.player-card-template.minimal .mp-top{font-size:13px}.player-card-template.minimal .mp-meta,.player-card-template.minimal .mp-footer{font-size:10px}.player-card-template.minimal .mp-name{font-size:42px}.player-card-template.minimal .mp-tags{font-size:11px;gap:8px}.player-card-template.minimal .mp-tag{padding:6px 8px}.player-card-template.minimal .mp-bottom-line{font-size:11px;gap:8px;flex-direction:column;align-items:flex-start}.player-card-template.minimal .mp-loc,.player-card-template.minimal .mp-date{max-width:100%;text-align:left}.player-card-template.minimal .mp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.player-card-template.minimal .mp-stat{min-height:88px;padding:12px 10px}.player-card-template.minimal .mp-stat-value{font-size:30px}}
+
+.generator-card-btn{margin-top:10px;width:100%}
+.profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.profile-fields input{margin:0}
+@media (max-width:1200px){.generator-layout{grid-template-columns:1fr}.player-card-template .pc-content{grid-template-columns:1fr}.player-card-template{width:100%}}
+@media (max-width:720px){.generator-meta .meta-grid{grid-template-columns:1fr}.player-card-template .pc-name{font-size:42px}.player-card-template .pc-nick{font-size:22px}.player-card-template .pc-stats,.player-card-template .pc-badges{grid-template-columns:repeat(2,minmax(0,1fr))}.player-card-template .pc-stat,.player-card-template .pc-badge{min-height:96px;padding:14px 10px}.player-card-template .pc-stat-value,.player-card-template .pc-badge-value{font-size:26px}.player-card-template .pc-right-bottom .pc-tagline{flex-direction:column;align-items:flex-start}}
+
+
+.player-card-template .pc-mode-pill{display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:8px 12px;border-radius:999px;background:#111;color:#fff;font-size:12px;letter-spacing:.16em;text-transform:uppercase;width:max-content}
+.player-card-template .pc-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.player-card-template .pc-split-card{border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.55);padding:12px}
+.player-card-template .pc-split-card b{display:block;font-size:12px;letter-spacing:.15em;text-transform:uppercase;opacity:.65;margin-bottom:8px}
+.player-card-template .pc-split-card span{display:block;font-size:18px;font-weight:700}
+.player-card-template.hybrid .pc-left{background:linear-gradient(180deg,#f7f7f7,#ededed)}
+@media(max-width:720px){.player-card-template .pc-split{grid-template-columns:1fr}}
+
+.profile-toolbar{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end;margin-bottom:14px}
+.profile-search-wrap label{margin-top:0}
+.profile-card-admin{display:grid;gap:12px;height:max-content}
+.profile-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:12px}
+.profile-avatar{width:56px;height:56px;border-radius:18px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;font-weight:950;background:rgba(255,255,255,.06)}
+.profile-title{display:flex;gap:12px;align-items:center}
+.profile-title b{font-size:18px}
+.profile-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+.profile-admin-grid .full{grid-column:1/-1}
+.profile-admin-grid input,.profile-admin-grid select,.profile-admin-grid textarea{font-size:13px;padding:10px;width:100%;min-width:0}
+.profile-actions-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.admin-note{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);border-radius:16px;padding:12px;color:var(--muted)}
+.admin-note b{color:var(--text)}
+@media(max-width:760px){.profile-toolbar{grid-template-columns:1fr}.profiles-grid{grid-template-columns:1fr}.profile-admin-grid{grid-template-columns:1fr}.profile-actions-row{grid-template-columns:1fr}}
+
+/* --- FINAL 1.4 CARD STYLE PACK --- */
+.player-card-template{
+  width:820px;
+  max-width:100%;
+  aspect-ratio:4/5;
+}
+.player-card-template.story-ratio{
+  width:720px;
+  aspect-ratio:9/16;
+}
+.player-card-template.post45-ratio{
+  width:820px;
+  aspect-ratio:4/5;
+}
+.player-card-template .pc-content{
+  grid-template-columns:1.22fr .78fr;
+}
+.player-card-template .pc-left{
+  gap:12px;
+}
+.player-card-template .pc-name{
+  font-size:52px;
+}
+.player-card-template .pc-detail-list{
+  gap:8px;
+}
+.player-card-template .pc-image,
+.player-card-template .pc-placeholder{
+  inset:18px 18px 108px 18px;
+  background-position:center top;
+  background-size:cover;
+}
+.player-card-template .pc-right-bottom{
+  min-height:84px;
+  padding:14px 16px;
+}
+.player-card-template .pc-right-bottom .pc-tagline{
+  gap:8px;
+}
+.player-card-template .pc-right-bottom .pc-tagline b{
+  font-size:12px;
+  letter-spacing:.13em;
+}
+.player-card-template .pc-stats{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.player-card-template .pc-badges{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.player-card-template .pc-stat,
+.player-card-template .pc-badge{
+  min-height:104px;
+  padding:14px 10px 16px;
+}
+.player-card-template .pc-stat-label,
+.player-card-template .pc-badge-label{
+  min-height:24px;
+  font-size:10px;
+  letter-spacing:.15em;
+}
+.player-card-template .pc-stat-value{
+  font-size:32px;
+}
+.player-card-template .pc-badge-value{
+  font-size:30px;
+}
+
+/* Premium Clean */
+.player-card-template.premium{
+  background:#050505;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+}
+.player-card-template.premium .pc-header{
+  background:#080808;
+}
+.player-card-template.premium .pc-left{
+  background:#f4f4f1;
+  color:#080808;
+}
+.player-card-template.premium .pc-nick{
+  background:#090909;
+  color:#fff;
+}
+.player-card-template.premium .pc-detail{
+  background:#fff;
+  border-color:#d7d7d0;
+}
+.player-card-template.premium .pc-mode-pill{
+  background:#090909;
+  color:#fff;
+}
+.player-card-template.premium .pc-stats{
+  background:#050505;
+}
+.player-card-template.premium .pc-badges{
+  background:#101010;
+}
+.player-card-template.premium .pc-footer{
+  background:#f4f4f1;
+  color:#080808;
+}
+
+/* Sport / Adidas-like */
+.player-card-template.sport{
+  background:#020202;
+  border:1px solid rgba(255,255,255,.2);
+}
+.player-card-template.sport .pc-header{
+  background:
+    linear-gradient(120deg,transparent 0 55%,rgba(255,255,255,.08) 55% 57%,transparent 57%),
+    #050505;
+}
+.player-card-template.sport .pc-left{
+  background:
+    linear-gradient(120deg,rgba(0,0,0,.06) 0 12%,transparent 12% 100%),
+    #efefeb;
+}
+.player-card-template.sport .pc-left:after{
+  content:"";
+  display:block;
+  height:8px;
+  margin-top:2px;
+  background:linear-gradient(90deg,#111 0 24%,transparent 24% 38%,#111 38% 62%,transparent 62% 76%,#111 76% 100%);
+}
+.player-card-template.sport .pc-nick{
+  background:#050505;
+  color:#fff;
+}
+.player-card-template.sport .pc-code,
+.player-card-template.sport .pc-footer .chip{
+  background:#fff;
+  color:#050505;
+}
+.player-card-template.sport .pc-stats{
+  background:#050505;
+}
+.player-card-template.sport .pc-badges{
+  background:#111;
+}
+
+/* Instagram Story */
+.player-card-template.story .pc-shell{
+  display:grid;
+  grid-template-rows:auto 1fr auto auto auto;
+}
+.player-card-template.story .pc-content{
+  grid-template-columns:1fr;
+}
+.player-card-template.story .pc-right{
+  min-height:520px;
+  order:-1;
+}
+.player-card-template.story .pc-left{
+  padding:22px;
+}
+.player-card-template.story .pc-name{
+  font-size:46px;
+}
+.player-card-template.story .pc-image,
+.player-card-template.story .pc-placeholder{
+  inset:0;
+}
+.player-card-template.story .pc-right-bottom{
+  min-height:70px;
+}
+.player-card-template.story .pc-detail-list{
+  grid-template-columns:repeat(3,1fr);
+}
+.player-card-template.story .pc-detail{
+  display:block;
+  text-align:center;
+}
+.player-card-template.story .pc-stats,
+.player-card-template.story .pc-badges{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.player-card-template.story .pc-stat,
+.player-card-template.story .pc-badge{
+  min-height:92px;
+}
+
+/* Instagram Post 4:5 */
+.player-card-template.post45 .pc-content{
+  grid-template-columns:1fr;
+}
+.player-card-template.post45 .pc-right{
+  min-height:430px;
+  order:-1;
+}
+.player-card-template.post45 .pc-image,
+.player-card-template.post45 .pc-placeholder{
+  inset:0;
+}
+.player-card-template.post45 .pc-left{
+  padding:22px;
+}
+.player-card-template.post45 .pc-detail-list{
+  grid-template-columns:repeat(3,1fr);
+}
+.player-card-template.post45 .pc-detail{
+  display:block;
+  text-align:center;
+}
+.player-card-template.post45 .pc-stats,
+.player-card-template.post45 .pc-badges{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+@media(max-width:720px){
+  .player-card-template.story-ratio,
+  .player-card-template.post45-ratio,
+  .player-card-template{
+    width:100%;
+  }
+  .player-card-template .pc-content,
+  .player-card-template.post45 .pc-content,
+  .player-card-template.story .pc-content{
+    grid-template-columns:1fr;
+  }
+  .player-card-template .pc-right{
+    min-height:360px;
+  }
+  .player-card-template .pc-image,
+  .player-card-template .pc-placeholder{
+    inset:0;
+  }
+  .player-card-template .pc-stats,
+  .player-card-template .pc-badges,
+  .player-card-template.story .pc-stats,
+  .player-card-template.story .pc-badges,
+  .player-card-template.post45 .pc-stats,
+  .player-card-template.post45 .pc-badges{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="sponsor-strip">
+  <div><span class="mini-stripes"><i></i><i></i><i></i></span>WARSAW FC MATCHDAY PRESENTED WITH ADIDAS FOOTBALL</div>
+  <div class="sponsor-note">brand partner visual mode</div>
+</div>
+
+<div id="lockModal" class="modal active">
+  <div class="modal-card lock-card">
+    <div class="brand"><div class="logo">WFC</div><div><h1>WARSAW FC × ADIDAS FOOTBALL</h1><p class="muted">Panel matchday z lekkim brand placementem partnera.</p></div></div>
+    <label>Kod admina</label>
+    <input id="adminCodeInput" type="password" placeholder="kod admina">
+    <button id="unlockBtn" class="primary" style="margin-top:12px;width:100%">Wejdź do aplikacji</button>
+    <p class="muted" style="margin-top:12px">Domyślny kod: <b>WFC-ADMIN</b>. Zmień go w kodzie po wdrożeniu.</p>
+  </div>
+</div>
+
+<div id="playerModal" class="modal">
+  <div class="modal-card">
+    <button id="closePlayerModal" class="close">×</button>
+    <div id="playerProfile"></div>
+  </div>
+</div>
+
+<div class="app">
+  <aside>
+    <div class="brand"><div class="logo">WFC</div><div><h2>Admin Panel</h2><p class="muted">Zarządzanie ustawkami</p></div></div>
+
+    <div class="actions">
+      <button id="lockBtn">Zablokuj</button>
+      <button id="tvBtn">TV kolejka</button>
+    </div>
+
+    <h3>Ustawka</h3>
+    <label>Numer ustawki</label><input id="eventCode" value="[ S03E12 ]">
+    <label>Nazwa</label><input id="eventTitle" value="WARSAW FC MATCHDAY">
+    <div class="grid2">
+      <div><label>Czas meczu</label><input id="matchMinutes" type="number" value="5" min="1"></div>
+      <div><label>Boiska</label><select id="pitchCount"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option></select></div>
+    </div>
+    <div class="grid2">
+      <div><label>Zespoły</label><select id="teamCount"></select></div>
+      <div><label>Tryb</label><select id="scheduleMode"><option value="single">bez rewanżów</option><option value="double" selected>rewanże</option></select></div>
+    </div>
+    <button id="generateBtn" class="primary" style="width:100%;margin-top:10px">Generuj terminarz</button>
+
+    <h3>Zawodnicy</h3>
+    <div class="grid2"><input id="newPlayerName" placeholder="Nick"><button id="addPlayerBtn">Dodaj</button></div>
+    <div class="actions">
+      <button id="balanceTeamsBtn">Losuj 3–4</button>
+      <button id="markAllBtn">Wszyscy obecni</button>
+      <button id="clearPlayersBtn" class="danger">Wyczyść</button>
+      <button id="resetPlayersBtn">Przywróć listę</button>
+    </div>
+    <div id="playersAdminList" class="list"></div>
+
+    <h3>Baza / kopia</h3>
+    <div class="actions">
+      <button id="saveEventBtn" class="primary">Zapisz ustawkę</button>
+      <button id="exportBtn">Eksport</button>
+      <button id="importBtn">Import</button>
+      <button id="resetLocalBtn" class="danger">Reset</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json" hidden>
+  </aside>
+
+  <main>
+    <header>
+      <div><h1 id="screenTitle">WARSAW FC MATCHDAY</h1><p class="muted">WE ARE WARSAW FC</p></div>
+      <div class="event-pill" id="screenEventCode">[ S03E12 ]</div>
+    </header>
+
+    <section class="partner-ribbon">
+      <div>
+        <strong>WARSAW FC × ADIDAS FOOTBALL</strong>
+        <div class="muted">matchday experience / football culture / street game</div>
+      </div>
+      <div class="brand-lockup">
+        <span class="brand-stripes"><span></span><span></span><span></span></span>
+        <span>ADIDAS FOOTBALL</span>
+      </div>
+    </section>
+
+
+    <nav class="tabs">
+      <button data-view="live" class="active">Live</button>
+      <button data-view="season">Sezon</button>
+      <button data-view="ranking">Ranking</button>
+      <button data-view="profiles">Profile</button>
+      <button data-view="generator">Generator</button>
+      <button data-view="schedule">Terminarz</button><button data-view="calendar">Kalendarz</button>
+    </nav>
+
+    <section id="liveView" class="view active">
+      <div class="kpis" id="kpis"></div>
+      <section class="panel">
+        <div class="round-meta"><span>Kolejka <b id="currentRoundLabel">1</b> / <b id="roundTotalLabel">1</b></span><span id="roundMode">ADMIN ONLY</span></div>
+        <div id="timer" class="timer">05:00</div>
+        <div class="actions" style="max-width:560px;margin:12px auto"><button id="startTimerBtn" class="primary">Start</button><button id="pauseTimerBtn">Pauza</button><button id="resetTimerBtn">Reset</button><button id="nextRoundQuickBtn">Następna kolejka</button></div>
+        <div class="round-nav"><button id="prevRoundBtn">←</button><div id="roundPills" class="round-pills"></div><button id="nextRoundBtn">→</button></div>
+      </section>
+
+      <section id="pitches" class="pitches"></section>
+
+      <section class="grid2">
+        <div class="panel"><h3>Następna kolejka</h3><div id="nextRound"></div><h3>Składy</h3><div id="rosters" class="cards"></div></div>
+        <div class="panel"><h3>Tabela</h3><div class="table-wrap"><table><thead><tr><th>#</th><th>Team</th><th>M</th><th>PKT</th><th>BR</th></tr></thead><tbody id="standings"></tbody></table></div></div>
+      </section>
+
+      <section class="grid2"><div class="panel"><h3>Lista strzelców</h3><div id="topScorers"></div></div><div class="panel"><h3>Ostatnie gole</h3><div id="lastGoals"></div></div></section>
+    </section>
+
+    <section id="seasonView" class="view"><button data-view="live" style="width:max-content">← Live</button><div class="panel"><h3>Przegląd sezonu</h3><div id="seasonOverview" class="kpis"></div></div><div class="panel"><h3>Historia ustawek</h3><div id="historyList"></div></div></section>
+    <section id="rankingView" class="view">
+      <button data-view="live" style="width:max-content">← Live</button>
+      <div class="panel">
+        <h3>Ranking sezonu</h3>
+        <div class="table-wrap"><table><thead><tr><th>#</th><th>Gracz</th><th>Ustawki</th><th>Gole</th><th>G/U</th><th>Team G/M</th><th>Team P/M</th><th>Impact</th></tr></thead><tbody id="rankingTable"></tbody></table></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h3>Team Goals AVG</h3><p class="muted">Gole zespołu na mecz — przypisane każdemu zawodnikowi tego teamu.</p><div id="teamGoalsAvg"></div></div>
+        <div class="panel"><h3>Team Points AVG</h3><p class="muted">Punkty zespołu na mecz: wygrana 3, remis 1, porażka 0.</p><div id="teamPointsAvg"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h3>Impact</h3><p class="muted">Gole + punkty zespołu + bilans + obecność.</p><div id="impactScore"></div></div>
+        <div class="panel"><h3>Silent Impact</h3><p class="muted">Wpływ zespołowy bez premiowania samych goli.</p><div id="silentImpact"></div></div>
+      </div>
+    </section>
+    <section id="profilesView" class="view">
+      <button data-view="live" style="width:max-content">← Live</button>
+      <div class="panel">
+        <h3>Profile graczy / baza admina</h3>
+        <p class="muted">Tu uzupełniasz tylko podstawowe informacje o graczu potrzebne do profilu i karty gracza.</p>
+        <div class="profile-toolbar">
+          <div class="profile-search-wrap">
+            <label>Szukaj zawodnika</label>
+            <input id="profileSearchInput" placeholder="wpisz imię, nick, team, Instagram...">
+          </div>
+          <button id="showPresentProfilesBtn">Tylko obecni</button>
+          <button id="showAllProfilesBtn" class="primary">Wszyscy</button>
+        </div>
+        <div class="admin-note">
+          <b>Tip:</b> wystarczy imię, nazwisko, ksywa, rok urodzenia, dzielnica i zdjęcie. Statystyki pobierają się z aplikacji.
+        </div>
+        <div id="profilesGrid" class="profiles-grid" style="margin-top:14px"></div>
+      </div>
+    </section>
+    <section id="generatorView" class="view">
+      <button data-view="live" style="width:max-content">← Live</button>
+      <div class="generator-layout">
+        <div class="panel generator-controls">
+          <h3>Generator karty gracza</h3>
+          <p class="muted">Automatyczna karta WARSAW FC oparta o statystyki z aplikacji.</p>
+          <label>Wybierz zawodnika</label>
+          <select id="generatorPlayerSelect"></select>
+          <div class="grid2">
+            <div>
+              <label>Typ karty</label>
+              <select id="cardModeSelect">
+                <option value="event">Ustawka</option>
+                <option value="season" selected>Sezon</option>
+              </select>
+            </div>
+            <div>
+              <label>Wybierz ustawkę</label>
+              <select id="cardEventSelect"></select>
+            </div>
+          </div>
+          <div class="grid2">
+            <div>
+              <label>Styl karty</label>
+              <select id="cardStyleSelect">
+                <option value="minimal" selected>Minimal Poster</option>
+                <option value="premium">Premium Clean</option>
+                <option value="sport">Sport / Adidas-like</option>
+                <option value="story">Instagram Story</option>
+                <option value="post45">Instagram Post 4:5</option>
+                <option value="poster">Poster Classic</option>
+                <option value="clean">Clean Classic</option>
+                <option value="adidas">Adidas Test</option>
+                <option value="topscorer">Top Scorer</option>
+              </select>
+            </div>
+            <div>
+              <label>Zdjęcie zawodnika</label>
+              <input id="generatorPhotoUpload" type="file" accept="image/*">
+            </div>
+          </div>
+          <div class="actions">
+            <button id="refreshCardBtn" class="primary">Odśwież kartę</button>
+            <button id="downloadCardBtn">Pobierz PNG</button>
+            <button id="openSelectedPlayerBtn">Otwórz profil</button>
+          </div>
+          <div class="generator-meta" id="generatorMeta"></div>
+        </div>
+        <div class="panel generator-preview-panel">
+          <div class="preview-head"><h3>Podgląd</h3><span class="muted">render 4:5 / social post</span></div>
+          <div class="player-card-preview-wrap">
+            <div id="playerCardPreview" class="player-card-preview"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="scheduleView" class="view"><button data-view="live" style="width:max-content">← Live</button><div class="panel"><h3>Terminarz</h3><div id="fullSchedule"></div></div></section>
+
+
+    <section id="calendarView" class="view">
+      <button data-view="live" style="width:max-content">← Live</button>
+      <div class="panel">
+        <h3>Kalendarz sezonu S03</h3>
+        <p class="muted">Ustawki od [ S03E03 ] do [ S03E33 ]. Kliknij „Wczytaj”, żeby przejść do konkretnej ustawki.</p>
+        <div class="actions">
+          <button id="seedSeasonBtn" class="primary">Wczytaj sezon S03</button>
+          <button id="markClosedBtn">Zamknij obecną ustawkę</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Kod</th><th>Data</th><th>Status</th><th>Dane</th><th>Obecni</th><th>Akcja</th></tr></thead>
+            <tbody id="seasonCalendarTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tvView" class="view">
+      <button id="exitTvBtn" style="width:max-content">← Wyjdź z TV</button>
+      <div class="panel"><div class="round-meta"><span>Aktualna kolejka <b id="tvRound">1</b> / <b id="tvTotal">1</b></span><span id="tvCode">[ S03E12 ]</span></div><div id="tvTimer" class="timer">05:00</div></div>
+      
+      <div class="matchday-ad">
+        <div><h3>WARSAW FC × ADIDAS FOOTBALL</h3><p class="muted">street football matchday / live scoreboard</p></div>
+        <div class="ad-badge">WE ARE WARSAW FC</div>
+      </div>
+
+      <div class="tv-grid"><div class="panel"><h3>Teraz grają</h3><div id="tvCurrent" class="cards"></div></div><div class="panel"><h3>Następna kolejka</h3><div id="tvNext"></div></div></div>
+      <div class="tv-bottom"><div class="panel"><h3>Tabela</h3><div id="tvStandings"></div></div><div class="panel"><h3>Strzelcy</h3><div id="tvScorers"></div></div></div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav"><button data-view="live">Live</button><button data-view="season">Sezon</button><button data-view="ranking">Ranking</button><button data-view="profiles">Profile</button><button data-view="generator">Generator</button><button data-view="schedule">Terminarz</button><button data-view="calendar">Kalendarz</button></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const ADMIN_CODE="WFC-ADMIN";
+const LS_KEY="warsaw_fc_admin_only_1_0";
+const PAST_EVENTS=[
+["[ S03E03 ]","2026-03-04"],["[ S03E04 ]","2026-03-11"],["[ S03E05 ]","2026-03-18"],["[ S03E06 ]","2026-03-25"],["[ S03E07 ]","2026-04-01"],["[ S03E08 ]","2026-04-08"],["[ S03E09 ]","2026-04-15"],["[ S03E10 ]","2026-04-22"],["[ S03E11 ]","2026-04-29"],["[ S03E12 ]","2026-05-06"]
+].map(([code,date])=>({code,title:"WARSAW FC MATCHDAY",date,season:"S03",players:[],matches:[],goals:{},standings:[]}));
+
+const FULL_SEASON_EVENTS=[{"code": "[ S03E03 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-03-04", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E04 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-03-11", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E05 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-03-18", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E06 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-03-25", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E07 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-04-01", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E08 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-04-08", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E09 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-04-15", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E10 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-04-22", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E11 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-04-29", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E12 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-05-06", "season": "S03", "status": "Odbyła się", "dataStatus": "Do uzupełnienia", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E13 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-05-13", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E14 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-05-20", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E15 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-05-27", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E16 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-06-03", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E17 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-06-10", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E18 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-06-17", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E19 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-06-24", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E20 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-07-01", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E21 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-07-08", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E22 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-07-15", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E23 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-07-22", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E24 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-07-29", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E25 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-08-05", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E26 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-08-12", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E27 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-08-19", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E28 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-08-26", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E29 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-09-02", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E30 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-09-09", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E31 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-09-16", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E32 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-09-23", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}, {"code": "[ S03E33 ]", "title": "WARSAW FC MATCHDAY", "date": "2026-09-30", "season": "S03", "status": "Planowana", "dataStatus": "Planowana", "players": [], "matches": [], "scores": {}, "goals": {}, "standings": []}];
+const DEFAULT_PLAYERS=[
+["Bartosz Piwiński","WFC 1"],["Bartek Nowak","WFC 1"],["Mateusz Żywulski","WFC 1"],["Karol Machulski","WFC 2"],["Marcel Michalczyk","WFC 2"],["Kamil Junior","WFC 2"],["Michał Rycaj","WFC 3"],["Weronika Samulska","WFC 3"],["Bartek Barzał","WFC 3"],["Damian Gawrych","WFC 4"],["Daniel Kleber","WFC 4"],["Patryk Junior","WFC 4"],["Kamil Machulski","WFC 5"],["Hubert Majewski","WFC 5"],["Szymon Kwiatkowski","WFC 5"],["Fernando Morales","WFC 6"],["Marcin Szejba","WFC 6"],["Bartosz Jabłoński","WFC 6"]
+].map(([name,team])=>({name,team,nickname:"",present:true,level:2,goals:0,photo:"",birthYear:"",district:"",notes:""}));
+let state={unlocked:false,event:{code:"[ S03E12 ]",title:"WARSAW FC MATCHDAY"},teams:Array.from({length:6},(_,i)=>`WFC ${i+1}`),players:DEFAULT_PLAYERS,rounds:[],currentRound:0,duration:300,remaining:300,timerId:null,scores:{},goalEvents:{},history:PAST_EVENTS,seasonCalendar:FULL_SEASON_EVENTS,playerImages:{},generator:{selectedPlayer:"",style:"minimal",mode:"season",eventCode:""}};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(LS_KEY,JSON.stringify({...state,timerId:null}))}
+function normalizePlayer(p){
+  if(!p) return p;
+  p.nickname = p.nickname || "";
+  p.birthYear = p.birthYear || p.birth || "";
+  p.district = p.district || p.city || "";
+  p.notes = p.notes || p.position || "";
+  p.photo = p.photo || "";
+  p.present = p.present !== false;
+  p.level = Number(p.level || 2);
+  p.goals = Number(p.goals || 0);
+  return p;
+}
+function normalizeState(){
+  state.players = (state.players || []).map(normalizePlayer);
+  state.playerImages = state.playerImages || {};
+  state.generator = state.generator || {};
+  if(!["event","season"].includes(state.generator.mode)) state.generator.mode = "season";
+  state.generator.style = state.generator.style || "minimal";
+  state.generator.selectedPlayer = state.generator.selectedPlayer || state.players[0]?.name || "";
+  state.generator.eventCode = state.generator.eventCode || state.event?.code || "";
+}
+function load(){try{const s=JSON.parse(localStorage.getItem(LS_KEY));if(s)state={...state,...s,timerId:null};normalizeState()}catch{normalizeState()}}
+function unlock(){if($("adminCodeInput").value===ADMIN_CODE){state.unlocked=true;$("lockModal").classList.remove("active");save();render()}else alert("Błędny kod admina.")}
+function lock(){state.unlocked=false;save();$("lockModal").classList.add("active")}
+function initials(name){return(name||"WFC").split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase()}
+function showView(view){if(document.body.classList.contains("tv-mode")&&view!=="tv")document.body.classList.remove("tv-mode");document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.querySelectorAll("[data-view]").forEach(b=>b.classList.remove("active"));const id=view==="tv"?"tvView":view+"View";$(id)?.classList.add("active");document.querySelectorAll(`[data-view="${view}"]`).forEach(b=>b.classList.add("active"));scrollTo({top:0,behavior:"smooth"})}
+function enterTv(){document.body.classList.add("tv-mode");showView("tv")}function exitTv(){document.body.classList.remove("tv-mode");showView("live")}
+function setupTeams(){const n=Number($("teamCount").value||6);state.teams=Array.from({length:n},(_,i)=>`WFC ${i+1}`)}
+function buildSchedule(){const teams=state.teams,pc=Number($("pitchCount").value||3),mode=$("scheduleMode").value,ms=[];for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++)ms.push([teams[i],teams[j],false,"MECZ"]);if(mode==="double")for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++)ms.push([teams[j],teams[i],false,"REWANŻ"]);const rem=ms.slice(),rounds=[];while(rem.length){const used=new Set(),slot=[];for(let i=0;i<rem.length&&slot.length<pc;i++){const[a,b]=rem[i];if(!used.has(a)&&!used.has(b)){slot.push(rem[i]);used.add(a);used.add(b);rem.splice(i,1);i--}}while(slot.length<pc&&teams.length>=pc*2){const av=teams.filter(t=>!used.has(t));if(av.length<2)break;slot.push([av[0],av[1],true,"BONUS"]);used.add(av[0]);used.add(av[1])}rounds.push(slot)}return rounds}
+function generate(){setupTeams();state.duration=Number($("matchMinutes").value||5)*60;state.remaining=state.duration;state.currentRound=0;state.rounds=buildSchedule();state.scores={};state.goalEvents={};save();render()}
+function fmt(s){return`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
+function labels(){return Array.from({length:Number($("pitchCount").value||3)},(_,i)=>`BOISKO NR ${i+1}`)}
+function mid(r,p){return`${r}-${p}`}
+function setScore(id,i,val){state.scores[id]=state.scores[id]||["",""];state.scores[id][i]=val;save();render()}
+function addGoal(id,playerName,team){state.goalEvents[id]=state.goalEvents[id]||[];state.goalEvents[id].push({playerName,team,at:new Date().toISOString()});syncScore(id);rebuildGoals();save();render()}
+function removeGoal(id,playerName,team){const list=state.goalEvents[id]||[];for(let i=list.length-1;i>=0;i--){if(list[i].playerName===playerName&&list[i].team===team){list.splice(i,1);break}}syncScore(id);rebuildGoals();save();render()}
+function syncScore(id){const[r,p]=id.split("-").map(Number),m=state.rounds[r]?.[p];if(!m)return;const g=state.goalEvents[id]||[];state.scores[id]=[String(g.filter(x=>x.team===m[0]).length),String(g.filter(x=>x.team===m[1]).length)]}
+function rebuildGoals(){state.players.forEach(p=>p.goals=0);Object.values(state.goalEvents).flat().forEach(g=>{const p=state.players.find(x=>x.name===g.playerName);if(p)p.goals++})}
+function goalCount(id,name){return(state.goalEvents[id]||[]).filter(g=>g.playerName===name).length}
+function startTimer(){pauseTimer(false);state.timerId=setInterval(()=>{if(state.remaining>0){state.remaining--;render(false)}else pauseTimer(false)},1000)}
+function pauseTimer(doRender=true){if(state.timerId)clearInterval(state.timerId);state.timerId=null;if(doRender)render(false)}
+function resetTimer(){pauseTimer(false);state.remaining=state.duration;save();render()}
+function goRound(d){const n=state.currentRound+d;if(n>=0&&n<state.rounds.length){state.currentRound=n;state.remaining=state.duration;save();render()}}
+function jumpRound(i){state.currentRound=i;state.remaining=state.duration;save();render()}
+function addOrUpdatePlayer(p){const f=state.players.find(x=>x.name.toLowerCase()===p.name.toLowerCase());if(f)Object.assign(f,p);else state.players.push(p)}
+function addPlayer(){const name=$("newPlayerName").value.trim();if(!name)return;addOrUpdatePlayer({name,nickname:"",present:true,team:"",level:2,goals:0,photo:"",birthYear:"",district:"",notes:""});$("newPlayerName").value="";save();render()}
+function updatePlayer(i,field,val){const p=state.players[i];if(!p)return;if(field==="present")p.present=val;else if(field==="level")p.level=Number(val);else p[field]=val;save();render()}
+function balance(){const present=state.players.filter(p=>p.present);if(present.length>state.teams.length*4)return alert(`Za dużo zawodników. Maks: ${state.teams.length*4}`);state.players.forEach(p=>p.team="");const buckets=state.teams.map(t=>({team:t,players:[],power:0}));present.sort((a,b)=>b.level-a.level||Math.random()-.5).forEach(p=>{let c=buckets.filter(b=>b.players.length<3);if(!c.length)c=buckets.filter(b=>b.players.length<4);c.sort((a,b)=>a.power-b.power||a.players.length-b.players.length);c[0].players.push(p);c[0].power+=p.level;p.team=c[0].team});save();render()}
+function markAll(){state.players.forEach(p=>p.present=true);save();render()}function clearPlayers(){if(confirm("Wyczyścić listę?")){state.players=[];save();render()}}function resetPlayers(){if(confirm("Przywrócić domyślną listę?")){state.players=JSON.parse(JSON.stringify(DEFAULT_PLAYERS));save();render()}}
+function standings(){const t={};state.teams.forEach(x=>t[x]={team:x,m:0,p:0,gf:0,ga:0,gd:0});state.rounds.forEach((r,ri)=>r.forEach((m,pi)=>{if(m[2])return;const s=state.scores[mid(ri,pi)];if(!s||s[0]===""||s[1]==="")return;const a=Number(s[0]),b=Number(s[1]),A=t[m[0]],B=t[m[1]];if(!A||!B)return;A.m++;B.m++;A.gf+=a;A.ga+=b;B.gf+=b;B.ga+=a;if(a>b)A.p+=3;else if(b>a)B.p+=3;else{A.p++;B.p++}}));return Object.values(t).map(x=>({...x,gd:x.gf-x.ga})).sort((a,b)=>b.p-a.p||b.gd-a.gd||b.gf-a.gf)}
+function saveEvent(){const ev={code:state.event.code,title:state.event.title,date:new Date().toISOString().slice(0,10),season:"S03",players:state.players.filter(p=>p.present).map(p=>({...p})),matches:state.rounds,scores:state.scores,goals:state.goalEvents,standings:standings()};const i=state.history.findIndex(e=>e.code===ev.code);if(i>=0&&!confirm("Nadpisać ustawkę?"))return;if(i>=0)state.history[i]=ev;else state.history.push(ev);
+ensureSeasonCalendar();
+let cal=state.seasonCalendar.find(x=>x.code===ev.code);
+if(!cal){cal={code:ev.code,title:ev.title,date:ev.date,season:"S03"};state.seasonCalendar.push(cal);}
+Object.assign(cal,{title:ev.title,status:"Odbyła się",dataStatus:"Zapisana",players:ev.players,matches:ev.matches,scores:ev.scores,goals:ev.goals,standings:ev.standings});
+save();render();alert("Zapisano ustawkę.")}
+
+function ensureSeasonCalendar(){
+  state.seasonCalendar = state.seasonCalendar || FULL_SEASON_EVENTS.map(e=>({...e}));
+  const byCode = {};
+  state.seasonCalendar.forEach(e=>byCode[e.code]=e);
+  FULL_SEASON_EVENTS.forEach(e=>{
+    if(!byCode[e.code]) state.seasonCalendar.push({...e});
+  });
+  state.seasonCalendar.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+}
+
+function seedSeason(){
+  if(!confirm("Wczytać / odświeżyć kalendarz sezonu S03 do końca września?")) return;
+  ensureSeasonCalendar();
+  state.history = state.history || [];
+  const historyByCode = {};
+  state.history.forEach(e=>historyByCode[e.code]=e);
+  state.seasonCalendar.forEach(ev=>{
+    if(!historyByCode[ev.code] && ev.status === "Odbyła się"){
+      state.history.push({
+        code: ev.code,
+        title: ev.title || "WARSAW FC MATCHDAY",
+        date: ev.date,
+        season: ev.season || "S03",
+        players: [],
+        matches: [],
+        scores: {},
+        goals: {},
+        standings: []
+      });
+    }
+  });
+  save();
+  render();
+  alert("Kalendarz sezonu S03 został wczytany.");
+}
+
+function loadCalendarEvent(code){
+  ensureSeasonCalendar();
+  const ev = state.seasonCalendar.find(e=>e.code===code) || state.history.find(e=>e.code===code);
+  if(!ev) return;
+
+  $("eventCode").value = ev.code;
+  $("eventTitle").value = ev.title || "WARSAW FC MATCHDAY";
+  state.event.code = ev.code;
+  state.event.title = ev.title || "WARSAW FC MATCHDAY";
+
+  if(ev.matches && ev.matches.length){
+    state.rounds = ev.matches;
+    state.scores = ev.scores || {};
+    state.goalEvents = ev.goals || {};
+  } else {
+    state.rounds = buildSchedule();
+    state.scores = {};
+    state.goalEvents = {};
+  }
+
+  // Restore attendance if this event has saved players, otherwise keep current player base.
+  if(ev.players && ev.players.length){
+    const savedByName = {};
+    ev.players.forEach(p=>savedByName[p.name]=p);
+    state.players.forEach(p=>{
+      if(savedByName[p.name]) Object.assign(p, savedByName[p.name], {present:true});
+      else p.present = false;
+    });
+    ev.players.forEach(p=>{
+      if(!state.players.find(x=>x.name===p.name)) state.players.push({...p, present:true});
+    });
+  }
+
+  state.currentRound = 0;
+  state.remaining = state.duration;
+  save();
+  render();
+  showView("live");
+}
+
+function closeCurrentEvent(){
+  const code = state.event.code;
+  saveEvent();
+  ensureSeasonCalendar();
+  let ev = state.seasonCalendar.find(e=>e.code===code);
+  if(!ev){
+    ev = {code, title: state.event.title, date: new Date().toISOString().slice(0,10), season:"S03"};
+    state.seasonCalendar.push(ev);
+  }
+  ev.status = "Odbyła się";
+  ev.dataStatus = "Zamknięta";
+  ev.players = state.players.filter(p=>p.present).map(p=>({...p}));
+  ev.matches = state.rounds;
+  ev.scores = state.scores;
+  ev.goals = state.goalEvents;
+  ev.standings = standings();
+  save();
+  render();
+  alert("Ustawka zamknięta w kalendarzu sezonu.");
+}
+
+function calendarStatusClass(status, dataStatus){
+  if(dataStatus === "Zamknięta") return "status-closed";
+  if(status === "Odbyła się") return "status-done";
+  if(status === "Planowana") return "status-planned";
+  return "status-open";
+}
+
+function renderSeasonCalendar(){
+  if(!$("seasonCalendarTable")) return;
+  ensureSeasonCalendar();
+  $("seasonCalendarTable").innerHTML = state.seasonCalendar.map((ev,i)=>{
+    const hist = (state.history||[]).find(h=>h.code===ev.code);
+    const present = hist?.players?.length || ev.players?.length || 0;
+    const dataStatus = ev.dataStatus || (hist?.players?.length ? "Zamknięta" : ev.status === "Odbyła się" ? "Do uzupełnienia" : "Planowana");
+    const cls = calendarStatusClass(ev.status, dataStatus);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><b>${ev.code}</b></td>
+      <td>${ev.date||""}</td>
+      <td><span class="status-pill ${cls}">${ev.status||"Planowana"}</span></td>
+      <td>${dataStatus}</td>
+      <td>${present}</td>
+      <td><button data-load-event="${ev.code}">Wczytaj</button></td>
+    </tr>`;
+  }).join("");
+}
+function exportBase(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="warsaw-fc-admin-base.json";a.click()}
+function importBase(file){const r=new FileReader();r.onload=()=>{try{state={...state,...JSON.parse(r.result),timerId:null};save();render()}catch{alert("Błędny plik.")}};r.readAsText(file)}
+function resetLocal(){if(confirm("Wyczyścić lokalne dane aplikacji?")){localStorage.removeItem(LS_KEY);location.reload()}}
+function openPlayer(name){const p=state.players.find(x=>x.name===name);if(!p)return;const events=state.history.filter(e=>(e.players||[]).some(ep=>ep.name===name));const adv=playerAdvancedStats().find(x=>x.name===name)||{};$("playerProfile").innerHTML=`<div class="brand"><div class="logo">${initials(p.name)}</div><div><h2>${esc(p.name)}</h2><p class="muted">${esc(p.team||"bez teamu")} · ${esc(p.district||"dzielnica —")}</p><p class="muted">Ksywa: ${esc(p.nickname||"—")} · Rok urodzenia: ${esc(p.birthYear||"—")} · Dzielnica: ${esc(p.district||"—")}</p></div></div><div class="actions"><button class="primary" data-open-generator="${attrEsc(p.name)}">Generator karty</button></div><div class="kpis"><div class="kpi"><div class="muted">Gole</div><div class="value">${adv.goals||p.goals||0}</div></div><div class="kpi"><div class="muted">Ustawki</div><div class="value">${adv.events||events.length}</div></div><div class="kpi"><div class="muted">Team G/M</div><div class="value">${Number(adv.teamGoalsAvg||0).toFixed(2)}</div></div><div class="kpi"><div class="muted">Team P/M</div><div class="value">${Number(adv.teamPointsAvg||0).toFixed(2)}</div></div><div class="kpi"><div class="muted">Impact</div><div class="value">${Number(adv.impact||0).toFixed(1)}</div></div><div class="kpi"><div class="muted">Dzielnica</div><div class="value" style="font-size:18px">${esc(p.district||"—")}</div></div></div><h3>Historia</h3>${events.length?events.map(e=>`<div class="card">${esc(e.code)} · ${esc(e.date||"")} · ${(e.players||[]).find(ep=>ep.name===name)?.team||"bez teamu"}</div>`).join(""):`<p class="muted">Brak historii.</p>`}`;$("playerModal").classList.add("active")}
+function closePlayer(){$("playerModal").classList.remove("active")}
+function render(doSave=true){state.event.code=$("eventCode").value;state.event.title=$("eventTitle").value;$("screenTitle").textContent=state.event.title;$("screenEventCode").textContent=state.event.code;$("tvCode").textContent=state.event.code;$("currentRoundLabel").textContent=state.currentRound+1;$("roundTotalLabel").textContent=Math.max(1,state.rounds.length);$("timer").textContent=fmt(state.remaining);$("tvTimer").textContent=fmt(state.remaining);$("tvRound").textContent=state.currentRound+1;$("tvTotal").textContent=Math.max(1,state.rounds.length);renderKpis();renderPlayersAdmin();renderRounds();renderPitches();renderRosters();renderStandings();renderScorers();renderHistory();renderRanking();renderProfiles();renderGenerator();renderSchedule();renderSeasonCalendar();renderTv();if(doSave)save()}
+function renderKpis(){const matches=state.rounds.reduce((a,r)=>a+r.filter(m=>!m[2]).length,0);$("kpis").innerHTML=[["Zespoły",state.teams.length],["Obecni",state.players.filter(p=>p.present).length],["Boiska",$("pitchCount").value],["Mecze",matches]].map(([k,v])=>`<div class="kpi"><div class="muted">${k}</div><div class="value">${v}</div></div>`).join("")}
+function renderPlayersAdmin(){const opts=["<option value=''>—</option>"].concat(state.teams.map(t=>`<option>${t}</option>`)).join("");$("playersAdminList").innerHTML=state.players.map((p,i)=>`<div class="player-row"><input type="checkbox" ${p.present?"checked":""} data-player-field="${i}:present"><input value="${p.name}" data-player-field="${i}:name"><select data-player-field="${i}:level"><option value="1" ${p.level==1?"selected":""}>beg</option><option value="2" ${p.level==2?"selected":""}>mid</option><option value="3" ${p.level==3?"selected":""}>pro</option></select><span></span><select data-player-field="${i}:team">${opts.replace(`>${p.team}<`,` selected>${p.team}<`)}</select><button class="danger" data-remove-player="${i}">x</button></div>`).join("")}
+function renderRounds(){$("roundPills").innerHTML=state.rounds.map((_,i)=>`<button class="${i===state.currentRound?"active":""}" data-round="${i}">${i+1}</button>`).join("")}
+function renderPitches(){const round=state.rounds[state.currentRound]||[],labs=labels();$("pitches").innerHTML=labs.map((lab,i)=>{const m=round[i];if(!m)return`<div class="pitch"><div class="pitch-title">${lab}</div><div class="teams">BRAK</div><div class="ad-mini">WARSAW FC × ADIDAS FOOTBALL</div></div>`;const id=mid(state.currentRound,i),s=state.scores[id]||["",""];const block=team=>state.players.filter(p=>p.present&&p.team===team).map(p=>`<div class="scorer-row"><span class="player-link" data-player="${p.name}">${p.name}</span><button data-remove-goal="${id}" data-player-name="${p.name}" data-team="${team}">−</button><b>${goalCount(id,p.name)}</b><button class="primary" data-add-goal="${id}" data-player-name="${p.name}" data-team="${team}">+</button></div>`).join("")||`<p class="muted">Brak zawodników</p>`;return`<div class="pitch"><div class="pitch-title">${lab}</div><div class="teams">${m[0]}<div class="vs">${m[2]?"BONUS":m[3]}</div>${m[1]}</div><div class="score"><input value="${s[0]}" data-score="${id}" data-side="0"><input value="${s[1]}" data-score="${id}" data-side="1"></div><div class="scorer-panel"><b>${m[0]}</b>${block(m[0])}<b>${m[1]}</b>${block(m[1])}</div><div class="ad-mini">WARSAW FC × ADIDAS FOOTBALL</div></div>`}).join("")}
+function renderRosters(){$("rosters").innerHTML=state.teams.map(t=>{const ps=state.players.filter(p=>p.present&&p.team===t);return`<div class="card"><b>${t}</b><p class="muted">${ps.length}/4</p>${ps.map(p=>`<div><span class="player-link" data-player="${p.name}">${p.name}</span> (${p.goals||0}g)</div>`).join("")||"—"}</div>`}).join("");const next=state.rounds[state.currentRound+1]||[];$("nextRound").innerHTML=next.map((m,i)=>`<div class="card"><p class="muted">${labels()[i]||""}</p><b>${m[0]} vs ${m[1]}</b><p class="muted">${m[2]?"BONUS":m[3]}</p></div>`).join("")||`<p class="muted">Koniec terminarza.</p>`}
+function renderStandings(){$("standings").innerHTML=standings().map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.m}</td><td>${r.p}</td><td>${r.gd>=0?"+":""}${r.gd}</td></tr>`).join("")}
+function renderScorers(){const sc=state.players.filter(p=>p.present).sort((a,b)=>(b.goals||0)-(a.goals||0));$("topScorers").innerHTML=sc.slice(0,10).map((p,i)=>`<div class="card">#${i+1} <span class="player-link" data-player="${p.name}">${p.name}</span> — <b>${p.goals||0}</b></div>`).join("");const goals=Object.values(state.goalEvents).flat().slice(-8).reverse();$("lastGoals").innerHTML=goals.map(g=>`<div class="card"><span class="player-link" data-player="${g.playerName}">${g.playerName}</span> · ${g.team}</div>`).join("")||`<p class="muted">Brak goli.</p>`}
+function renderHistory(){const total=new Set();state.history.forEach(e=>(e.players||[]).forEach(p=>total.add(p.name)));$("seasonOverview").innerHTML=[["Ustawki",state.history.length],["Unikalni gracze",total.size],["Lista graczy",state.players.length],["Sezon","S03"]].map(([k,v])=>`<div class="kpi"><div class="muted">${k}</div><div class="value">${v}</div></div>`).join("");$("historyList").innerHTML=state.history.map(e=>`<div class="card"><b>${e.code}</b><p class="muted">${e.date||""} · ${(e.players||[]).length} graczy</p></div>`).join("")}
+
+function playerAdvancedStats(){
+  const stats = {};
+  const ensure = name => stats[name] ||= {
+    name, events:0, goals:0,
+    teamMatches:0, teamGoalsFor:0, teamGoalsAgainst:0, teamPoints:0,
+    teamWins:0, teamDraws:0, teamLosses:0
+  };
+
+  state.history.forEach(ev => {
+    const eventPlayers = ev.players || [];
+    eventPlayers.forEach(p => {
+      const s = ensure(p.name);
+      s.events += 1;
+    });
+
+    const eventMatches = ev.matches || [];
+    const eventScores = ev.scores || {};
+    const eventGoals = ev.goals || {};
+
+    eventMatches.forEach((round, ri) => {
+      (round || []).forEach((m, pi) => {
+        if(!m || m[2]) return;
+        const id = `${ri}-${pi}`;
+        let score = eventScores[id];
+
+        if((!score || score[0] === "" || score[1] === "") && eventGoals[id]){
+          const list = eventGoals[id] || [];
+          score = [
+            String(list.filter(g => g.team === m[0]).length),
+            String(list.filter(g => g.team === m[1]).length)
+          ];
+        }
+
+        if(!score || score[0] === "" || score[1] === "") return;
+        const a = Number(score[0]), b = Number(score[1]);
+
+        const applyTeam = (team, gf, ga) => {
+          eventPlayers.filter(p => p.team === team).forEach(p => {
+            const s = ensure(p.name);
+            s.teamMatches += 1;
+            s.teamGoalsFor += gf;
+            s.teamGoalsAgainst += ga;
+            if(gf > ga){ s.teamPoints += 3; s.teamWins += 1; }
+            else if(gf === ga){ s.teamPoints += 1; s.teamDraws += 1; }
+            else { s.teamLosses += 1; }
+          });
+        };
+
+        applyTeam(m[0], a, b);
+        applyTeam(m[1], b, a);
+      });
+    });
+
+    Object.values(eventGoals || {}).flat().forEach(g => {
+      const s = ensure(g.playerName);
+      s.goals += 1;
+    });
+  });
+
+  // Bieżąca ustawka live też liczy się do podglądu przed zapisem.
+  state.players.filter(p => p.present).forEach(p => ensure(p.name));
+
+  state.rounds.forEach((round, ri) => {
+    (round || []).forEach((m, pi) => {
+      if(!m || m[2]) return;
+      const score = state.scores[mid(ri,pi)];
+      if(!score || score[0] === "" || score[1] === "") return;
+      const a = Number(score[0]), b = Number(score[1]);
+
+      const applyCurrentTeam = (team, gf, ga) => {
+        state.players.filter(p => p.present && p.team === team).forEach(p => {
+          const s = ensure(p.name);
+          s.teamMatches += 1;
+          s.teamGoalsFor += gf;
+          s.teamGoalsAgainst += ga;
+          if(gf > ga){ s.teamPoints += 3; s.teamWins += 1; }
+          else if(gf === ga){ s.teamPoints += 1; s.teamDraws += 1; }
+          else { s.teamLosses += 1; }
+        });
+      };
+
+      applyCurrentTeam(m[0], a, b);
+      applyCurrentTeam(m[1], b, a);
+    });
+  });
+
+  Object.values(state.goalEvents || {}).flat().forEach(g => {
+    const s = ensure(g.playerName);
+    s.goals += 1;
+  });
+
+  Object.values(stats).forEach(s => {
+    s.goalsPerEvent = s.events ? s.goals / s.events : 0;
+    s.teamGoalsAvg = s.teamMatches ? s.teamGoalsFor / s.teamMatches : 0;
+    s.teamPointsAvg = s.teamMatches ? s.teamPoints / s.teamMatches : 0;
+    s.teamGoalDiff = s.teamGoalsFor - s.teamGoalsAgainst;
+    s.impact = (s.goals * 2) + (s.teamPoints * 1.2) + (s.teamGoalDiff * 0.5) + (s.events * 0.75);
+    s.silentImpact = s.impact - (s.goals * 1.5);
+  });
+
+  return Object.values(stats);
+}
+
+function statCards(rows, field, suffix="", limit=8){
+  return rows.slice().sort((a,b)=>(b[field]||0)-(a[field]||0)).slice(0,limit).map((p,i)=>`
+    <div class="card">#${i+1} <span class="player-link" data-player="${p.name}">${p.name}</span> — <b>${Number(p[field]||0).toFixed(field.includes("Avg")?2:1)}${suffix}</b></div>
+  `).join("") || `<p class="muted">Brak danych.</p>`;
+}
+
+function renderRanking(){
+  const rows = playerAdvancedStats().sort((a,b)=>b.impact-a.impact || b.goals-a.goals || b.events-a.events);
+
+  $("rankingTable").innerHTML = rows.map((p,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><span class="player-link" data-player="${p.name}">${p.name}</span></td>
+      <td>${p.events}</td>
+      <td>${p.goals}</td>
+      <td>${p.goalsPerEvent.toFixed(1)}</td>
+      <td>${p.teamGoalsAvg.toFixed(2)}</td>
+      <td>${p.teamPointsAvg.toFixed(2)}</td>
+      <td>${p.impact.toFixed(1)}</td>
+    </tr>
+  `).join("");
+
+  if($("teamGoalsAvg")) $("teamGoalsAvg").innerHTML = statCards(rows, "teamGoalsAvg");
+  if($("teamPointsAvg")) $("teamPointsAvg").innerHTML = statCards(rows, "teamPointsAvg");
+  if($("impactScore")) $("impactScore").innerHTML = statCards(rows, "impact");
+  if($("silentImpact")) $("silentImpact").innerHTML = statCards(rows, "silentImpact");
+}
+
+
+
+
+function renderProfiles(){
+  const q = ($("profileSearchInput")?.value || "").toLowerCase().trim();
+  const onlyPresent = state.profileFilterPresent === true;
+  const teamOpts = ["", ...state.teams].map(t=>`<option value="${attrEsc(t)}">${t || "—"}</option>`).join("");
+
+  let players = state.players.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  if(onlyPresent) players = players.filter(p=>p.present);
+  if(q){
+    players = players.filter(p => [p.name,p.nickname,p.team,p.district,p.notes].join(" ").toLowerCase().includes(q));
+  }
+
+  $("profilesGrid").innerHTML = players.map((p)=>{
+    const i = state.players.findIndex(x=>x.name===p.name);
+    const adv = playerAdvancedStats().find(x=>x.name===p.name) || {};
+    const teamOptions = teamOpts.replace(`value="${attrEsc(p.team||"")}"`, `value="${attrEsc(p.team||"")}" selected`);
+    const photo = p.photo ? `<img src="${p.photo}" alt="${attrEsc(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:18px">` : initials(p.name);
+
+    return `<div class="card profile-card-admin">
+      <div class="profile-card-top">
+        <div class="profile-title">
+          <div class="profile-avatar">${photo}</div>
+          <div>
+            <b class="player-link" data-player="${attrEsc(p.name)}">${esc(p.name)}</b>
+            <p class="muted">${p.nickname ? "ksywa: " + esc(p.nickname) + " · " : ""}${esc(p.team||"bez teamu")} · ${esc(p.district||"dzielnica —")} · ${p.present ? "obecny" : "nieobecny"}</p>
+          </div>
+        </div>
+        <input type="checkbox" ${p.present?"checked":""} data-player-field="${i}:present" title="obecny">
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="muted">Gole</div><div class="value">${adv.goals || p.goals || 0}</div></div>
+        <div class="kpi"><div class="muted">Ustawki</div><div class="value">${adv.events || 0}</div></div>
+        <div class="kpi"><div class="muted">Impact</div><div class="value">${Math.round(adv.impact || 0)}</div></div>
+      </div>
+
+      <div class="profile-admin-grid">
+        <input placeholder="Imię i nazwisko" value="${attrEsc(p.name||"")}" data-player-field="${i}:name">
+        <input placeholder="Ksywa" value="${attrEsc(p.nickname||"")}" data-player-field="${i}:nickname">
+        <select data-player-field="${i}:team">${teamOptions}</select>
+        <input placeholder="Rok urodzenia" value="${attrEsc(p.birthYear||"")}" data-player-field="${i}:birthYear">
+        <input placeholder="Dzielnica" value="${attrEsc(p.district||"")}" data-player-field="${i}:district">
+        <label class="full" style="margin:0">
+          Zdjęcie gracza
+          <input type="file" accept="image/*" data-profile-photo="${i}">
+        </label>
+        <textarea class="full" placeholder="Krótka notatka ogólna, np. styl gry / ulubiona pozycja" data-player-field="${i}:notes">${esc(p.notes||"")}</textarea>
+      </div>
+
+      <div class="profile-actions-row">
+        <button data-player="${attrEsc(p.name)}">Profil</button>
+        <button class="primary" data-open-generator="${attrEsc(p.name)}">Generator karty</button>
+      </div>
+    </div>`;
+  }).join("") || `<p class="muted">Brak zawodników dla wybranego filtra.</p>`;
+}
+
+function handleProfilePhoto(index, file){
+  const p = state.players[index];
+  if(!p || !file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    p.photo = r.result;
+    state.playerImages = state.playerImages || {};
+    state.playerImages[p.name] = r.result;
+    save();
+    renderProfiles();
+    renderGenerator();
+  };
+  r.readAsDataURL(file);
+}
+
+function selectedGeneratorEvent(){
+  const code = state.generator?.eventCode || state.event.code;
+  const fromCalendar = (state.seasonCalendar || []).find(e => e.code === code);
+  const fromHistory = (state.history || []).find(e => e.code === code);
+  return fromHistory || fromCalendar || {
+    code: state.event.code,
+    title: state.event.title,
+    date: new Date().toISOString().slice(0,10),
+    players: state.players.filter(p=>p.present).map(p=>({...p})),
+    matches: state.rounds,
+    scores: state.scores,
+    goals: state.goalEvents,
+    standings: standings()
+  };
+}
+
+function eventStatsForPlayer(name, ev){
+  const players = ev?.players || [];
+  const playerInEvent = players.find(p => p.name === name);
+  const team = playerInEvent?.team || state.players.find(p=>p.name===name)?.team || "";
+  const eventGoals = ev?.goals || {};
+  const eventScores = ev?.scores || {};
+  const eventMatches = ev?.matches || [];
+  let goals = 0, matches = 0, teamGoals = 0, teamAgainst = 0, teamPoints = 0, wins = 0, draws = 0, losses = 0;
+
+  Object.values(eventGoals || {}).flat().forEach(g => {
+    if(g.playerName === name) goals += 1;
+  });
+
+  eventMatches.forEach((round, ri) => {
+    (round || []).forEach((m, pi) => {
+      if(!m || m[2]) return;
+      if(m[0] !== team && m[1] !== team) return;
+      const id = `${ri}-${pi}`;
+      let score = eventScores[id];
+
+      if((!score || score[0] === "" || score[1] === "") && eventGoals[id]){
+        const list = eventGoals[id] || [];
+        score = [
+          String(list.filter(g => g.team === m[0]).length),
+          String(list.filter(g => g.team === m[1]).length)
+        ];
+      }
+
+      if(!score || score[0] === "" || score[1] === "") return;
+      const a = Number(score[0]), b = Number(score[1]);
+      const gf = m[0] === team ? a : b;
+      const ga = m[0] === team ? b : a;
+      matches += 1;
+      teamGoals += gf;
+      teamAgainst += ga;
+      if(gf > ga){ teamPoints += 3; wins += 1; }
+      else if(gf === ga){ teamPoints += 1; draws += 1; }
+      else { losses += 1; }
+    });
+  });
+
+  const impact = (goals * 2) + (teamPoints * 1.2) + ((teamGoals - teamAgainst) * 0.5) + (playerInEvent ? 1 : 0);
+  return {
+    present: !!playerInEvent,
+    team,
+    goals,
+    matches,
+    teamGoals,
+    teamAgainst,
+    teamPoints,
+    wins,
+    draws,
+    losses,
+    teamGoalsAvg: matches ? teamGoals / matches : 0,
+    teamPointsAvg: matches ? teamPoints / matches : 0,
+    impact
+  };
+}
+
+function seasonRankings(){
+  const rows = playerAdvancedStats();
+  const byGoals = rows.slice().sort((a,b)=>b.goals-a.goals || b.impact-a.impact);
+  const byAttendance = rows.slice().sort((a,b)=>b.events-a.events || b.impact-a.impact);
+  const byImpact = rows.slice().sort((a,b)=>b.impact-a.impact || b.goals-a.goals);
+  const rankOf = (arr, name) => {
+    const i = arr.findIndex(x=>x.name===name);
+    return i >= 0 ? i + 1 : "—";
+  };
+  return { rows, byGoals, byAttendance, byImpact, rankOf };
+}
+
+function getPlayerCardData(name){
+  const p = state.players.find(x=>x.name===name) || state.players[0];
+  if(!p) return null;
+
+  const mode = ["event","season"].includes(state.generator?.mode) ? state.generator.mode : "season";
+  const ev = selectedGeneratorEvent();
+  const adv = playerAdvancedStats().find(x=>x.name===p.name) || {};
+  const evs = eventStatsForPlayer(p.name, ev);
+  const ranks = seasonRankings();
+  const totalHistory = Math.max(1, state.history.length || 1);
+  const attendance = Math.round(((adv.events || 0) / totalHistory) * 100);
+
+  const base = {
+    mode,
+    modeLabel: mode === "event" ? "USTAWKA" : mode === "hybrid" ? "SEZON" : "SEZON",
+    eventCode: ev?.code || state.event.code,
+    eventDate: ev?.date || "",
+    name: p.name,
+    nickname: p.nickname || initials(p.name),
+    team: mode === "season" ? (p.team || "WFC") : (evs.team || p.team || "WFC"),
+    position: p.notes || "street baller",
+    instagram: p.birthYear || "—",
+    memberSince: p.district || "Warszawa",
+    birth: p.birthYear || "—",
+    code: mode === "season" ? "S03" : (ev?.code || state.event.code || "[ S03 ]"),
+    season: "S03",
+    photo: (state.playerImages && state.playerImages[p.name]) || p.photo || "",
+  };
+
+  if(mode === "event"){
+    return {
+      ...base,
+      appearances: evs.present ? 1 : 0,
+      goals: evs.goals,
+      attendance: evs.present ? 100 : 0,
+      teamGoalsAvg: evs.teamGoalsAvg.toFixed(1),
+      teamPointsAvg: evs.teamPointsAvg.toFixed(1),
+      impact: Math.round(evs.impact),
+      silentImpact: Math.round(evs.impact - (evs.goals * 1.5)),
+      mvp: Math.max(0, Math.round(evs.impact / 8)),
+      topScorer: evs.goals,
+      event: evs,
+      seasonData: adv,
+      splitA: { title:"TA USTAWKA", line1:`${evs.goals} gole`, line2:`${evs.matches} mecze`, line3:`${evs.wins}W/${evs.draws}R/${evs.losses}P` },
+      splitB: { title:"TEAM", line1:`${evs.teamGoals} goli`, line2:`${evs.teamPoints} pkt`, line3:`Impact ${Math.round(evs.impact)}` }
+    };
+  }
+
+  if(mode === "hybrid"){
+    return {
+      ...base,
+      appearances: adv.events || 0,
+      goals: adv.goals || p.goals || 0,
+      attendance,
+      teamGoalsAvg: Number(adv.teamGoalsAvg || 0).toFixed(1),
+      teamPointsAvg: Number(adv.teamPointsAvg || 0).toFixed(1),
+      impact: Math.round(adv.impact || 0),
+      silentImpact: Math.round(adv.silentImpact || 0),
+      mvp: Math.max(0, Math.round((adv.impact || 0) / 35)),
+      topScorer: ranks.rankOf(ranks.byGoals, p.name),
+      event: evs,
+      seasonData: adv,
+      splitA: { title:"TA USTAWKA", line1:`${evs.goals} gole`, line2:`${evs.matches} mecze`, line3:`${evs.wins}W/${evs.draws}R/${evs.losses}P` },
+      splitB: { title:"SEZON", line1:`${adv.events || 0} ustawek`, line2:`${adv.goals || 0} goli`, line3:`Impact ${Math.round(adv.impact || 0)}` }
+    };
+  }
+
+  return {
+    ...base,
+    appearances: adv.events || 0,
+    goals: adv.goals || p.goals || 0,
+    attendance,
+    teamGoalsAvg: Number(adv.teamGoalsAvg || 0).toFixed(1),
+    teamPointsAvg: Number(adv.teamPointsAvg || 0).toFixed(1),
+    impact: Math.round(adv.impact || 0),
+    silentImpact: Math.round(adv.silentImpact || 0),
+    mvp: Math.max(0, Math.round((adv.impact || 0) / 35)),
+    topScorer: ranks.rankOf(ranks.byGoals, p.name),
+    event: evs,
+    seasonData: adv,
+    splitA: { title:"RANKING", line1:`Strzelcy #${ranks.rankOf(ranks.byGoals, p.name)}`, line2:`Impact #${ranks.rankOf(ranks.byImpact, p.name)}`, line3:`Obecność #${ranks.rankOf(ranks.byAttendance, p.name)}` },
+    splitB: { title:"ŚREDNIE", line1:`${Number(adv.goalsPerEvent || 0).toFixed(1)} G/U`, line2:`${Number(adv.teamGoalsAvg || 0).toFixed(1)} Team G/M`, line3:`${Number(adv.teamPointsAvg || 0).toFixed(1)} Team P/M` }
+  };
+}
+
+function attrEsc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function esc(s){return String(s??"").replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]))}
+
+function buildPlayerCardHTML(d, style="premium"){
+  if(!d) return `<div class="card"><p class="muted">Brak zawodników.</p></div>`;
+
+  if(style === "minimal"){
+    const bg = d.photo
+      ? `<div class="mp-bg" style="background-image:url('${esc(d.photo)}')"></div>`
+      : `<div class="mp-placeholder"><span>${esc(initials(d.name))}</span></div>`;
+    const primaryStatLabel = d.mode === "event" ? "Gole" : "Ustawki";
+    const primaryStatValue = d.mode === "event" ? d.goals : d.appearances;
+    return `<article class="player-card-template minimal">
+      ${bg}
+      <div class="mp-layer">
+        <div class="mp-top"><span>WE ARE WARSAW FC</span><span>${esc(d.code)}</span></div>
+        <div class="mp-meta"><span>PLAYER CARD</span><span>${esc(d.modeLabel)}</span></div>
+        <div class="mp-spacer"></div>
+        <div class="mp-core">
+          <div class="mp-kicker">${esc(d.team)} · ${esc(d.memberSince || "Warszawa")}</div>
+          <div class="mp-name">${esc(d.name)}</div>
+          <div class="mp-tags">
+            <span class="mp-tag">${esc(d.nickname)}</span>
+            <span class="mp-tag">${esc(d.modeLabel)}</span>
+            <span class="mp-tag">${esc(d.birth || "—")}</span>
+          </div>
+        </div>
+        <div class="mp-bottom">
+          <div class="mp-bottom-line">
+            <div class="mp-loc">UNDER THE ŁAZIENKOWSKI BRIDGE · WARSAW</div>
+            <div class="mp-date">${esc(d.eventCode)}${d.eventDate ? `<br>${esc(d.eventDate)}` : ""}</div>
+          </div>
+          <div class="mp-stats">
+            <div class="mp-stat"><div class="mp-stat-label">${primaryStatLabel}</div><div class="mp-stat-value">${esc(primaryStatValue)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Impact</div><div class="mp-stat-value">${esc(d.impact)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Team G/M</div><div class="mp-stat-value">${esc(d.teamGoalsAvg)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Top Scorer #</div><div class="mp-stat-value">${esc(d.topScorer)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Obecność %</div><div class="mp-stat-value">${esc(d.attendance)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Team P/M</div><div class="mp-stat-value">${esc(d.teamPointsAvg)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">MVP</div><div class="mp-stat-value">${esc(d.mvp)}</div></div>
+            <div class="mp-stat"><div class="mp-stat-label">Gole</div><div class="mp-stat-value">${esc(d.goals)}</div></div>
+          </div>
+          <div class="mp-footer"><span>STREET FOOTBALL / PLAYER PROFILE</span><strong>${esc(d.modeLabel)}</strong></div>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  const visual = d.photo ? `<div class="pc-image" style="background-image:url('${esc(d.photo)}')"></div>` : `<div class="pc-placeholder"><div><b>${esc(initials(d.name))}</b><p>dodaj zdjęcie zawodnika</p></div></div>`;
+  return `<article class="player-card-template ${style} ${d.mode} ${style==="story"?"story-ratio":style==="post45"?"post45-ratio":""}">
+    <div class="pc-shell">
+      <div class="pc-header">
+        <div class="pc-header-left pc-header-no-logo"><div><div class="pc-title">WE ARE WARSAW FC</div><div class="pc-subtitle">PLAYER CARD · ${esc(d.modeLabel)}</div></div></div>
+        <div class="pc-motto">${esc(d.code)}</div>
+      </div>
+      <div class="pc-content">
+        <div class="pc-left">
+          <div class="pc-kicker">Karta gracza</div>
+          <div class="pc-name">${esc(d.name)}</div>
+          <div class="pc-nick"><span>${esc(d.nickname)}</span><span>${esc(d.modeLabel)}</span></div>
+          <div class="pc-mode-pill">${esc(d.eventCode)} ${d.eventDate ? "· " + esc(d.eventDate) : ""}</div>
+          <div class="pc-detail-list">
+            <div class="pc-detail"><span>Team</span><span>${esc(d.team)}</span></div>
+            <div class="pc-detail"><span>Dzielnica</span><span>${esc(d.memberSince)}</span></div>
+            <div class="pc-detail"><span>Rocznik</span><span>${esc(d.birth)}</span></div>
+          </div>
+        </div>
+        <div class="pc-right">
+          ${visual}
+          <div class="pc-code">${esc(d.modeLabel)}</div>
+          <div class="pc-right-bottom"><div class="pc-tagline"><span>${esc(d.team)}</span><b>WE ARE WARSAW FC</b></div></div>
+        </div>
+      </div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="pc-stat-label">${d.mode === "event" ? "Obecność" : "Ustawki"}</div><div class="pc-stat-value">${esc(d.appearances)}</div></div>
+        <div class="pc-stat"><div class="pc-stat-label">Gole</div><div class="pc-stat-value">${esc(d.goals)}</div></div>
+        <div class="pc-stat"><div class="pc-stat-label">Obec. %</div><div class="pc-stat-value">${esc(d.attendance)}</div></div>
+        <div class="pc-stat"><div class="pc-stat-label">Śr. goli</div><div class="pc-stat-value">${esc(d.teamGoalsAvg)}</div></div>
+      </div>
+      <div class="pc-badges">
+        <div class="pc-badge"><div class="pc-badge-label">Śr. pkt</div><div class="pc-badge-value">${esc(d.teamPointsAvg)}</div></div>
+        <div class="pc-badge"><div class="pc-badge-label">Impact</div><div class="pc-badge-value">${esc(d.impact)}</div></div>
+        <div class="pc-badge"><div class="pc-badge-label">MVP</div><div class="pc-badge-value">${esc(d.mvp)}</div></div>
+        <div class="pc-badge"><div class="pc-badge-label">TS #</div><div class="pc-badge-value">${esc(d.topScorer)}</div></div>
+      </div>
+      <div class="pc-footer"><span>WE ARE WARSAW FC</span><span class="chip">${esc(d.modeLabel)}</span></div>
+    </div>
+  </article>`;
+}
+
+
+function syncGeneratorControls(){
+  const players = state.players.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  $("generatorPlayerSelect").innerHTML = players.map(p=>`<option value="${p.name}">${p.name}</option>`).join("");
+  if(!state.generator.selectedPlayer || !players.some(p=>p.name===state.generator.selectedPlayer)) state.generator.selectedPlayer = players[0]?.name || "";
+  $("generatorPlayerSelect").value = state.generator.selectedPlayer;
+
+  const events = [
+    ...(state.seasonCalendar || []),
+    ...(state.history || []).filter(h => !(state.seasonCalendar || []).some(c => c.code === h.code))
+  ].filter(e=>e && e.code);
+  if(!state.generator.eventCode) state.generator.eventCode = state.event.code || events[0]?.code || "";
+  $("cardEventSelect").innerHTML = events.map(e=>`<option value="${e.code}">${e.code} ${e.date ? "· " + e.date : ""}</option>`).join("");
+  if(events.some(e=>e.code===state.generator.eventCode)) $("cardEventSelect").value = state.generator.eventCode;
+
+  if(!["event","season"].includes(state.generator.mode)) state.generator.mode = "season";
+  $("cardModeSelect").value = state.generator.mode || "season";
+  $("cardStyleSelect").value = state.generator.style || "minimal";
+  $("cardEventSelect").disabled = $("cardModeSelect").value === "season";
+}
+
+function renderGenerator(){
+  if(!$("generatorPlayerSelect")) return;
+  syncGeneratorControls();
+  const playerName = $("generatorPlayerSelect").value;
+  state.generator.selectedPlayer = playerName;
+  state.generator.style = $("cardStyleSelect").value || state.generator.style || "minimal";
+  const d = getPlayerCardData(playerName);
+  $("playerCardPreview").innerHTML = buildPlayerCardHTML(d, state.generator.style);
+  if(d){$("generatorMeta").innerHTML = `<div class="meta-grid"><div class="mini"><div class="muted">Typ karty</div><b>${esc(d.modeLabel)}</b></div><div class="mini"><div class="muted">Ustawka</div><b>${esc(d.eventCode)}</b></div><div class="mini"><div class="muted">Występy / Gole</div><b>${d.appearances} / ${d.goals}</b></div><div class="mini"><div class="muted">Impact / Silent</div><b>${d.impact} / ${d.silentImpact}</b></div></div>`;} else {$("generatorMeta").innerHTML = `<p class="muted">Brak zawodników do wygenerowania karty.</p>`;}
+}
+function openGenerator(name){showView("generator");if(name) state.generator.selectedPlayer = name;setTimeout(()=>renderGenerator(),30)}
+function downloadPlayerCard(){const node = $("playerCardPreview").querySelector(".player-card-template");if(!node) return alert("Najpierw wygeneruj kartę.");if(window.html2canvas){html2canvas(node,{backgroundColor:null,scale:2,useCORS:true}).then(canvas=>{const a=document.createElement("a");const player=(state.generator.selectedPlayer||"player").replace(/\s+/g,"_").toLowerCase();a.href=canvas.toDataURL("image/png");a.download=`warsaw_fc_card_${player}.png`;a.click()})}else{alert("Brak biblioteki eksportu PNG.")}}
+function handleGeneratorPhoto(file){const name = $("generatorPlayerSelect").value;if(!name || !file) return;const r = new FileReader();r.onload = () => {state.playerImages[name] = r.result;const p=state.players.find(x=>x.name===name);if(p) p.photo=r.result;save();renderGenerator()};r.readAsDataURL(file)}
+
+function renderSchedule(){$("fullSchedule").innerHTML=state.rounds.map((r,ri)=>`<div class="schedule-round"><b>Start ${ri+1}</b><div class="schedule-matches">${r.map((m,pi)=>`<div class="card"><p class="muted">${labels()[pi]||""}</p><b>${m[0]} vs ${m[1]}</b><p class="muted">${m[2]?"BONUS":m[3]}</p></div>`).join("")}</div></div>`).join("")}
+function renderTv(){const r=state.rounds[state.currentRound]||[],next=state.rounds[state.currentRound+1]||[];$("tvCurrent").innerHTML=r.map(m=>`<div class="card"><b>${m[0]}</b><div class="vs">${m[2]?"BONUS":m[3]}</div><b>${m[1]}</b></div>`).join("");$("tvNext").innerHTML=next.map(m=>`<div class="card">${m[0]} vs ${m[1]}</div>`).join("")||`<p class="muted">Koniec terminarza.</p>`;$("tvStandings").innerHTML=`<table>${standings().slice(0,8).map((r,i)=>`<tr><td>${i+1}</td><td>${r.team}</td><td>${r.p}</td></tr>`).join("")}</table>`;$("tvScorers").innerHTML=state.players.filter(p=>p.present).sort((a,b)=>(b.goals||0)-(a.goals||0)).slice(0,8).map((p,i)=>`<div class="card">#${i+1} ${p.name} — ${p.goals||0}</div>`).join("")}
+function bind(){document.addEventListener("click",e=>{const v=e.target.closest("[data-view]");if(v)return showView(v.dataset.view);const p=e.target.closest("[data-player]");if(p&&!e.target.closest("button"))return openPlayer(p.dataset.player);const r=e.target.closest("[data-round]");if(r)return jumpRound(Number(r.dataset.round));const add=e.target.closest("[data-add-goal]");if(add)return addGoal(add.dataset.addGoal,add.dataset.playerName,add.dataset.team);const rem=e.target.closest("[data-remove-goal]");if(rem)return removeGoal(rem.dataset.removeGoal,rem.dataset.playerName,rem.dataset.team);const rp=e.target.closest("[data-remove-player]");if(rp){state.players.splice(Number(rp.dataset.removePlayer),1);save();render()}const le=e.target.closest("[data-load-event]");if(le)return loadCalendarEvent(le.dataset.loadEvent);const og=e.target.closest("[data-open-generator]");if(og)return openGenerator(og.dataset.openGenerator);});document.addEventListener("change",e=>{if(e.target.dataset.score)return setScore(e.target.dataset.score,Number(e.target.dataset.side),e.target.value);if(e.target.dataset.playerField){const[i,f]=e.target.dataset.playerField.split(":");updatePlayer(Number(i),f,e.target.type==="checkbox"?e.target.checked:e.target.value)}if(e.target.dataset.profilePhoto){handleProfilePhoto(Number(e.target.dataset.profilePhoto), e.target.files[0])}});$("unlockBtn").onclick=unlock;$("adminCodeInput").addEventListener("keydown",e=>{if(e.key==="Enter")unlock()});$("lockBtn").onclick=lock;$("tvBtn").onclick=enterTv;$("seedSeasonBtn").onclick=seedSeason;$("markClosedBtn").onclick=closeCurrentEvent;$("exitTvBtn").onclick=exitTv;$("generateBtn").onclick=generate;$("startTimerBtn").onclick=startTimer;$("pauseTimerBtn").onclick=pauseTimer;$("resetTimerBtn").onclick=resetTimer;$("nextRoundQuickBtn").onclick=()=>goRound(1);$("prevRoundBtn").onclick=()=>goRound(-1);$("nextRoundBtn").onclick=()=>goRound(1);$("addPlayerBtn").onclick=addPlayer;$("balanceTeamsBtn").onclick=balance;$("markAllBtn").onclick=markAll;$("clearPlayersBtn").onclick=clearPlayers;$("resetPlayersBtn").onclick=resetPlayers;$("saveEventBtn").onclick=saveEvent;$("exportBtn").onclick=exportBase;$("importBtn").onclick=()=>$("importFile").click();$("importFile").onchange=e=>e.target.files[0]&&importBase(e.target.files[0]);$("resetLocalBtn").onclick=resetLocal;$("closePlayerModal").onclick=closePlayer;$("profileSearchInput").oninput=()=>renderProfiles();$("showPresentProfilesBtn").onclick=()=>{state.profileFilterPresent=true;renderProfiles()};$("showAllProfilesBtn").onclick=()=>{state.profileFilterPresent=false;renderProfiles()};$("refreshCardBtn").onclick=()=>renderGenerator();$("downloadCardBtn").onclick=downloadPlayerCard;$("openSelectedPlayerBtn").onclick=()=>openPlayer($("generatorPlayerSelect").value);$("generatorPlayerSelect").onchange=()=>{state.generator.selectedPlayer=$("generatorPlayerSelect").value;save();renderGenerator()};$("cardModeSelect").onchange=()=>{state.generator.mode=$("cardModeSelect").value;save();renderGenerator()};$("cardEventSelect").onchange=()=>{state.generator.eventCode=$("cardEventSelect").value;save();renderGenerator()};$("cardStyleSelect").onchange=()=>{state.generator.style=$("cardStyleSelect").value;save();renderGenerator()};$("generatorPhotoUpload").onchange=e=>e.target.files[0]&&handleGeneratorPhoto(e.target.files[0]);["eventCode","eventTitle","matchMinutes","pitchCount","teamCount","scheduleMode"].forEach(id=>$(id).addEventListener("change",()=>{if(id==="teamCount")setupTeams();save();render()}))}
+function init(){for(let i=2;i<=10;i++)$("teamCount").innerHTML+=`<option value="${i}" ${i===6?"selected":""}>${i}</option>`;load();ensureSeasonCalendar();$("eventCode").value=state.event.code;$("eventTitle").value=state.event.title;$("teamCount").value=String(state.teams.length||6);bind();if(!state.rounds.length)generate();else render();if(state.unlocked)$("lockModal").classList.remove("active")}
+init();
+</script>
+</body>
+</html>
